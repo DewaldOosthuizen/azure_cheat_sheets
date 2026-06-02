@@ -240,6 +240,20 @@ graph LR
 
 > Exam tip: Always use **Managed Identity** to access Key Vault — never store credentials in app config.
 
+## Key Vault Access Models
+
+| Service | Access Model | Audit | Granularity | Key Feature |
+| --- | --- | --- | --- | --- |
+| **Key Vault** | Vault Access Policies (legacy) | Per-vault log; no per-operation identity trail | Coarse — get/list/set apply to all secrets | Simple setup; max 1024 policies per vault |
+| **Key Vault** | Azure RBAC | Full Azure Activity Log + Entra audit trail | Fine-grained — role assignment per secret/key/cert | Entra-native; supports PIM, Conditional Access |
+
+> **Exam tip:** Choose Azure RBAC for Key Vault when the requirement mentions
+> Entra integration, Privileged Identity Management (PIM), per-resource
+> granularity, or migration away from legacy Access Policies.
+
+Use **Managed Identity** bound to an Azure RBAC role (e.g. Key Vault Secrets User)
+as the credential-free pattern — no secrets stored in application configuration.
+
 ---
 
 ## Encryption
