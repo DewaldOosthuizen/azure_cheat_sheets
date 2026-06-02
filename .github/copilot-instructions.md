@@ -1,8 +1,57 @@
-Written to: /home/dewald/Workspace/personal/github/azure_cheat_sheets/.github/copilot-instructions.md
+# GitHub Copilot Instructions — azure_cheat_sheets
 
-Changes made:
+## Project Overview
 
-- Added a Project Overview section — what this repo is and who it targets (AZ-305 prep, no app code).
-- Added a Repository Structure section — points directly at docs/Azure-CheatSheet.md and lists the eight sections.
-- Added a Content Guidelines section — concise rules for tables, Mermaid diagrams, exam tips, and PR scope.
-- Preserved the existing graph-tools block (codegraph + understand-anything) without modification.
+This repository contains quick-reference study notes for Azure architecture
+decisions. It is aimed at candidates preparing for AZ-305: Designing Microsoft
+Azure Infrastructure Solutions. The focus is service selection, architectural
+trade-offs, and decision reasoning — not step-by-step walkthroughs, portal
+screenshots, or hands-on labs.
+
+There is no application code, no build system, and no test suite. All
+meaningful content lives in a single Markdown file.
+
+## Repository Structure
+
+    docs/Azure-CheatSheet.md   — the single main cheat sheet
+
+The cheat sheet is organized into eight top-level sections:
+
+1. Networking
+2. Security
+3. Storage
+4. Monitoring & Observability
+5. Compute
+6. Identity & Access
+7. High Availability & Disaster Recovery
+8. Governance
+
+Supporting files:
+
+    scripts/validate_mermaid.py   — CI script that validates Mermaid code blocks
+    config/orchestrator.yml       — workspace-orchestrator pipeline config
+
+## Content Guidelines
+
+When adding or editing content, follow these rules:
+
+- Keep explanations concise and comparison-oriented.
+- Prefer tables when comparing Azure services, tiers, or design options.
+- Use Mermaid diagrams for branching decision flows where a visual aid is more
+  useful than prose alone.
+- Use short exam-tip callouts only when they clarify a likely decision point.
+- Do not document features or claims not already reflected in the content.
+- Scope pull requests to one improvement area where possible.
+- Verify that Markdown formatting and Mermaid blocks render cleanly on GitHub.
+
+## Mermaid Diagrams
+
+GitHub renders Mermaid natively. For local preview, install the
+"Markdown Preview Mermaid Support" extension in VS Code.
+
+The CI lint workflow runs `scripts/validate_mermaid.py` to catch broken
+Mermaid blocks before merge.
+
+## License
+
+GPL-3.0 — see LICENSE.

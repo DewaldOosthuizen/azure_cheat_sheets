@@ -1,7 +1,5 @@
 # workspace-orchestrator managed entries
-.hermes_tmp_prompt.txt
-.understand-anything/intermediate/
-.understand-anything/diff-overlay.json
-graphify-out/cache/
+openspec
 # workspace-orchestrator managed entries
-openspec/changes/
+.hermes_tmp_prompt.txt
+openspec/
