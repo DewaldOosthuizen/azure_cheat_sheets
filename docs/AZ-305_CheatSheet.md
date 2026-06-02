@@ -334,29 +334,31 @@ as the credential-free pattern — no secrets stored in application configuratio
 
 ---
 
-## Blob Access Tiers
+## Blob Storage Access Tiers
 
-| Tier | Access Frequency | Storage Cost | Access Cost | Minimum Duration |
-| --- | --- | --- | --- | --- |
-| **Hot** | Frequent | Highest | Lowest | None |
-| **Cool** | Infrequent (≥30 days) | Lower | Higher | 30 days |
-| **Cold** | Rare (≥90 days) | Lower still | Higher | 90 days |
-| **Archive** | Very rare (≥180 days) | Lowest | Highest + rehydration | 180 days |
+| Service | Type | Best For | Key Feature |
+| --- | --- | --- | --- |
+| **Hot** | Blob access tier | Frequently accessed data; no minimum retention | Lowest access cost; highest storage cost |
+| **Cool** | Blob access tier | Infrequently accessed data; min 30-day retention | Lower storage cost; higher per-operation cost |
+| **Cold** | Blob access tier | Rarely accessed data; min 90-day retention | Lower storage cost than Cool; higher access cost |
+| **Archive** | Blob access tier | Long-term archival; min 180-day retention | Lowest storage cost; requires rehydration (hours) before read |
 
-> Archive blobs must be **rehydrated** (hours) before access. Use Lifecycle Management policies to auto-tier.
+> **Exam tip:** Use Lifecycle Management policies to auto-transition blobs
+> through tiers. Archive blobs must be rehydrated to Hot or Cool before access;
+> plan for rehydration latency in recovery scenarios.
 
 ---
 
-## Replication Options
+## Storage Redundancy
 
-| Option | Acronym | Copies | Scope | Use Case | SLA |
-| --- | --- | --- | --- | --- | --- |
-| Locally Redundant Storage | **LRS** | 3 | Single datacenter | Dev/test, low cost | 99.9% |
-| Zone-Redundant Storage | **ZRS** | 3 | 3 Availability Zones, 1 region | HA in region, no data loss on zone failure | 99.9% |
-| Geo-Redundant Storage | **GRS** | 6 | Primary + secondary region | DR, read from secondary only on failover | 99.9% |
-| Read-Access Geo-Redundant | **RA-GRS** | 6 | Primary + secondary region | Read from secondary at any time | 99.99% read |
-| Geo-Zone-Redundant | **GZRS** | 6 | 3 AZs + secondary region | HA + DR | 99.9% |
-| Read-Access GZRS | **RA-GZRS** | 6 | 3 AZs + secondary region | Highest durability + read availability | 99.99% read |
+| Service | Type | Best For | Key Feature |
+| --- | --- | --- | --- |
+| **LRS** | Storage redundancy | Dev/test; lowest cost; no zone/regional DR requirement | 3 copies in one datacenter; 99.9999999% durability |
+| **ZRS** | Storage redundancy | Regional HA; zone-failure tolerance; no cross-region DR | 3 copies across 3 AZs in one region; no data loss on zone outage |
+| **GRS** | Storage redundancy | Cross-region DR; secondary readable only after failover | 6 copies (3 primary + 3 secondary region); RPO < 15 min |
+| **RA-GRS** | Storage redundancy | Cross-region DR with continuous read access to secondary | GRS + secondary endpoint always readable; 99.99% read SLA |
+| **GZRS** | Storage redundancy | HA + cross-region DR without secondary read requirement | 3 AZs primary + geo-replicated secondary; highest resilience |
+| **RA-GZRS** | Storage redundancy | Maximum durability with continuous secondary read access | GZRS + secondary endpoint always readable; 99.99% read SLA |
 
 ```mermaid
 graph TD
@@ -370,6 +372,12 @@ graph TD
     G -- No --> I[GRS]
     G -- Yes --> J[GZRS]
 ```
+
+> **Exam tip:** Choose RA-GRS when zone resilience in the primary region is
+> not required but continuous read access to the secondary is. Choose GZRS
+> (or RA-GZRS) when you need both zone-level resilience in the primary region
+> and geo-redundancy — GZRS is strictly more resilient than RA-GRS for the
+> same read-availability requirement.
 
 ---
 
