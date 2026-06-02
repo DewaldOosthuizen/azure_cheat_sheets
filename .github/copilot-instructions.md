@@ -13,7 +13,7 @@ meaningful content lives in a single Markdown file.
 
 ## Repository Structure
 
-    docs/Azure-CheatSheet.md   — the single main cheat sheet
+    docs/AZ-305_CheatSheet.md   — the single main cheat sheet
 
 The cheat sheet is organized into eight top-level sections:
 

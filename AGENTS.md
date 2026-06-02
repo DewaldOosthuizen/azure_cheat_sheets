@@ -7,7 +7,7 @@ and decision reasoning — not step-by-step walkthroughs or portal labs.
 
 ## Repository Structure
 
-    docs/Azure-CheatSheet.md   — the single main cheat sheet
+    docs/AZ-305_CheatSheet.md   — the single main cheat sheet
 
 The cheat sheet is organized into eight top-level sections:
 
@@ -32,7 +32,7 @@ The cheat sheet is organized into eight top-level sections:
 
 This is a documentation-only repository. There is no application code, no
 build system, and no test suite. All meaningful content lives in
-docs/Azure-CheatSheet.md.
+docs/AZ-305_CheatSheet.md.
 
 When asked to add or update content:
 
