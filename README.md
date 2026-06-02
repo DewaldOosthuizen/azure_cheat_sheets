@@ -22,6 +22,14 @@ decision-making. Configuration walkthroughs, portal screenshots, and hands-on
 labs are intentionally out of scope. Other Azure exams may overlap with parts
 of this material, but the repository is not yet organized around those tracks.
 
+### Exam Overlap
+
+| Exam | Focus | Relevant Sections |
+|------|-------|-------------------|
+| AZ-900 | Fundamentals | Networking (overview), Storage, Compute, Identity & Access (Entra basics) |
+| AZ-104 | Administrator | All sections — administrator-level depth on RBAC, Networking, HA & DR |
+| AZ-305 | Architect | All sections — architectural decision-making focus |
+
 ## Repository Structure
 
 - [`docs/Azure-CheatSheet.md`](docs/Azure-CheatSheet.md) - the main cheat sheet

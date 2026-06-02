@@ -23,6 +23,9 @@
 
 # NETWORKING
 
+> Also relevant for: **AZ-900** (foundational networking concepts) and **AZ-104**
+> (VNet design, NSGs, load balancing administration).
+
 ## Load Balancers
 
 | Service | Layer | Scope | Use Case | Key Feature |
@@ -489,6 +492,9 @@ flowchart TD
 
 # IDENTITY & ACCESS
 
+> Also relevant for: **AZ-900** (Entra ID basics, authentication concepts) and
+> **AZ-104** (RBAC assignments, role definitions, Managed Identity administration).
+
 ## Entra ID (Azure AD) Concepts
 
 | Concept | Description |
@@ -547,6 +553,9 @@ flowchart TD
 ---
 
 # HIGH AVAILABILITY & DISASTER RECOVERY
+
+> Also relevant for: **AZ-104** (Availability Sets, Availability Zones, Backup,
+> Site Recovery administration).
 
 ## Key Concepts
 
