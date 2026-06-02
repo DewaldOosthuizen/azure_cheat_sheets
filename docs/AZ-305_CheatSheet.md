@@ -124,15 +124,15 @@ flowchart TD
 
 ## Virtual Networks (VNet)
 
-| Concept | Description | Use Case |
-| --- | --- | --- |
-| **VNet Peering** | Direct low-latency connection between VNets | Same or cross-region connectivity, no gateway needed |
-| **VNet-to-VNet VPN** | Encrypted tunnel over public internet | Cross-region, cross-subscription (older pattern) |
-| **ExpressRoute** | Private dedicated circuit via provider | Enterprise, compliance, predictable bandwidth |
-| **VPN Gateway** | IPSec tunnel over internet | On-prem to Azure, cost-effective |
-| **Azure Bastion** | Browser-based RDP/SSH via Azure portal | Secure jump-host, no public IP on VMs |
-| **Private Endpoint** | Private IP for PaaS service in your VNet | Secure PaaS access, no public internet exposure |
-| **Service Endpoint** | Extends VNet identity to PaaS service | Simpler than Private Endpoint, still uses public IP |
+| Service | Layer | Scope | Use Case | Key Feature |
+| --- | --- | --- | --- | --- |
+| **VNet Peering** | L3 | Regional / Global | Same or cross-region VNet connectivity without a gateway | Low latency; no gateway required; non-transitive by default |
+| **VNet-to-VNet VPN** | L3 | Global | Cross-region or cross-subscription encrypted connectivity | IPSec/IKE tunnel; older pattern superseded by peering in most cases |
+| **ExpressRoute** | L3 | Global | Private dedicated circuit for enterprise workloads | SLA-backed; avoids public internet; supports up to 100 Gbps |
+| **VPN Gateway** | L3 | Regional | On-premises to Azure encrypted tunnel | Site-to-site, point-to-site, and VNet-to-VNet; cost-effective |
+| **Azure Bastion** | L7 | Regional | Secure browser-based RDP/SSH without public VM IPs | Deployed per VNet; no jump-box VM required |
+| **Private Endpoint** | L3 | Regional | Private IP access to PaaS services inside a VNet | NIC injected into VNet; DNS integration required |
+| **Service Endpoint** | L3 | Regional | Route PaaS traffic over Azure backbone from a subnet | No private IP; PaaS firewall can restrict to specific subnets |
 
 > **Private Endpoint vs Service Endpoint:**
 >
@@ -152,11 +152,11 @@ flowchart TD
 
 ## DNS
 
-| Service | Use Case |
-| --- | --- |
-| **Azure DNS** | Host public DNS zones in Azure |
-| **Azure Private DNS Zones** | Name resolution within VNets |
-| **Private DNS Resolver** | Hybrid DNS — forward on-prem queries to Azure Private DNS |
+| Service | Layer | Scope | Use Case | Key Feature |
+| --- | --- | --- | --- | --- |
+| **Azure DNS** | DNS | Global | Host public DNS zones in Azure | Authoritative DNS; delegates to Azure name servers |
+| **Azure Private DNS Zones** | DNS | Regional (VNet-linked) | Name resolution within VNets | Auto-registration of VM records; linked to one or more VNets |
+| **Private DNS Resolver** | DNS | Regional | Hybrid DNS — forward on-prem queries to Azure Private DNS | Inbound/outbound endpoints; replaces custom DNS VM |
 
 ---
 
