@@ -441,6 +441,37 @@ graph TD
 
 ---
 
+## Azure Container Apps vs AKS vs ACI
+
+| Dimension | ACI | ACA | AKS |
+|---|---|---|---|
+| **Control plane** | None — single container group | Managed (Envoy/KEDA/Dapr hidden) | Full K8s API access |
+| **Scale trigger** | Manual / ARM template | KEDA (HTTP, queue, cron, custom) | HPA / KEDA (self-managed) |
+| **Dapr integration** | No | Native sidecar injection | Manual Dapr install |
+| **Revision management** | No | Yes — traffic split across revisions | Rolling deploy via K8s |
+| **VNet integration** | Yes (inject into subnet) | Yes (environment-level) | Yes (CNI plugin) |
+| **Cost model** | Per second, vCPU + memory | Per vCPU-s + memory-s (scale to zero) | Node pool VMs (always on) |
+| **Ops overhead** | Minimal | Low | High (cluster upgrades, node pools) |
+
+```mermaid
+flowchart TD
+    A[Container workload?] --> B{Need K8s API\nor custom controllers?}
+    B -- Yes --> AKS[Azure Kubernetes Service]
+    B -- No --> C{Need event-driven scale\nor Dapr without K8s ops?}
+    C -- Yes --> ACA[Azure Container Apps]
+    C -- No --> D{Single burst container\nno long-lived scale?}
+    D -- Yes --> ACI[Azure Container Instances]
+    D -- No --> ACA
+```
+
+> **Exam tip:** ACA uses KEDA under the hood and supports **scale-to-zero** for HTTP and
+> queue-based triggers — similar to Consumption plan Functions but for containerised workloads.
+> Choose ACA over Functions when you need: a custom runtime, Dapr service invocation, or
+> revision-based traffic splitting. Choose AKS when the scenario requires direct Kubernetes
+> API access, custom admission webhooks, or specific CNI configuration.
+
+---
+
 ## Virtual Machine SKU Families
 
 | Family | Purpose |
