@@ -145,6 +145,19 @@ flowchart TD
 
 ---
 
+## Content Delivery (CDN)
+
+| Service | Layer | Scope | Use Case | Key Feature |
+|---|---|---|---|---|
+| **Azure Front Door** | L7 (HTTP/S) | Global | CDN + WAF + global LB combined | Anycast PoP, WAF, SSL offload, caching rules |
+| **Azure CDN (Microsoft)** | L7 (HTTP/S) | Global | Static asset delivery, simple CDN | Verizon/Akamai PoPs, rules engine, legacy option |
+
+> **Exam tip:** Azure CDN classic profiles (Verizon, Akamai) are being retired. For new
+> architectures requiring CDN, Microsoft recommends Azure Front Door. Choose Front Door when
+> the requirement mentions CDN *plus* WAF, global load balancing, or SSL offload at the edge.
+
+---
+
 ## Connectivity Patterns
 
 ```mermaid
@@ -490,6 +503,42 @@ flowchart TD
 
 ---
 
+## Caching
+
+### Azure Cache for Redis
+
+| Tier | Replication | Clustering | Use Case | Key Feature |
+|---|---|---|---|---|
+| Basic | No | No | Dev/test only | Single node, no SLA |
+| Standard | Yes (primary + replica) | No | Production general | 99.9% SLA, failover |
+| Premium | Yes | Yes (up to 10 shards) | High throughput, persistence | VNet, geo-replication, RDB/AOF |
+| Enterprise | Yes | Yes (OSS Redis cluster) | Ultra-low latency, RediSearch | Active geo-replication, 99.999% SLA |
+| Enterprise Flash | Yes | Yes | Large datasets, cost optimisation | NVMe + DRAM tiering |
+
+> **Exam tip:** Choose Premium when VNet injection or geo-replication is required.
+> Choose Enterprise when active-active multi-region or RediSearch/RedisBloom modules are needed.
+
+**Eviction policies (exam-relevant):**
+
+- `volatile-lru` — evict least-recently-used keys that have a TTL set (default safe choice)
+- `allkeys-lru` — evict any LRU key (use when all keys are equally expendable)
+- `noeviction` — return errors when memory is full (use for session stores where data loss is unacceptable)
+
+#### Tier Selection Decision Flow
+
+```mermaid
+flowchart TD
+    A[Need Redis caching?] --> B{Dev/test only?}
+    B -- Yes --> C[Basic]
+    B -- No --> D{Need VNet or geo-replication?}
+    D -- No --> E[Standard]
+    D -- Yes --> F{Active-active multi-region\\nor Redis modules?}
+    F -- No --> G[Premium]
+    F -- Yes --> H[Enterprise / Enterprise Flash]
+```
+
+---
+
 # IDENTITY & ACCESS
 
 > Also relevant for: **AZ-900** (Entra ID basics, authentication concepts) and
@@ -747,7 +796,7 @@ flowchart TD
 | Operational Excellence  | Safe deployments; observable operations  | Azure Monitor, Log Analytics, Deployment Slots, IaC        | Blue/green deploys; alerting strategy               |
 | Performance Efficiency  | Scale to meet demand; minimise latency   | Azure CDN, Front Door, VMSS, Cosmos DB, Redis Cache        | Horizontal vs vertical scale; caching layers        |
 
-> **Cross-reference:** See [High Availability & Disaster Recovery](#high-availability--disaster-recovery) for Reliability patterns, [Security](#security) for defence-in-depth, [Networking](#networking) for CDN/Front Door/DDoS, and [Governance](#governance) for cost control tooling.
+> **Cross-reference:** See [High Availability & Disaster Recovery](#high-availability--disaster-recovery) for Reliability patterns, [Security](#security) for defence-in-depth, [Networking — CDN](#content-delivery-cdn) for CDN/Front Door, [Compute — Caching](#caching) for Redis tier selection, [Networking](#networking) for DDoS, and [Governance](#governance) for cost control tooling.
 
 ---
 
