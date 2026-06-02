@@ -21,7 +21,8 @@ GRAPH_DIR=$(pwd) npx vite --host 127.0.0.1
 ```
 
 For prose questions load the skill:
-```
+
+```text
 skill: understand-chat
 ```
 
@@ -38,9 +39,10 @@ codegraph sync .                               # after any code change
 ```
 
 Decision order for code tasks:
-  1. codegraph context  — which symbols matter?
-  2. graphify query     — which files are involved?
-  3. understand-anything — where in the architecture does this live?
-  4. Read raw source    — only the 1-2 files that actually matter.
+
+1. codegraph context  — which symbols matter?
+2. graphify query     — which files are involved?
+3. understand-anything — where in the architecture does this live?
+4. Read raw source    — only the 1-2 files that actually matter.
 
 <!-- graph-tools-end -->

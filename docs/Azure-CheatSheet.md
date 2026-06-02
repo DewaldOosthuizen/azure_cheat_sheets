@@ -1,4 +1,5 @@
 # Designing Microsoft Azure Infrastructure Solutions
+
 ## Comprehensive Cheat Sheet
 
 > **Exam Focus:** Architectural decision-making — *which* service, *why*, *when*. Not how to configure.
@@ -61,6 +62,7 @@ flowchart TD
 | **Service Endpoint** | Extends VNet identity to PaaS service | Simpler than Private Endpoint, still uses public IP |
 
 > **Private Endpoint vs Service Endpoint:**
+>
 > - Private Endpoint = PaaS resource gets a NIC in your VNet (true private)
 > - Service Endpoint = traffic stays on Azure backbone but PaaS still has public IP
 

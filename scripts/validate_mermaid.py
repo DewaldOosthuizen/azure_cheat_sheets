@@ -21,15 +21,18 @@ def validate_block(index, diagram_src):
     ) as tmp:
         tmp.write(diagram_src)
         tmp_path = tmp.name
+    out_path = tmp_path.replace(".mmd", ".svg")
     try:
         result = subprocess.run(
-            ["mmdc", "--input", tmp_path, "--output", "/dev/null"],
+            ["mmdc", "--input", tmp_path, "--output", out_path],
             capture_output=True,
             text=True,
         )
         return result.returncode == 0, result.stderr
     finally:
         os.unlink(tmp_path)
+        if os.path.exists(out_path):
+            os.unlink(out_path)
 
 
 def main():
