@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Validate all fenced mermaid blocks in a Markdown file using mmdc."""
 
-import re
-import sys
-import subprocess
-import tempfile
 import os
+import re
+import subprocess
+import sys
+import tempfile
 
 
 def extract_mermaid_blocks(md_path):
@@ -24,8 +24,15 @@ def validate_block(index, diagram_src):
     out_path = tmp_path.replace(".mmd", ".svg")
     try:
         result = subprocess.run(
-            ["mmdc", "--input", tmp_path, "--output", out_path,
-             "--puppeteerConfigFile", "/tmp/puppeteer-config.json"],
+            [
+                "mmdc",
+                "--input",
+                tmp_path,
+                "--output",
+                out_path,
+                "--puppeteerConfigFile",
+                "/tmp/puppeteer-config.json",
+            ],
             capture_output=True,
             text=True,
         )
