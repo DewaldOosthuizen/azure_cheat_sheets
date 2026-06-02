@@ -29,13 +29,44 @@ docs/Azure-CheatSheet.md.
 When asked to add or update content:
 
 - Keep explanations concise and comparison-oriented.
+- Section headings: top-level domain names in ALL CAPS (`# NETWORKING`).
+  Sub-topics as `##`. Do not use Title Case for top-level section headings.
 - Prefer tables when comparing Azure services, tiers, or design options.
-- Use Mermaid diagrams for branching decision flows.
+  Use these column templates:
+
+  Networking / compute services:
+  | Service | Layer | Scope | Use Case | Key Feature |
+
+  Data / storage services:
+  | Service | Type | Best For | Key Feature |
+
+  Consistency columns (always present): Service, Key Feature.
+  Do not add free-form columns not in the template above.
+
 - Use short exam-tip callouts only when they clarify a likely decision point.
+  Format: place the callout immediately after the relevant table, using:
+
+  > **Exam tip:** Choose Azure Front Door when the requirement mentions
+  > global HTTP load balancing, WAF, or SSL offload at the edge.
+
+  Do not use plain blockquotes, bold sentences, or note/warning admonitions
+  for exam tips.
+
+- Use Mermaid diagrams for branching decision flows. Choose the directive by
+  purpose:
+
+  | Purpose                        | Directive       |
+  |--------------------------------|-----------------|
+  | Decision flows (if/else trees) | flowchart TD    |
+  | Hierarchy / ecosystem maps     | graph TD        |
+  | Connectivity / network paths   | graph LR        |
+
 - Do not document features or claims not already reflected in the content.
 
 For pull requests, scope changes to one improvement area, explain what section
 changed, and verify that Markdown and Mermaid blocks render cleanly on GitHub.
+Run `npx markdownlint-cli2 "**/*.md"` locally before opening a PR to catch
+formatting violations before CI runs them.
 
 ## Mermaid Diagrams
 
