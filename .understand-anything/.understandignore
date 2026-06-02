@@ -1,0 +1,11 @@
+# .understandignore — patterns for files/dirs to exclude from analysis
+# Syntax: same as .gitignore
+node_modules/
+.git/
+dist/
+build/
+*.lock
+*.min.js
+*.min.css
+*.map
+.codegraph/

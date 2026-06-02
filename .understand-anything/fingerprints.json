@@ -1,0 +1,57 @@
+{
+  "version": "1.0.0",
+  "gitCommitHash": "3aadffc2d705e3f6383309d19b68e5d623f3aae4",
+  "generatedAt": "2026-06-02T05:42:18.751Z",
+  "files": {
+    "README.md": {
+      "filePath": "README.md",
+      "contentHash": "5aab49b23c20e0612e8e2932637ba7e78b3652ae487a4bb6eea30d29331a50a4",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 3,
+      "hasStructuralAnalysis": true
+    },
+    "docs/Azure-CheatSheet.md": {
+      "filePath": "docs/Azure-CheatSheet.md",
+      "contentHash": "7052932d5628377719a357985c419ed24331c203c794c9140c1f383947c4edc1",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 569,
+      "hasStructuralAnalysis": true
+    },
+    "AGENTS.md": {
+      "filePath": "AGENTS.md",
+      "contentHash": "fba1b8bfa1cbf8098401b79e139120edab1269761e6333dc8ae6736fc293cc9c",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 35,
+      "hasStructuralAnalysis": true
+    },
+    ".github/copilot-instructions.md": {
+      "filePath": ".github/copilot-instructions.md",
+      "contentHash": "b2c01f52209ce0d698f37878a186694e638807817152cc0afd05be2ecc7bbd87",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 25,
+      "hasStructuralAnalysis": true
+    },
+    "LICENSE": {
+      "filePath": "LICENSE",
+      "contentHash": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "functions": [],
+      "classes": [],
+      "imports": [],
+      "exports": [],
+      "totalLines": 675,
+      "hasStructuralAnalysis": false
+    }
+  }
+}
