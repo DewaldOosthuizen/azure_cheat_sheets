@@ -1,0 +1,3 @@
+# Domains that rate-limit or redirect aggressively — exclude to prevent false positives
+https://learn.microsoft.com
+https://portal.azure.com
