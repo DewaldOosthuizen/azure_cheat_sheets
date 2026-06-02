@@ -24,7 +24,8 @@ def validate_block(index, diagram_src):
     out_path = tmp_path.replace(".mmd", ".svg")
     try:
         result = subprocess.run(
-            ["mmdc", "--input", tmp_path, "--output", out_path],
+            ["mmdc", "--input", tmp_path, "--output", out_path,
+             "--puppeteerConfigFile", "/tmp/puppeteer-config.json"],
             capture_output=True,
             text=True,
         )
