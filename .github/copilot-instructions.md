@@ -123,3 +123,7 @@ Decision order for content tasks:
 ## License
 
 GPL-3.0 — see LICENSE.
+
+---
+
+The sole change from the previous version is the removal of the stale `docs/Azure-CheatSheet.md` line from the Repository Structure section — that file was renamed to `docs/AZ-305_CheatSheet.md` and no longer exists.
