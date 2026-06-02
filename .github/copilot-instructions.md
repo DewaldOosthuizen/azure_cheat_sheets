@@ -13,6 +13,7 @@ meaningful content lives in a single Markdown file.
 
 ## Repository Structure
 
+    docs/AZ-305_CheatSheet.md   — the single main cheat sheet
     docs/Azure-CheatSheet.md    — the single main cheat sheet
     scripts/validate_mermaid.py — CI script that validates Mermaid code blocks
     config/orchestrator.yml     — workspace-orchestrator pipeline config
@@ -58,14 +59,22 @@ When adding or editing content, follow these rules precisely:
   Do not use plain blockquotes, bold sentences, or note/warning admonitions
   for exam tips.
 
-- Use Mermaid diagrams for branching decision flows where a visual aid helps.
-  Choose the directive by purpose:
+- Use Mermaid diagrams for branching decision flows. Choose the directive by
+  purpose:
 
-  | Purpose                        | Directive    |
-  |--------------------------------|--------------|
-  | Decision flows (if/else trees) | flowchart TD |
-  | Hierarchy / ecosystem maps     | graph TD     |
-  | Connectivity / network paths   | graph LR     |
+  | Purpose                        | Directive       |
+  |--------------------------------|-----------------|
+  | Decision flows (if/else trees) | flowchart TD    |
+  | Hierarchy / ecosystem maps     | graph TD        |
+  | Connectivity / network paths   | graph LR        |
+
+  Example:
+
+  ```mermaid
+  flowchart TD
+      A[Need load balancing?] -->|Global HTTP| B[Azure Front Door]
+      A -->|Regional TCP/UDP| C[Azure Load Balancer]
+  ```
 
 - Do not document features or claims not already reflected in the content.
 - Scope pull requests to one improvement area where possible.

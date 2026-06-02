@@ -7,7 +7,7 @@ and decision reasoning — not step-by-step walkthroughs or portal labs.
 
 ## Repository Structure
 
-    docs/Azure-CheatSheet.md   — the single main cheat sheet
+    docs/AZ-305_CheatSheet.md   — the single main cheat sheet
 
 The cheat sheet is organized into eight top-level sections:
 
@@ -20,11 +20,19 @@ The cheat sheet is organized into eight top-level sections:
 7. High Availability & Disaster Recovery
 8. Governance
 
+## Exam Overlap
+
+| Exam   | Focus         | Relevant Sections |
+|--------|---------------|-------------------|
+| AZ-900 | Fundamentals  | Networking (overview), Storage, Compute, Identity & Access (Entra basics) |
+| AZ-104 | Administrator | All sections — administrator-level depth on RBAC, Networking, HA & DR |
+| AZ-305 | Architect     | All sections — architectural decision-making focus |
+
 ## Orientation for AI Agents
 
 This is a documentation-only repository. There is no application code, no
 build system, and no test suite. All meaningful content lives in
-docs/Azure-CheatSheet.md.
+docs/AZ-305_CheatSheet.md.
 
 When asked to add or update content:
 
@@ -60,6 +68,14 @@ When asked to add or update content:
   | Decision flows (if/else trees) | flowchart TD    |
   | Hierarchy / ecosystem maps     | graph TD        |
   | Connectivity / network paths   | graph LR        |
+
+  Example decision flow:
+
+  ```mermaid
+  flowchart TD
+      A[Need load balancing?] -->|Global HTTP| B[Azure Front Door]
+      A -->|Regional TCP/UDP| C[Azure Load Balancer]
+  ```
 
 - Do not document features or claims not already reflected in the content.
 
