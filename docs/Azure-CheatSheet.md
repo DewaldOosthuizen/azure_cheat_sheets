@@ -65,8 +65,8 @@ flowchart TD
 
 ### Policy Evaluation Order
 
-| Layer    | Trigger                              | Typical Use                                           |
-|----------|--------------------------------------|-------------------------------------------------------|
+| Layer    | Trigger                              | Typical Use                                            |
+|----------|--------------------------------------|--------------------------------------------------------|
 | Inbound  | Every request on arrival at gateway  | JWT validation, rate limiting, IP filtering, rewriting |
 | Backend  | Just before forwarding to backend    | Load-balance, set backend URL, retry policy            |
 | Outbound | After backend response, before reply | Response transformation, header stripping, caching     |
@@ -90,6 +90,7 @@ flowchart TD
 ```
 
 > **Exam Tips**
+>
 > - Consumption tier is serverless — there is no VNet injection and there is a cold-start on the first call after idle. Choose it only when portal and VNet are not required.
 > - Premium is the only tier that supports multi-region gateway deployment and availability zones. Any exam scenario requiring geo-redundant API exposure points to Premium.
 > - Policy evaluation order matters: Inbound is the correct layer to validate JWTs and enforce auth before the request reaches the backend. Placing auth in Outbound is a common distractor.
