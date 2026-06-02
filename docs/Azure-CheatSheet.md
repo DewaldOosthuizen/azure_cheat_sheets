@@ -17,6 +17,7 @@
 7. [High Availability & Disaster Recovery](#high-availability--disaster-recovery)
 8. [Governance](#governance)
 9. [Messaging & Integration](#messaging--integration)
+10. [Well-Architected Framework](#well-architected-framework)
 
 ---
 
@@ -719,3 +720,57 @@ flowchart TD
 ---
 
 *Last updated for AZ-305 exam preparation — review official Microsoft Learn documentation for latest service updates.*
+
+---
+
+# WELL-ARCHITECTED FRAMEWORK
+
+> **Exam Focus:** Use WAF pillars to *justify* design decisions in
+> case-study questions — not just to name the correct service.
+
+## Five-Pillar Summary
+
+| Pillar                  | Goal                                     | Key Azure Services / Patterns                              | Exam Focus                                          |
+|-------------------------|------------------------------------------|------------------------------------------------------------|-----------------------------------------------------|
+| Reliability             | Survive failures; meet SLA targets       | Availability Zones, Traffic Manager, Azure Site Recovery   | AZ vs AS vs Multi-Region; RTO/RPO targets           |
+| Security                | Protect data, identities, and workloads  | Microsoft Entra ID, Defender for Cloud, Key Vault, DDoS    | Zero Trust; defence-in-depth layers                 |
+| Cost Optimization       | Maximise value; eliminate waste          | Reserved Instances, Spot VMs, Azure Advisor, Cost Budgets  | RI vs Spot vs On-Demand trade-offs                  |
+| Operational Excellence  | Safe deployments; observable operations  | Azure Monitor, Log Analytics, Deployment Slots, IaC        | Blue/green deploys; alerting strategy               |
+| Performance Efficiency  | Scale to meet demand; minimise latency   | Azure CDN, Front Door, VMSS, Cosmos DB, Redis Cache        | Horizontal vs vertical scale; caching layers        |
+
+> **Cross-reference:** See [High Availability & Disaster Recovery](#high-availability--disaster-recovery) for Reliability patterns, [Security](#security) for defence-in-depth, [Networking](#networking) for CDN/Front Door/DDoS, and [Governance](#governance) for cost control tooling.
+
+---
+
+## Reliability — SLA Target Mapping
+
+| SLA Target | Recommended Deployment Pattern       | Notes                                              |
+|------------|--------------------------------------|----------------------------------------------------|
+| 99.9 %     | Single region, Availability Set      | Protects against rack/host failure; no zone fault  |
+| 99.95 %    | Single region, Availability Zones    | Protects against datacenter-level failure          |
+| 99.99 %+   | Multi-region (active-active/passive) | Requires Traffic Manager or Front Door for routing |
+
+> **Exam tip:** Availability Zones ≠ Availability Sets. AZs span separate
+> datacenters; AS only separate fault/update domains within one datacenter.
+
+---
+
+## Cost Optimization — Compute Pricing Model Selection
+
+| Option                | Best For                                     | Commitment        | Interruption Risk |
+|-----------------------|----------------------------------------------|-------------------|-------------------|
+| On-Demand (Pay-as-go) | Unpredictable workloads, short-term dev/test | None              | None              |
+| Reserved Instances    | Steady-state, 24/7 production workloads      | 1 or 3 years      | None              |
+| Spot VMs              | Fault-tolerant batch jobs, HPC, dev/test     | None              | Yes (eviction)    |
+| Azure Hybrid Benefit  | Existing Windows Server / SQL Server licences| Bring own licence | None              |
+
+> **Tools:** Azure Advisor surfaces rightsizing and idle resource
+> recommendations. Azure Budgets + Cost Alerts prevent spend overruns.
+> See [Governance](#governance) for Policy and Budget configuration patterns.
+
+---
+
+> **Exam tip:** In case-study questions, every design decision maps to at
+> least one WAF pillar. When asked *why* a solution is recommended, frame
+> your answer using the pillar: "This satisfies the **Reliability** pillar
+> because it adds zone redundancy, raising the composite SLA above 99.95 %."
