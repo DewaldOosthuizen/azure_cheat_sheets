@@ -13,12 +13,14 @@ meaningful content lives in a single Markdown file.
 
 ## Repository Structure
 
-    docs/AZ-305_CheatSheet.md   — the single main cheat sheet
-    docs/Azure-CheatSheet.md    — the single main cheat sheet
-    scripts/validate_mermaid.py — CI script that validates Mermaid code blocks
-    config/orchestrator.yml     — workspace-orchestrator pipeline config
-    openspec/                   — openspec change workflow artefacts (proposals,
-                                  specs, impls, archive)
+```
+docs/AZ-305_CheatSheet.md   — the single main cheat sheet
+docs/Azure-CheatSheet.md    — the single main cheat sheet
+scripts/validate_mermaid.py — CI script that validates Mermaid code blocks
+config/orchestrator.yml     — workspace-orchestrator pipeline config
+openspec/                   — openspec change workflow artefacts (proposals,
+                              specs, impls, archive)
+```
 
 The cheat sheet is organized into eight top-level sections:
 
@@ -95,15 +97,19 @@ Two analysis tool artefacts are present. Use them before opening raw source.
 
 ### codegraph
 
-    codegraph context "<task description>" -p .   # focused file+symbol context
-    codegraph query "<symbol>" -p .               # where is X defined / used
-    codegraph sync .                              # after any content change
+```bash
+codegraph context "<task description>" -p .   # focused file+symbol context
+codegraph query "<symbol>" -p .               # where is X defined / used
+codegraph sync .                              # after any content change
+```
 
 ### understand-anything
 
-    # Interactive dashboard
-    cd ~/.understand-anything-plugin/packages/dashboard
-    GRAPH_DIR=$(pwd) npx vite --host 127.0.0.1
+```bash
+# Interactive dashboard
+cd ~/.understand-anything-plugin/packages/dashboard
+GRAPH_DIR=$(pwd) npx vite --host 127.0.0.1
+```
 
 Knowledge graph: `.understand-anything/knowledge-graph.json`
 Use for layered architecture questions (layers, communities, entry points).
