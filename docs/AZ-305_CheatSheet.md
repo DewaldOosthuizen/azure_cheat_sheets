@@ -25,16 +25,16 @@
 
 | Section | AZ-900 | AZ-104 | AZ-305 |
 | --- | --- | --- | --- |
-| Networking | Partial | Full | Full |
-| Security | — | Partial | Full |
-| Storage | Partial | Full | Full |
-| Monitoring & Observability | — | Partial | Full |
-| Compute | Partial | Full | Full |
-| Identity & Access | Partial | Full | Full |
-| High Availability & Disaster Recovery | — | Full | Full |
-| Governance | — | Partial | Full |
-| Messaging & Integration | — | — | Full |
-| Well-Architected Framework | — | — | Full |
+| [Networking](#networking) | Partial | Full | Full |
+| [Security](#security) | — | Partial | Full |
+| [Storage](#storage) | Partial | Full | Full |
+| [Monitoring & Observability](#monitoring--observability) | — | Partial | Full |
+| [Compute](#compute) | Partial | Full | Full |
+| [Identity & Access](#identity--access) | Partial | Full | Full |
+| [High Availability & Disaster Recovery](#high-availability--disaster-recovery) | — | Full | Full |
+| [Governance](#governance) | — | Partial | Full |
+| [Messaging & Integration](#messaging--integration) | — | — | Full |
+| [Well-Architected Framework](#well-architected-framework) | — | — | Full |
 
 > **Exam tip:** AZ-900 rows marked Partial cover conceptual awareness only.
 > AZ-104 Full rows require administrator-level depth. AZ-305 covers all
