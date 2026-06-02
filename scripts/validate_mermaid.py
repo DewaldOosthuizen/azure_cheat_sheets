@@ -36,8 +36,11 @@ def validate_block(index, diagram_src):
             ],
             capture_output=True,
             text=True,
+            timeout=60,
         )
         return result.returncode == 0, result.stderr
+    except subprocess.TimeoutExpired:
+        return (False, "mmdc timed out after 60 s")
     except FileNotFoundError:
         # Guard against race-condition where mmdc is removed mid-run after the which() check
         return (False, "mmdc binary not found on PATH")
@@ -61,6 +64,9 @@ def main():
         sys.exit(1)
 
     md_path = sys.argv[1]
+    if not os.path.isfile(md_path):
+        print(f"Error: file not found: {md_path}", file=sys.stderr)
+        sys.exit(1)
     blocks = extract_mermaid_blocks(md_path)
     print(f"Found {len(blocks)} mermaid diagram(s) in {md_path}")
 
