@@ -33,7 +33,7 @@
 | Identity & Access | Partial | Full | Full |
 | High Availability & Disaster Recovery | — | Full | Full |
 | Governance | — | Partial | Full |
-| Messaging & Integration | — | — | Full |
+| Messaging & Integration | — | Partial | Full |
 | Well-Architected Framework | — | — | Full |
 
 > **Exam tip:** AZ-900 rows marked Partial cover conceptual awareness only.

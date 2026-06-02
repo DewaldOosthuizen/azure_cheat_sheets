@@ -28,8 +28,8 @@ of this material, but the repository is not yet organized around those tracks.
 | Exam | Focus | Relevant Sections |
 |------|-------|-------------------|
 | AZ-900 | Fundamentals | Networking (overview), Storage, Compute, Identity & Access (Entra basics) |
-| AZ-104 | Administrator | All sections — administrator-level depth on RBAC, Networking, HA & DR |
-| AZ-305 | Architect | All sections — architectural decision-making focus |
+| AZ-104 | Administrator | All sections — administrator-level depth on RBAC, Networking, HA & DR; Messaging & Integration (partial — Service Bus, Event Hub namespace admin) |
+| AZ-305 | Architect | All sections including Messaging & Integration and Well-Architected Framework |
 
 ## Repository Structure
 
