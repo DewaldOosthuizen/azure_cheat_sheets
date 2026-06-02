@@ -1,3 +1,7 @@
 # workspace-orchestrator managed entries
 .hermes_tmp_prompt.txt
 openspec/
+# BEGIN workspace-orchestrator
+.hermes_tmp_prompt.txt
+openspec/
+# END workspace-orchestrator
