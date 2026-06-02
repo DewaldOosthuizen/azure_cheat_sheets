@@ -51,6 +51,13 @@ GitHub renders Mermaid natively. For local preview, install the
 .understand-anything/knowledge-graph.json is present.
 Use it for layered architecture questions (layers, communities, entry points).
 
+> **Regeneration note:** After any `understand-anything` run that creates or
+> regenerates `.understand-anything/knowledge-graph.json`, perform a global
+> find-and-replace of `AZ-204` → `AZ-305` across the entire file before
+> committing it. The generator may propagate an incorrect exam code to
+> `project.description`, the cheat-sheet node summary, the guided-tour
+> description, and tour-step fields. A single-field patch is insufficient.
+
 ```bash
 # Launch the interactive dashboard
 cd ~/.understand-anything-plugin/packages/dashboard
