@@ -13,7 +13,11 @@ meaningful content lives in a single Markdown file.
 
 ## Repository Structure
 
-    docs/Azure-CheatSheet.md   — the single main cheat sheet
+    docs/Azure-CheatSheet.md    — the single main cheat sheet
+    scripts/validate_mermaid.py — CI script that validates Mermaid code blocks
+    config/orchestrator.yml     — workspace-orchestrator pipeline config
+    openspec/                   — openspec change workflow artefacts (proposals,
+                                  specs, impls, archive)
 
 The cheat sheet is organized into eight top-level sections:
 
@@ -26,22 +30,46 @@ The cheat sheet is organized into eight top-level sections:
 7. High Availability & Disaster Recovery
 8. Governance
 
-Supporting files:
-
-    scripts/validate_mermaid.py   — CI script that validates Mermaid code blocks
-    config/orchestrator.yml       — workspace-orchestrator pipeline config
-
 ## Content Guidelines
 
-When adding or editing content, follow these rules:
+When adding or editing content, follow these rules precisely:
 
 - Keep explanations concise and comparison-oriented.
+- Section headings: top-level domain names in ALL CAPS (`# NETWORKING`).
+  Sub-topics as `##`. Do not use Title Case for top-level section headings.
 - Prefer tables when comparing Azure services, tiers, or design options.
-- Use Mermaid diagrams for branching decision flows where a visual aid is more
-  useful than prose alone.
+  Use these column templates:
+
+  Networking / compute services:
+  | Service | Layer | Scope | Use Case | Key Feature |
+
+  Data / storage services:
+  | Service | Type | Best For | Key Feature |
+
+  Consistency columns (always present): Service, Key Feature.
+  Do not add free-form columns not in the template above.
+
 - Use short exam-tip callouts only when they clarify a likely decision point.
+  Place the callout immediately after the relevant table, using this format:
+
+  > **Exam tip:** Choose Azure Front Door when the requirement mentions
+  > global HTTP load balancing, WAF, or SSL offload at the edge.
+
+  Do not use plain blockquotes, bold sentences, or note/warning admonitions
+  for exam tips.
+
+- Use Mermaid diagrams for branching decision flows where a visual aid helps.
+  Choose the directive by purpose:
+
+  | Purpose                        | Directive    |
+  |--------------------------------|--------------|
+  | Decision flows (if/else trees) | flowchart TD |
+  | Hierarchy / ecosystem maps     | graph TD     |
+  | Connectivity / network paths   | graph LR     |
+
 - Do not document features or claims not already reflected in the content.
 - Scope pull requests to one improvement area where possible.
+- Run `npx markdownlint-cli2 "**/*.md"` locally before opening a PR.
 - Verify that Markdown formatting and Mermaid blocks render cleanly on GitHub.
 
 ## Mermaid Diagrams
@@ -54,7 +82,7 @@ Mermaid blocks before merge.
 
 ## Code Exploration
 
-Two analysis tool artifacts are present. Use them before opening raw source.
+Two analysis tool artefacts are present. Use them before opening raw source.
 
 ### codegraph
 
@@ -73,9 +101,9 @@ Use for layered architecture questions (layers, communities, entry points).
 
 Decision order for content tasks:
 
-1. codegraph context  — which symbols or sections matter?
-2. understand-anything — where in the structure does this live?
-3. Read raw source — only the file(s) that actually matter.
+1. codegraph context       — which symbols or sections matter?
+2. understand-anything     — where in the structure does this live?
+3. Read raw source         — only the file(s) that actually matter.
 
 ## License
 
