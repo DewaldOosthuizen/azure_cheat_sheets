@@ -1,5 +1,7 @@
 # Azure Cheat Sheets
 
+[![Lint](https://github.com/DewaldOosthuizen/azure_cheat_sheets/actions/workflows/lint.yml/badge.svg)](https://github.com/DewaldOosthuizen/azure_cheat_sheets/actions/workflows/lint.yml)
+
 Quick-reference study notes for Azure architecture decisions, with tables and
 Mermaid diagrams that compare services by tradeoff, scope, and common exam
 scenarios.
