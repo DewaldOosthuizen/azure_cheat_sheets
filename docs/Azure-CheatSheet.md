@@ -522,14 +522,22 @@ graph TD
 
 ## Azure Blueprints vs ARM Templates vs Terraform
 
-| Tool | Purpose | Drift Detection | State |
-|---|---|---|---|
-| **ARM Templates** | Deploy resources declaratively | No | Stateless |
-| **Bicep** | ARM simplified syntax | No | Stateless |
-| **Terraform** | Multi-cloud IaC | Yes (plan) | Stateful |
-| **Azure Blueprints** | Governance packages (policy + RBAC + ARM) | Partial (locking) | Artifact-tracked |
+| Tool | Purpose | Drift Detection | State | Status |
+|---|---|---|---|---|
+| **ARM Templates** | Deploy resources declaratively | No | Stateless | Active |
+| **Bicep** | ARM simplified syntax | No | Stateless | Active |
+| **Terraform** | Multi-cloud IaC | Yes (plan) | Stateful | Active |
+| **Azure Blueprints** | Governance packages (policy + RBAC + ARM) | Partial (locking) | Artifact-tracked | **RETIRED July 2026** |
 
-> Blueprints are being deprecated — Microsoft is moving toward **Template Specs + Policy + RBAC** separately.
+> **Azure Blueprints is retired (July 2026).** Migrate to:
+> - **ARM/Bicep Template Specs** — for reusable, versioned IaC artifacts.
+> - **Azure Policy** — for compliance rules and auto-remediation.
+> - **RBAC** — for role assignments and least-privilege access.
+> Use all three together to replicate what a Blueprint provided as a single package.
+>
+> See: [Microsoft retirement announcement](https://azure.microsoft.com/en-us/updates/azure-blueprints-is-being-retired-on-11-july-2026/)
+
+> **Exam tip:** Questions about Blueprints reference legacy or existing environments. For new governance designs always specify Template Specs + Policy + RBAC as the replacement pattern.
 
 ---
 
