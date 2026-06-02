@@ -118,6 +118,15 @@ flowchart TD
 > - Private Endpoint = PaaS resource gets a NIC in your VNet (true private)
 > - Service Endpoint = traffic stays on Azure backbone but PaaS still has public IP
 
+```mermaid
+flowchart TD
+    A[Secure PaaS service access?] --> B{Require private IP in VNet?}
+    B -- Yes --> PE[Private Endpoint]
+    B -- No --> C{Traffic must stay on Azure backbone?}
+    C -- Yes --> SE[Service Endpoint]
+    C -- No --> PUB[Public endpoint with firewall rules]
+```
+
 ---
 
 ## DNS
