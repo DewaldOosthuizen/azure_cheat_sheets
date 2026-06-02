@@ -489,6 +489,27 @@ graph TD
 | **Azure Batch** | HPC jobs | Large parallel compute jobs |
 | **Azure Spring Apps** | PaaS Java | Spring Boot microservices |
 
+## Compute Decision Flow
+
+```mermaid
+flowchart TD
+    A[New workload?] --> B{Need full OS / legacy lift-and-shift?}
+    B -- Yes --> VM[Azure VM / VMSS]
+    B -- No --> C{Containerised?}
+    C -- No --> D{Event-driven / serverless?}
+    D -- Yes --> AF[Azure Functions]
+    D -- No --> AS[App Service]
+    C -- Yes --> E{Need K8s API or custom controllers?}
+    E -- Yes --> AKS[AKS]
+    E -- No --> F{Single burst / no long-lived scale?}
+    F -- Yes --> ACI[ACI]
+    F -- No --> ACA[Azure Container Apps]
+```
+
+> **Exam tip:** Start with OS control (VM), then container vs. code, then
+> serverless vs. always-on. ACA is the default for containerised
+> microservices when you do not need full Kubernetes API access.
+
 ---
 
 ## App Service Plans (Tiers)
