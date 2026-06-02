@@ -558,10 +558,12 @@ graph TD
 
 | Lock Type | Prevents |
 |---|---|
-| **ReadOnly** | Create and delete operations (modifications) |
+| **ReadOnly** | All write operations (create, update, delete) — read access only |
 | **CanNotDelete** | Delete only — updates still allowed |
 
 > Locks are inherited by child resources. Applied at resource, resource group, or subscription.
+>
+> Source: [Azure Lock Resources — Microsoft Learn](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/lock-resources)
 
 ---
 
