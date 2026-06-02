@@ -15,6 +15,7 @@
 6. [Identity & Access](#identity--access)
 7. [High Availability & Disaster Recovery](#high-availability--disaster-recovery)
 8. [Governance](#governance)
+9. [Messaging & Integration](#messaging--integration)
 
 ---
 
@@ -564,6 +565,51 @@ graph TD
 > Locks are inherited by child resources. Applied at resource, resource group, or subscription.
 >
 > Source: [Azure Lock Resources — Microsoft Learn](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/lock-resources)
+
+---
+
+# MESSAGING & INTEGRATION
+
+## Service Comparison
+
+| Service | Pattern | Ordering | Replay | Use Case |
+|---|---|---|---|---|
+| **Service Bus Queue** | Message (P2P) | FIFO optional | No | Reliable command delivery |
+| **Service Bus Topic** | Message (pub/sub) | FIFO optional | No | Fan-out with filters |
+| **Event Grid** | Event (reactive) | No | No | Resource change reactions |
+| **Event Hub** | Stream (telemetry) | Per-partition | Yes (retention) | IoT, log ingestion |
+| **Storage Queue** | Message (P2P) | Best-effort | No | Simple, cheap async |
+
+## Decision Flowchart
+
+```mermaid
+flowchart TD
+    A[Need async communication?] --> B{Events or Messages?}
+    B -- Events --> C{Fan-out to multiple subscribers?}
+    B -- Messages --> D{Ordering required?}
+    C -- Yes --> E[Event Grid]
+    C -- No / High-volume stream --> F[Event Hub]
+    D -- Yes --> G[Service Bus Queue - FIFO sessions]
+    D -- No --> H{Volume very high / simple?}
+    H -- Yes --> I[Storage Queue]
+    H -- No --> J[Service Bus Queue]
+```
+
+## Logic Apps vs Azure Functions vs Durable Functions
+
+| Service | Best For | Trigger Model | State | Pricing Model |
+|---|---|---|---|---|
+| **Logic Apps** | Low-code workflow automation, SaaS connectors | Event / Schedule / HTTP | Stateful (built-in) | Per-action / consumption |
+| **Azure Functions** | Stateless compute, event-driven microservices | Many triggers (HTTP, queue, timer, etc.) | Stateless by default | Consumption / Premium |
+| **Durable Functions** | Long-running, stateful orchestrations in code | Orchestrator / Activity / Entity | Stateful (via storage) | Consumption (includes storage cost) |
+
+## Exam Tips
+
+> **Dead-Letter Queues (DLQ):** Messages are moved to the DLQ when TTL expires, max delivery count is exceeded, or the message is explicitly dead-lettered by the receiver. Monitor DLQ depth via Azure Monitor metrics or Service Bus Explorer — a growing DLQ indicates poison messages or consumer failures.
+
+> **Sessions & Partitioning:** Enable sessions on a Service Bus queue/topic to guarantee ordered processing per session key — all messages with the same session ID are delivered to the same consumer in order. Enable partitioning to distribute load across multiple message brokers and increase throughput; note that sessions and partitioning can be combined but partitioned entities have a 1 GB size limit per partition.
+
+> **Consumer Groups & Retention (Event Hub):** Each consumer group maintains its own independent offset/cursor, allowing multiple downstream systems to read the same stream at their own pace without interference. Configure retention (1–90 days, up to 7 days on Standard tier) to enable event replay for late-joining consumers, reprocessing after failures, or auditing.
 
 ---
 
