@@ -532,6 +532,7 @@ graph TD
 | **Azure Blueprints** | Governance packages (policy + RBAC + ARM) | Partial (locking) | Artifact-tracked | **RETIRED July 2026** |
 
 > **Azure Blueprints is retired (July 2026).** Migrate to:
+>
 > - **ARM/Bicep Template Specs** — for reusable, versioned IaC artifacts.
 > - **Azure Policy** — for compliance rules and auto-remediation.
 > - **RBAC** — for role assignments and least-privilege access.
