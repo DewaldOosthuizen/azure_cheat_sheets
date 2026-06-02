@@ -718,6 +718,17 @@ flowchart TD
 | **Azure Functions** | Stateless compute, event-driven microservices | Many triggers (HTTP, queue, timer, etc.) | Stateless by default | Consumption / Premium |
 | **Durable Functions** | Long-running, stateful orchestrations in code | Orchestrator / Activity / Entity | Stateful (via storage) | Consumption (includes storage cost) |
 
+```mermaid
+flowchart TD
+    A[Integration or automation need?] --> B{Low-code / SaaS connectors?}
+    B -- Yes --> LA[Logic Apps]
+    B -- No --> C{Long-running or stateful workflow?}
+    C -- Yes --> DF[Durable Functions]
+    C -- No --> AF[Azure Functions]
+```
+
+> **Exam tip:** Choose Logic Apps when the requirement mentions low-code orchestration or pre-built SaaS connectors. Choose Durable Functions for long-running, stateful, or fan-out/fan-in patterns written in code. Choose Azure Functions for stateless, event-driven compute with no orchestration requirement.
+
 ## Exam Tips
 
 > **Dead-Letter Queues (DLQ):** Messages are moved to the DLQ when TTL expires, max delivery count is exceeded, or the message is explicitly dead-lettered by the receiver. Monitor DLQ depth via Azure Monitor metrics or Service Bus Explorer — a growing DLQ indicates poison messages or consumer failures.
