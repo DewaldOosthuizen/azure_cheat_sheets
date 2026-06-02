@@ -21,6 +21,27 @@
 
 ---
 
+## Exam Track Index
+
+| Section | AZ-900 | AZ-104 | AZ-305 |
+| --- | --- | --- | --- |
+| Networking | Partial | Full | Full |
+| Security | — | Partial | Full |
+| Storage | Partial | Full | Full |
+| Monitoring & Observability | — | Partial | Full |
+| Compute | Partial | Full | Full |
+| Identity & Access | Partial | Full | Full |
+| High Availability & Disaster Recovery | — | Full | Full |
+| Governance | — | Partial | Full |
+| Messaging & Integration | — | — | Full |
+| Well-Architected Framework | — | — | Full |
+
+> **Exam tip:** AZ-900 rows marked Partial cover conceptual awareness only.
+> AZ-104 Full rows require administrator-level depth. AZ-305 covers all
+> sections with an architectural decision-making focus.
+
+---
+
 # NETWORKING
 
 > Also relevant for: **AZ-900** (foundational networking concepts) and **AZ-104**
@@ -187,6 +208,9 @@ graph LR
 
 # SECURITY
 
+> Also relevant for: **AZ-104** (Defender for Cloud policies, Key Vault
+> administration, security baselines).
+
 ## Microsoft Defender for Cloud
 
 | Plan | Covers | Key Feature |
@@ -281,6 +305,10 @@ graph LR
 
 # STORAGE
 
+> Also relevant for: **AZ-900** (storage account concepts, redundancy
+> options) and **AZ-104** (storage account management, access keys,
+> lifecycle policies, file shares).
+
 ## Storage Account Types
 
 | Type | Supported Services | Use Case |
@@ -372,6 +400,9 @@ graph TD
 
 # MONITORING & OBSERVABILITY
 
+> Also relevant for: **AZ-104** (Azure Monitor alerts, Log Analytics
+> workspace administration, diagnostic settings).
+
 ## Azure Monitor Ecosystem
 
 ```mermaid
@@ -440,6 +471,9 @@ graph TD
 ---
 
 # COMPUTE
+
+> Also relevant for: **AZ-900** (VM, App Service, and container concepts)
+> and **AZ-104** (VM deployment, VMSS, App Service plans, AKS node pools).
 
 ## Compute Options
 
@@ -690,6 +724,9 @@ graph TD
 
 # GOVERNANCE
 
+> Also relevant for: **AZ-104** (RBAC assignments, Policy definitions,
+> Management Groups, Blueprints administration).
+
 ## Management Hierarchy
 
 ```mermaid
@@ -770,6 +807,9 @@ graph TD
 
 # MESSAGING & INTEGRATION
 
+> Also relevant for: **AZ-104** (Service Bus namespace administration,
+> Event Grid subscriptions).
+
 ## Service Comparison
 
 | Service | Pattern | Ordering | Replay | Use Case |
@@ -832,6 +872,7 @@ flowchart TD
 
 > **Exam Focus:** Use WAF pillars to *justify* design decisions in
 > case-study questions — not just to name the correct service.
+> Relevant for **AZ-305** only; not assessed in AZ-900 or AZ-104.
 
 ## Five-Pillar Summary
 
