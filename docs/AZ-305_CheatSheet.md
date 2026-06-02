@@ -29,7 +29,7 @@
 ## Load Balancers
 
 | Service | Layer | Scope | Use Case | Key Feature |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | **Azure Load Balancer** | L4 (TCP/UDP) | Regional | Internal or public VM load balancing | Low latency, non-HTTP |
 | **Application Gateway** | L7 (HTTP/S) | Regional | Web apps, URL-based routing | WAF, SSL termination, cookie affinity |
 | **Azure Front Door** | L7 (HTTP/S) | Global | Multi-region web apps, CDN+WAF | Anycast, global routing, WAF, CDN |
@@ -57,24 +57,24 @@ flowchart TD
 
 ### Tier Comparison
 
-| Tier        | VNet Injection          | Scale Units          | Availability Zones | Primary Use Case                                      |
-|-------------|-------------------------|----------------------|--------------------|-------------------------------------------------------|
-| Consumption | None                    | Serverless (auto)    | No                 | Lightweight, event-driven APIs; no portal; cold-start |
-| Developer   | External / Internal     | 1 (no scale-out)     | No                 | Non-production, dev/test, full feature exploration    |
-| Basic       | None                    | Up to 2              | No                 | Entry-level production; no VNet, limited SLA          |
-| Standard    | External / Internal     | Up to 4              | No                 | Production; VNet injection without AZ or multi-region |
-| Premium     | External / Internal     | Up to 31 per region  | Yes (multi-region) | Enterprise; multi-region gateways, AZs, private APIs  |
+| Tier | VNet Injection | Scale Units | Availability Zones | Primary Use Case |
+| --- | --- | --- | --- | --- |
+| Consumption | None | Serverless (auto) | No | Lightweight, event-driven APIs; no portal; cold-start |
+| Developer | External / Internal | 1 (no scale-out) | No | Non-production, dev/test, full feature exploration |
+| Basic | None | Up to 2 | No | Entry-level production; no VNet, limited SLA |
+| Standard | External / Internal | Up to 4 | No | Production; VNet injection without AZ or multi-region |
+| Premium | External / Internal | Up to 31 per region | Yes (multi-region) | Enterprise; multi-region gateways, AZs, private APIs |
 
 > **v2 note:** Basic v2 and Standard v2 are GA. They offer faster provisioning and VNet integration via injection (Standard v2) but do not yet support all Premium features (multi-region, self-hosted gateway at scale). Use Premium v1/v2 for full enterprise requirements.
 
 ### Policy Evaluation Order
 
-| Layer    | Trigger                              | Typical Use                                            |
-|----------|--------------------------------------|--------------------------------------------------------|
-| Inbound  | Every request on arrival at gateway  | JWT validation, rate limiting, IP filtering, rewriting |
-| Backend  | Just before forwarding to backend    | Load-balance, set backend URL, retry policy            |
-| Outbound | After backend response, before reply | Response transformation, header stripping, caching     |
-| On-Error | Any unhandled exception in the chain | Uniform error responses, logging, alerting             |
+| Layer | Trigger | Typical Use |
+| --- | --- | --- |
+| Inbound | Every request on arrival at gateway | JWT validation, rate limiting, IP filtering, rewriting |
+| Backend | Just before forwarding to backend | Load-balance, set backend URL, retry policy |
+| Outbound | After backend response, before reply | Response transformation, header stripping, caching |
+| On-Error | Any unhandled exception in the chain | Uniform error responses, logging, alerting |
 
 ### Decision Flow — API Gateway Selection
 
@@ -104,7 +104,7 @@ flowchart TD
 ## Virtual Networks (VNet)
 
 | Concept | Description | Use Case |
-|---|---|---|
+| --- | --- | --- |
 | **VNet Peering** | Direct low-latency connection between VNets | Same or cross-region connectivity, no gateway needed |
 | **VNet-to-VNet VPN** | Encrypted tunnel over public internet | Cross-region, cross-subscription (older pattern) |
 | **ExpressRoute** | Private dedicated circuit via provider | Enterprise, compliance, predictable bandwidth |
@@ -123,7 +123,7 @@ flowchart TD
 ## DNS
 
 | Service | Use Case |
-|---|---|
+| --- | --- |
 | **Azure DNS** | Host public DNS zones in Azure |
 | **Azure Private DNS Zones** | Name resolution within VNets |
 | **Private DNS Resolver** | Hybrid DNS — forward on-prem queries to Azure Private DNS |
@@ -133,7 +133,7 @@ flowchart TD
 ## Network Security
 
 | Service | Purpose | Key Feature |
-|---|---|---|
+| --- | --- | --- |
 | **NSG (Network Security Group)** | Allow/deny traffic at NIC or subnet | Stateful, rules by port/IP/protocol |
 | **Azure Firewall** | Managed L3-L7 network firewall | FQDN filtering, threat intel, centralized policy |
 | **Azure Firewall Premium** | Advanced threat protection | TLS inspection, IDPS, URL filtering |
@@ -170,7 +170,7 @@ graph LR
 ```
 
 | Pattern | Description |
-|---|---|
+| --- | --- |
 | **Hub-Spoke** | Central hub VNet with shared services (firewall, bastion, DNS), spokes per workload |
 | **Virtual WAN** | Microsoft-managed hub-spoke at scale, with SD-WAN integration |
 
@@ -181,7 +181,7 @@ graph LR
 ## Microsoft Defender for Cloud
 
 | Plan | Covers | Key Feature |
-|---|---|---|
+| --- | --- | --- |
 | **Defender for Servers** | VMs, Arc servers | Vulnerability assessment, JIT VM access |
 | **Defender for Storage** | Blob, Files, ADLS | Malware scanning, anomaly detection |
 | **Defender for SQL** | Azure SQL, SQL Server | SQL injection detection, anomalous access |
@@ -196,7 +196,7 @@ graph LR
 ## Azure Key Vault
 
 | Feature | Detail |
-|---|---|
+| --- | --- |
 | **Secrets** | Connection strings, passwords, API keys |
 | **Keys** | Encryption keys (RSA, EC) — HSM-backed option |
 | **Certificates** | Manage TLS/SSL lifecycle |
@@ -212,7 +212,7 @@ graph LR
 ## Encryption
 
 | Type | Description | Service |
-|---|---|---|
+| --- | --- | --- |
 | **Encryption at rest** | Data encrypted on disk | Default in Azure Storage, SQL, etc. |
 | **CMK (Customer-Managed Keys)** | You control key in Key Vault | Stricter compliance, storage + SQL |
 | **PMK (Platform-Managed Keys)** | Microsoft manages key | Default, lower admin overhead |
@@ -226,7 +226,7 @@ graph LR
 ## Policy & Compliance
 
 | Concept | Description |
-|---|---|
+| --- | --- |
 | **Azure Policy** | Enforce, audit, or remediate resource configurations |
 | **Policy Initiative** | Group of policies (e.g., CIS benchmark) |
 | **Deny Effect** | Block non-compliant resource creation |
@@ -243,7 +243,7 @@ graph LR
 ## Authentication & Password Security
 
 | Feature | Description | Use Case |
-|---|---|---|
+| --- | --- | --- |
 | **MFA** | Multi-factor authentication | All users, especially admins |
 | **Passwordless** | FIDO2 key, Microsoft Authenticator, Windows Hello | Zero-password auth |
 | **Conditional Access** | Policy-based access decisions | Enforce MFA by location/risk/device |
@@ -258,7 +258,7 @@ graph LR
 ## Microsoft Sentinel
 
 | Component | Purpose |
-|---|---|
+| --- | --- |
 | **Data Connectors** | Ingest logs from Azure, M365, 3rd party |
 | **Analytics Rules** | Detect threats from log patterns |
 | **Playbooks (Logic Apps)** | Auto-respond to incidents |
@@ -275,7 +275,7 @@ graph LR
 ## Storage Account Types
 
 | Type | Supported Services | Use Case |
-|---|---|---|
+| --- | --- | --- |
 | **Standard GPv2** | Blob, File, Queue, Table | General purpose, most scenarios |
 | **Premium Block Blobs** | Block Blob only | Low-latency blob I/O, analytics |
 | **Premium File Shares** | Azure Files only | High-performance SMB/NFS shares |
@@ -286,7 +286,7 @@ graph LR
 ## Blob Access Tiers
 
 | Tier | Access Frequency | Storage Cost | Access Cost | Minimum Duration |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | **Hot** | Frequent | Highest | Lowest | None |
 | **Cool** | Infrequent (≥30 days) | Lower | Higher | 30 days |
 | **Cold** | Rare (≥90 days) | Lower still | Higher | 90 days |
@@ -299,7 +299,7 @@ graph LR
 ## Replication Options
 
 | Option | Acronym | Copies | Scope | Use Case | SLA |
-|---|---|---|---|---|---|
+| --- | --- | --- | --- | --- | --- |
 | Locally Redundant Storage | **LRS** | 3 | Single datacenter | Dev/test, low cost | 99.9% |
 | Zone-Redundant Storage | **ZRS** | 3 | 3 Availability Zones, 1 region | HA in region, no data loss on zone failure | 99.9% |
 | Geo-Redundant Storage | **GRS** | 6 | Primary + secondary region | DR, read from secondary only on failover | 99.9% |
@@ -325,7 +325,7 @@ graph TD
 ## Azure Files vs Blob vs Disk vs NetApp
 
 | Service | Protocol | Use Case |
-|---|---|---|
+| --- | --- | --- |
 | **Azure Blob** | REST/HTTP | Unstructured data, backups, media, data lake |
 | **Azure Files** | SMB 3.0 / NFS 4.1 | Lift-and-shift file shares, shared app config |
 | **Azure NetApp Files** | NFS / SMB | High-perf enterprise workloads, SAP HANA |
@@ -338,7 +338,7 @@ graph TD
 ## Database Storage Options
 
 | Service | Type | Best For | Key Feature |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | **Azure SQL Database** | Relational PaaS | Cloud-native OLTP | Serverless, elastic pool, hyperscale |
 | **Azure SQL Managed Instance** | Relational PaaS | SQL Server lift-and-shift | Near 100% SQL Server compat, VNet inject |
 | **Cosmos DB** | NoSQL multi-model | Global distributed, low-latency | Multi-region writes, 5 APIs |
@@ -352,7 +352,7 @@ graph TD
 ## Cosmos DB Consistency Levels (strong → weak)
 
 | Level | Guarantee | Latency | Use Case |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | **Strong** | Linearizable reads | Higher | Financial transactions |
 | **Bounded Staleness** | Lag bounded by ops/time | Moderate | Global apps, bounded lag OK |
 | **Session** | Consistent within session | Low | Per-user data (default) |
@@ -382,7 +382,7 @@ graph TD
 ## Key Services
 
 | Service | Purpose | Key Concepts |
-|---|---|---|
+| --- | --- | --- |
 | **Azure Monitor** | Central telemetry platform | Metrics, Logs, Alerts, Workbooks |
 | **Log Analytics Workspace** | Store and query logs (KQL) | Retention (30–730 days), data export |
 | **Application Insights** | APM for apps | Live metrics, dependency tracking, availability tests |
@@ -398,7 +398,7 @@ graph TD
 ## Alerts
 
 | Type | Trigger | Use Case |
-|---|---|---|
+| --- | --- | --- |
 | **Metric Alert** | Threshold on metric value | CPU > 80%, response time > 2s |
 | **Log Alert** | KQL query result count/value | Error count in last 5 min > 10 |
 | **Activity Log Alert** | Azure control-plane events | Who deleted a resource, policy assignment |
@@ -421,7 +421,7 @@ graph TD
 ## Compute Options
 
 | Service | Type | Use Case |
-|---|---|---|
+| --- | --- | --- |
 | **Azure Virtual Machines** | IaaS | Full OS control, lift-and-shift |
 | **VM Scale Sets (VMSS)** | IaaS autoscale | Stateless workloads needing horizontal scale |
 | **Azure App Service** | PaaS | Web apps, APIs, mobile backends |
@@ -437,7 +437,7 @@ graph TD
 ## App Service Plans (Tiers)
 
 | Tier | Category | Features |
-|---|---|---|
+| --- | --- | --- |
 | **Free / Shared (F1/D1)** | Dev/Test | No SLA, shared infra, no custom domain SSL |
 | **Basic (B1–B3)** | Dev/Test | Dedicated VMs, manual scale (up to 3 instances) |
 | **Standard (S1–S3)** | Production | Auto-scale, custom domain, SSL, deployment slots (5) |
@@ -451,7 +451,7 @@ graph TD
 ## Azure Functions Hosting Plans
 
 | Plan | Scale | Cold Start | Use Case |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | **Consumption** | Auto (0 to N) | Yes | Sporadic, unpredictable traffic |
 | **Premium** | Pre-warmed instances | No | No cold start, VNet, longer execution |
 | **Dedicated (App Service)** | Manual / autoscale | No | Predictable load, reuse existing plan |
@@ -461,7 +461,7 @@ graph TD
 ## Azure Container Apps vs AKS vs ACI
 
 | Dimension | ACI | ACA | AKS |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | **Control plane** | None — single container group | Managed (Envoy/KEDA/Dapr hidden) | Full K8s API access |
 | **Scale trigger** | Manual / ARM template | KEDA (HTTP, queue, cron, custom) | HPA / KEDA (self-managed) |
 | **Dapr integration** | No | Native sidecar injection | Manual Dapr install |
@@ -492,7 +492,7 @@ flowchart TD
 ## Virtual Machine SKU Families
 
 | Family | Purpose |
-|---|---|
+| --- | --- |
 | **D-series** | General purpose — balanced CPU/memory |
 | **E-series** | Memory optimized — databases, caches |
 | **F-series** | Compute optimized — batch, game servers |
@@ -547,7 +547,7 @@ flowchart TD
 ## Entra ID (Azure AD) Concepts
 
 | Concept | Description |
-|---|---|
+| --- | --- |
 | **Tenant** | Dedicated Entra ID instance for org |
 | **User** | Human identity |
 | **Service Principal** | App identity (manual credential management) |
@@ -562,7 +562,7 @@ flowchart TD
 ## Entra Identity Scenarios
 
 | Scenario | Solution | Tenant Type |
-|---|---|---|
+| --- | --- | --- |
 | Employee / workforce identity | Entra ID (workforce tenant) | Workforce |
 | Partner / vendor B2B access | Entra B2B (guest users) | Workforce |
 | Customer-facing app identity | Entra External ID (external tenant) | External / CIAM |
@@ -577,7 +577,7 @@ flowchart TD
 ## RBAC
 
 | Concept | Description |
-|---|---|
+| --- | --- |
 | **Role Definition** | Set of allowed actions (e.g. Contributor) |
 | **Role Assignment** | Assign role to principal at a scope |
 | **Scope levels** | Management Group > Subscription > Resource Group > Resource |
@@ -592,7 +592,7 @@ flowchart TD
 ## PIM Key Concepts
 
 | Feature | Detail |
-|---|---|
+| --- | --- |
 | **Eligible Assignment** | Role not active until user activates |
 | **Active Assignment** | Role always active |
 | **Activation** | User requests role, optionally requires MFA + justification |
@@ -609,7 +609,7 @@ flowchart TD
 ## Key Concepts
 
 | Term | Definition |
-|---|---|
+| --- | --- |
 | **RTO** | Recovery Time Objective — max acceptable downtime |
 | **RPO** | Recovery Point Objective — max acceptable data loss (time) |
 | **SLA** | Uptime guarantee; VMs need 2+ instances for 99.9%+ |
@@ -629,7 +629,7 @@ graph TD
 ## Azure Site Recovery (ASR)
 
 | Feature | Detail |
-|---|---|
+| --- | --- |
 | **Purpose** | Replicate VMs to secondary region for DR |
 | **RPO** | As low as 30 seconds (crash-consistent) |
 | **RTO** | Minutes (orchestrated failover) |
@@ -641,7 +641,7 @@ graph TD
 ## Azure Backup
 
 | Workload | Vault Type | Key Feature |
-|---|---|---|
+| --- | --- | --- |
 | Azure VMs | Recovery Services Vault | App-consistent snapshots |
 | Azure SQL | Recovery Services Vault | Full/diff/log backup, PITR |
 | Azure Files | Recovery Services Vault | Share-level snapshots |
@@ -667,7 +667,7 @@ graph TD
 ```
 
 | Scope | Purpose |
-|---|---|
+| --- | --- |
 | **Root Management Group** | Apply policies across entire tenant |
 | **Management Group** | Group subscriptions, inherit policies |
 | **Subscription** | Billing boundary, policy scope |
@@ -678,7 +678,7 @@ graph TD
 ## Azure Blueprints vs ARM Templates vs Terraform
 
 | Tool | Purpose | Drift Detection | State | Status |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | **ARM Templates** | Deploy resources declaratively | No | Stateless | Active |
 | **Bicep** | ARM simplified syntax | No | Stateless | Active |
 | **Terraform** | Multi-cloud IaC | Yes (plan) | Stateful | Active |
@@ -700,7 +700,7 @@ graph TD
 ## Cost Management
 
 | Tool | Purpose |
-|---|---|
+| --- | --- |
 | **Azure Cost Management** | View, analyze, alert on spending |
 | **Budgets** | Set spend thresholds, trigger alerts/actions |
 | **Azure Advisor (Cost)** | Right-sizing and reservation recommendations |
@@ -722,7 +722,7 @@ graph TD
 ## Locks
 
 | Lock Type | Prevents |
-|---|---|
+| --- | --- |
 | **ReadOnly** | All write operations (create, update, delete) — read access only |
 | **CanNotDelete** | Delete only — updates still allowed |
 
@@ -737,7 +737,7 @@ graph TD
 ## Service Comparison
 
 | Service | Pattern | Ordering | Replay | Use Case |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | **Service Bus Queue** | Message (P2P) | FIFO optional | No | Reliable command delivery |
 | **Service Bus Topic** | Message (pub/sub) | FIFO optional | No | Fan-out with filters |
 | **Event Grid** | Event (reactive) | No | No | Resource change reactions |
@@ -762,7 +762,7 @@ flowchart TD
 ## Logic Apps vs Azure Functions vs Durable Functions
 
 | Service | Best For | Trigger Model | State | Pricing Model |
-|---|---|---|---|---|
+| --- | --- | --- | --- | --- |
 | **Logic Apps** | Low-code workflow automation, SaaS connectors | Event / Schedule / HTTP | Stateful (built-in) | Per-action / consumption |
 | **Azure Functions** | Stateless compute, event-driven microservices | Many triggers (HTTP, queue, timer, etc.) | Stateless by default | Consumption / Premium |
 | **Durable Functions** | Long-running, stateful orchestrations in code | Orchestrator / Activity / Entity | Stateful (via storage) | Consumption (includes storage cost) |
@@ -799,13 +799,13 @@ flowchart TD
 
 ## Five-Pillar Summary
 
-| Pillar                  | Goal                                     | Key Azure Services / Patterns                              | Exam Focus                                          |
-|-------------------------|------------------------------------------|------------------------------------------------------------|-----------------------------------------------------|
-| Reliability             | Survive failures; meet SLA targets       | Availability Zones, Traffic Manager, Azure Site Recovery   | AZ vs AS vs Multi-Region; RTO/RPO targets           |
-| Security                | Protect data, identities, and workloads  | Microsoft Entra ID, Defender for Cloud, Key Vault, DDoS    | Zero Trust; defence-in-depth layers                 |
-| Cost Optimization       | Maximise value; eliminate waste          | Reserved Instances, Spot VMs, Azure Advisor, Cost Budgets  | RI vs Spot vs On-Demand trade-offs                  |
-| Operational Excellence  | Safe deployments; observable operations  | Azure Monitor, Log Analytics, Deployment Slots, IaC        | Blue/green deploys; alerting strategy               |
-| Performance Efficiency  | Scale to meet demand; minimise latency   | Azure CDN, Front Door, VMSS, Cosmos DB, Redis Cache        | Horizontal vs vertical scale; caching layers        |
+| Pillar | Goal | Key Azure Services / Patterns | Exam Focus |
+| --- | --- | --- | --- |
+| Reliability | Survive failures; meet SLA targets | Availability Zones, Traffic Manager, Azure Site Recovery | AZ vs AS vs Multi-Region; RTO/RPO targets |
+| Security | Protect data, identities, and workloads | Microsoft Entra ID, Defender for Cloud, Key Vault, DDoS | Zero Trust; defence-in-depth layers |
+| Cost Optimization | Maximise value; eliminate waste | Reserved Instances, Spot VMs, Azure Advisor, Cost Budgets | RI vs Spot vs On-Demand trade-offs |
+| Operational Excellence | Safe deployments; observable operations | Azure Monitor, Log Analytics, Deployment Slots, IaC | Blue/green deploys; alerting strategy |
+| Performance Efficiency | Scale to meet demand; minimise latency | Azure CDN, Front Door, VMSS, Cosmos DB, Redis Cache | Horizontal vs vertical scale; caching layers |
 
 > **Cross-reference:** See [High Availability & Disaster Recovery](#high-availability--disaster-recovery) for Reliability patterns, [Security](#security) for defence-in-depth, [Networking — CDN](#content-delivery-cdn) for CDN/Front Door, [Compute — Caching](#caching) for Redis tier selection, [Networking](#networking) for DDoS, and [Governance](#governance) for cost control tooling.
 
@@ -813,11 +813,11 @@ flowchart TD
 
 ## Reliability — SLA Target Mapping
 
-| SLA Target | Recommended Deployment Pattern       | Notes                                              |
-|------------|--------------------------------------|----------------------------------------------------|
-| 99.9 %     | Single region, Availability Set      | Protects against rack/host failure; no zone fault  |
-| 99.95 %    | Single region, Availability Zones    | Protects against datacenter-level failure          |
-| 99.99 %+   | Multi-region (active-active/passive) | Requires Traffic Manager or Front Door for routing |
+| SLA Target | Recommended Deployment Pattern | Notes |
+| --- | --- | --- |
+| 99.9 % | Single region, Availability Set | Protects against rack/host failure; no zone fault |
+| 99.95 % | Single region, Availability Zones | Protects against datacenter-level failure |
+| 99.99 %+ | Multi-region (active-active/passive) | Requires Traffic Manager or Front Door for routing |
 
 > **Exam tip:** Availability Zones ≠ Availability Sets. AZs span separate
 > datacenters; AS only separate fault/update domains within one datacenter.
@@ -826,12 +826,12 @@ flowchart TD
 
 ## Cost Optimization — Compute Pricing Model Selection
 
-| Option                | Best For                                     | Commitment        | Interruption Risk |
-|-----------------------|----------------------------------------------|-------------------|-------------------|
-| On-Demand (Pay-as-go) | Unpredictable workloads, short-term dev/test | None              | None              |
-| Reserved Instances    | Steady-state, 24/7 production workloads      | 1 or 3 years      | None              |
-| Spot VMs              | Fault-tolerant batch jobs, HPC, dev/test     | None              | Yes (eviction)    |
-| Azure Hybrid Benefit  | Existing Windows Server / SQL Server licences| Bring own licence | None              |
+| Option | Best For | Commitment | Interruption Risk |
+| --- | --- | --- | --- |
+| On-Demand (Pay-as-go) | Unpredictable workloads, short-term dev/test | None | None |
+| Reserved Instances | Steady-state, 24/7 production workloads | 1 or 3 years | None |
+| Spot VMs | Fault-tolerant batch jobs, HPC, dev/test | None | Yes (eviction) |
+| Azure Hybrid Benefit | Existing Windows Server / SQL Server licences | Bring own licence | None |
 
 > **Tools:** Azure Advisor surfaces rightsizing and idle resource
 > recommendations. Azure Budgets + Cost Alerts prevent spend overruns.
