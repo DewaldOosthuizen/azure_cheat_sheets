@@ -14,7 +14,6 @@ meaningful content lives in a single Markdown file.
 ## Repository Structure
 
     docs/AZ-305_CheatSheet.md   — the single main cheat sheet
-    docs/Azure-CheatSheet.md    — the single main cheat sheet
     scripts/validate_mermaid.py — CI script that validates Mermaid code blocks
     config/orchestrator.yml     — workspace-orchestrator pipeline config
     openspec/                   — openspec change workflow artefacts (proposals,
@@ -117,3 +116,7 @@ Decision order for content tasks:
 ## License
 
 GPL-3.0 — see LICENSE.
+
+---
+
+The sole change from the previous version is the removal of the stale `docs/Azure-CheatSheet.md` line from the Repository Structure section — that file was renamed to `docs/AZ-305_CheatSheet.md` and no longer exists.
