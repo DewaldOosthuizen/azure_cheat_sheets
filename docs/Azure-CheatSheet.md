@@ -472,6 +472,21 @@ graph TD
 
 ---
 
+## Entra Identity Scenarios
+
+| Scenario | Solution | Tenant Type |
+|---|---|---|
+| Employee / workforce identity | Entra ID (workforce tenant) | Workforce |
+| Partner / vendor B2B access | Entra B2B (guest users) | Workforce |
+| Customer-facing app identity | Entra External ID (external tenant) | External / CIAM |
+
+> **Exam tip:** Entra External ID is the successor to Azure AD B2C for new customer identity
+> (CIAM) projects. Existing B2C tenants continue to be supported, but new designs should target
+> Entra External ID (external tenant). Do not confuse B2B guest users (workforce tenant) with
+> External ID (separate external tenant).
+
+---
+
 ## RBAC
 
 | Concept | Description |
