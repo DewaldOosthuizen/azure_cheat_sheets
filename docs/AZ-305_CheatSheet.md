@@ -597,6 +597,33 @@ flowchart TD
 
 ---
 
+## Serverless / Event-Driven Selection
+
+```mermaid
+flowchart TD
+    A[Serverless / Event-Driven workload?] --> B{Execution duration\n< 10 minutes?}
+    B -- Yes --> C{Stateless with\nHTTP / queue / timer trigger?}
+    B -- No --> D{Need long-running\norchestration / stateful?}
+    C -- Yes --> E{Code-first preference?}
+    C -- No --> F{Enterprise workflow\nor B2B integration?}
+    D -- Yes --> DURABLE[Azure Functions Premium/Dedicated\nwith Durable Functions]
+    D -- No --> ACA_LONG[Azure Container Apps]
+    E -- Yes --> FUNC_CONS[Azure Functions Consumption]
+    E -- No --> LOGIC_CONS[Logic Apps Consumption]
+    F -- Yes --> G{Low-code / visual designer?}
+    F -- No --> FUNC_CONS
+    G -- Yes --> LOGIC_CONS
+    G -- No --> LOGIC_STD[Logic Apps Standard]
+```
+
+> **Exam tip:** Use Azure Functions (Consumption) for short-lived, stateless, code-first triggers.
+> Use Durable Functions (Premium/Dedicated) for stateful orchestration or fan-out patterns.
+> Use Logic Apps Consumption for simple enterprise/B2B workflows with low-code connectors.
+> Use Logic Apps Standard when you need ISE-like VNet isolation or single-tenant deployment.
+> Use Azure Container Apps when execution duration exceeds Functions limits or you need a custom runtime.
+
+---
+
 ## Azure Container Apps vs AKS vs ACI
 
 | Dimension | ACI | ACA | AKS |
@@ -611,20 +638,27 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A[Container workload?] --> B{Need K8s API\nor custom controllers?}
+    A[Container workload?] --> B{Existing Kubernetes\nteam expertise or\ncustom K8s API access?}
     B -- Yes --> AKS[Azure Kubernetes Service]
-    B -- No --> C{Need event-driven scale\nor Dapr without K8s ops?}
-    C -- Yes --> ACA[Azure Container Apps]
-    C -- No --> D{Single burst container\nno long-lived scale?}
-    D -- Yes --> ACI[Azure Container Instances]
-    D -- No --> ACA
+    B -- No --> C{Scale-to-zero\nrequirement?}
+    C -- Yes --> D{Microservice complexity\nor Dapr integration?}
+    C -- No --> E{Simple web app\nor single container?}
+    D -- Yes --> ACA[Azure Container Apps]
+    D -- No --> F{Single burst / short-lived\ntask, no persistent scale?}
+    F -- Yes --> ACI[Azure Container Instances]
+    F -- No --> ACA
+    E -- Yes --> APPSVC[App Service Containers]
+    E -- No --> ACA
 ```
 
 > **Exam tip:** ACA uses KEDA under the hood and supports **scale-to-zero** for HTTP and
 > queue-based triggers — similar to Consumption plan Functions but for containerised workloads.
-> Choose ACA over Functions when you need: a custom runtime, Dapr service invocation, or
+> Choose ACA over Functions when you need a custom runtime, Dapr service invocation, or
 > revision-based traffic splitting. Choose AKS when the scenario requires direct Kubernetes
 > API access, custom admission webhooks, or specific CNI configuration.
+> Choose App Service Containers for simple, single-container web apps that benefit from
+> built-in deployment slots and App Service features without microservice overhead.
+> Use ACI for one-off batch jobs or CI/CD pipeline steps that need an isolated container burst.
 
 ---
 
