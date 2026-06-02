@@ -19,6 +19,14 @@ codegraph affected <changed-files> -p .   # find affected tests
 codegraph sync .                          # after any code changes
 ```
 
+If `.understand-anything/knowledge-graph.json` exists, use it for architecture
+questions (layers, relationships, guided tour) — launch the dashboard with:
+
+```bash
+cd ~/.understand-anything-plugin/packages/dashboard
+GRAPH_DIR=$(pwd) npx vite --host 127.0.0.1
+```
+
 Fall back to grep/file reading only when these tools return insufficient results.
 
 <!-- graph-tools-end -->
