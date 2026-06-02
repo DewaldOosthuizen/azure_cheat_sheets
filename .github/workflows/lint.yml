@@ -27,7 +27,7 @@ jobs:
       - name: Write puppeteer config
         run: echo '{"args":["--no-sandbox","--disable-setuid-sandbox"]}' > /tmp/puppeteer-config.json
       - name: Validate Mermaid diagrams
-        run: python3 scripts/validate_mermaid.py docs/Azure-CheatSheet.md
+        run: python3 scripts/validate_mermaid.py docs/AZ-305_CheatSheet.md
 
   python-lint:
     runs-on: ubuntu-latest

@@ -1,6 +1,7 @@
 # Azure Cheat Sheets
 
 [![Lint](https://github.com/DewaldOosthuizen/azure_cheat_sheets/actions/workflows/lint.yml/badge.svg)](https://github.com/DewaldOosthuizen/azure_cheat_sheets/actions/workflows/lint.yml)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=RVJC5VUM5ZEW8&source=url)
 
 Quick-reference study notes for Azure architecture decisions, with tables and
 Mermaid diagrams that compare services by tradeoff, scope, and common exam
@@ -22,9 +23,17 @@ decision-making. Configuration walkthroughs, portal screenshots, and hands-on
 labs are intentionally out of scope. Other Azure exams may overlap with parts
 of this material, but the repository is not yet organized around those tracks.
 
+### Exam Overlap
+
+| Exam | Focus | Relevant Sections |
+|------|-------|-------------------|
+| AZ-900 | Fundamentals | Networking (overview), Storage, Compute, Identity & Access (Entra basics) |
+| AZ-104 | Administrator | All sections — administrator-level depth on RBAC, Networking, HA & DR |
+| AZ-305 | Architect | All sections — architectural decision-making focus |
+
 ## Repository Structure
 
-- [`docs/Azure-CheatSheet.md`](docs/Azure-CheatSheet.md) - the main cheat sheet
+- [`docs/AZ-305_CheatSheet.md`](docs/AZ-305_CheatSheet.md) - the main cheat sheet
   for Azure infrastructure design topics.
 
 The current cheat sheet is organized into these top-level sections:
