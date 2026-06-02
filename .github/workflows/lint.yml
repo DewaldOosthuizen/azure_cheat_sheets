@@ -28,3 +28,12 @@ jobs:
         run: echo '{"args":["--no-sandbox","--disable-setuid-sandbox"]}' > /tmp/puppeteer-config.json
       - name: Validate Mermaid diagrams
         run: python3 scripts/validate_mermaid.py docs/Azure-CheatSheet.md
+
+  link-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: lycheeverse/lychee-action@v2
+        with:
+          args: --verbose --no-progress docs/**/*.md README.md
+          fail: true
