@@ -14,6 +14,11 @@ meaningful content lives in a single Markdown file.
 ## Repository Structure
 
     docs/AZ-305_CheatSheet.md   — the single main cheat sheet
+    docs/Azure-CheatSheet.md    — the single main cheat sheet
+    scripts/validate_mermaid.py — CI script that validates Mermaid code blocks
+    config/orchestrator.yml     — workspace-orchestrator pipeline config
+    openspec/                   — openspec change workflow artefacts (proposals,
+                                  specs, impls, archive)
 
 The cheat sheet is organized into eight top-level sections:
 
@@ -26,14 +31,9 @@ The cheat sheet is organized into eight top-level sections:
 7. High Availability & Disaster Recovery
 8. Governance
 
-Supporting files:
-
-    scripts/validate_mermaid.py   — CI script that validates Mermaid code blocks
-    config/orchestrator.yml       — workspace-orchestrator pipeline config
-
 ## Content Guidelines
 
-When adding or editing content, follow these rules:
+When adding or editing content, follow these rules precisely:
 
 - Keep explanations concise and comparison-oriented.
 - Section headings: top-level domain names in ALL CAPS (`# NETWORKING`).
@@ -91,7 +91,7 @@ Mermaid blocks before merge.
 
 ## Code Exploration
 
-Two analysis tool artifacts are present. Use them before opening raw source.
+Two analysis tool artefacts are present. Use them before opening raw source.
 
 ### codegraph
 
@@ -110,9 +110,9 @@ Use for layered architecture questions (layers, communities, entry points).
 
 Decision order for content tasks:
 
-1. codegraph context  — which symbols or sections matter?
-2. understand-anything — where in the structure does this live?
-3. Read raw source — only the file(s) that actually matter.
+1. codegraph context       — which symbols or sections matter?
+2. understand-anything     — where in the structure does this live?
+3. Read raw source         — only the file(s) that actually matter.
 
 ## License
 
