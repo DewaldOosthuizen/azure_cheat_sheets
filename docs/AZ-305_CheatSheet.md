@@ -416,6 +416,20 @@ graph TD
 
 ---
 
+## Log Analytics Retention & Cost Tiers
+
+| Tier | Type | Best For | Key Feature |
+| --- | --- | --- | --- |
+| **Analytics** | Interactive (30–730 days) | Active investigation, alerting | Full KQL, per-GB ingestion cost |
+| **Basic** | Interactive (8 days) | High-volume, low-value logs | Limited KQL, lower per-GB cost |
+| **Archive** | Cold (up to 12 years) | Compliance, audit, cold storage | Search jobs only, lowest per-GB cost |
+
+> **Exam tip:** Choose Basic tier for noisy, rarely queried logs (e.g. verbose diagnostics)
+> to reduce cost. Use Archive when retention beyond 730 days is required for compliance;
+> queries against archived data run as Search Jobs, not interactive KQL.
+
+---
+
 # COMPUTE
 
 ## Compute Options
