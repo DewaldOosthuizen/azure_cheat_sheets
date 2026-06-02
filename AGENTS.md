@@ -11,7 +11,19 @@ graphify-out/ not yet generated for this repo.
 
 ## understand-anything
 
-.understand-anything/ not yet generated for this repo.
+.understand-anything/knowledge-graph.json is present.
+Use it for layered architecture questions (layers, communities, entry points).
+
+```bash
+# Launch the interactive dashboard
+cd ~/.understand-anything-plugin/packages/dashboard
+GRAPH_DIR=$(pwd) npx vite --host 127.0.0.1
+```
+
+For prose questions load the skill:
+```
+skill: understand-chat
+```
 
 ## codegraph
 
