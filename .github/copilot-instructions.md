@@ -36,12 +36,49 @@ Supporting files:
 When adding or editing content, follow these rules:
 
 - Keep explanations concise and comparison-oriented.
+- Section headings: top-level domain names in ALL CAPS (`# NETWORKING`).
+  Sub-topics as `##`. Do not use Title Case for top-level section headings.
 - Prefer tables when comparing Azure services, tiers, or design options.
-- Use Mermaid diagrams for branching decision flows where a visual aid is more
-  useful than prose alone.
+  Use these column templates:
+
+  Networking / compute services:
+  | Service | Layer | Scope | Use Case | Key Feature |
+
+  Data / storage services:
+  | Service | Type | Best For | Key Feature |
+
+  Consistency columns (always present): Service, Key Feature.
+  Do not add free-form columns not in the template above.
+
 - Use short exam-tip callouts only when they clarify a likely decision point.
+  Place the callout immediately after the relevant table, using this format:
+
+  > **Exam tip:** Choose Azure Front Door when the requirement mentions
+  > global HTTP load balancing, WAF, or SSL offload at the edge.
+
+  Do not use plain blockquotes, bold sentences, or note/warning admonitions
+  for exam tips.
+
+- Use Mermaid diagrams for branching decision flows. Choose the directive by
+  purpose:
+
+  | Purpose                        | Directive       |
+  |--------------------------------|-----------------|
+  | Decision flows (if/else trees) | flowchart TD    |
+  | Hierarchy / ecosystem maps     | graph TD        |
+  | Connectivity / network paths   | graph LR        |
+
+  Example:
+
+  ```mermaid
+  flowchart TD
+      A[Need load balancing?] -->|Global HTTP| B[Azure Front Door]
+      A -->|Regional TCP/UDP| C[Azure Load Balancer]
+  ```
+
 - Do not document features or claims not already reflected in the content.
 - Scope pull requests to one improvement area where possible.
+- Run `npx markdownlint-cli2 "**/*.md"` locally before opening a PR.
 - Verify that Markdown formatting and Mermaid blocks render cleanly on GitHub.
 
 ## Mermaid Diagrams
