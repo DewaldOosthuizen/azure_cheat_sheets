@@ -1015,6 +1015,29 @@ flowchart TD
 > **Exam tip:** Availability Zones ≠ Availability Sets. AZs span separate
 > datacenters; AS only separate fault/update domains within one datacenter.
 
+### Composite SLA Calculation
+
+Composite SLA = SLA₁ × SLA₂ × … × SLAₙ (serial dependencies multiply downward).
+
+**Worked example:** App Service 99.95 % × SQL Database 99.99 % = **99.94 %**
+(monthly downtime budget drops from ~4.4 min to ~26 min).
+
+Adding redundant independent paths raises the composite SLA:
+Composite = 1 − (1 − SLA₁) × (1 − SLA₂) for parallel components.
+
+### Multi-Region Failover Patterns
+
+| Pattern | RTO | RPO | Azure Implementation | Key Feature |
+| --- | --- | --- | --- | --- |
+| Active-Active | Near zero | Near zero | Front Door + globally distributed backends | Traffic split across regions; no failover lag |
+| Active-Passive (warm) | Minutes | Seconds–minutes | Traffic Manager + pre-provisioned standby region | Standby receives replication but serves no live traffic |
+| Active-Passive (cold) | Hours | Minutes–hours | Azure Site Recovery + on-demand provisioning | Lowest cost; longest recovery time |
+
+> **Exam tip:** Choose active-active when the requirement states RTO ≈ 0 or
+> "no downtime tolerated". Choose active-passive (warm) when cost must be
+> controlled but recovery must complete within minutes. Use composite SLA
+> multiplication to verify the architecture meets the stated SLA target.
+
 ---
 
 ## Cost Optimization — Compute Pricing Model Selection
