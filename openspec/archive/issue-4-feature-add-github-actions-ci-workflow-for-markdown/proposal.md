@@ -1,3 +1,5 @@
+# Proposal: Issue #4 — Add GitHub Actions CI Workflow for Markdown Linting
+
 ## Overview
 
 The repository has no CI pipeline, which means broken Markdown tables, invalid
@@ -52,14 +54,16 @@ see whether the main branch is passing lint.
 below the first `# Azure Cheat Sheets` heading on line 1.
 
 Before:
-```
+
+```markdown
 # Azure Cheat Sheets
 
 Quick-reference study notes for Azure architecture decisions...
 ```
 
 After:
-```
+
+```markdown
 # Azure Cheat Sheets
 
 ![Lint](https://github.com/DewaldOosthuizen/azure_cheat_sheets/actions/workflows/lint.yml/badge.svg)

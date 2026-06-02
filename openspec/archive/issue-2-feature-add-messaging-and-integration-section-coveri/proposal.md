@@ -30,6 +30,7 @@ entirely absent.
 1. Add a 9th entry to the Table of Contents block (after line 17, before the closing `---`):
 
 Before (lines 8–18):
+
 ```markdown
 ## Table of Contents
 
@@ -44,6 +45,7 @@ Before (lines 8–18):
 ```
 
 After:
+
 ```markdown
 ## Table of Contents
 
@@ -58,13 +60,14 @@ After:
 9. [Messaging & Integration](#messaging--integration)
 ```
 
-2. Append a new `# MESSAGING & INTEGRATION` section before the footer note (after line 566,
+1. Append a new `# MESSAGING & INTEGRATION` section before the footer note (after line 566,
    before line 568). The section must contain:
 
    a) **Service comparison table** — columns: Service | Pattern | Ordering | Replay | Use Case.
       Rows: Service Bus Queue, Service Bus Topic, Event Grid, Event Hub, Storage Queue.
 
    Example:
+
    ```markdown
    | Service | Pattern | Ordering | Replay | Use Case |
    |---|---|---|---|---|
@@ -79,6 +82,7 @@ After:
       requirements, fan-out needs, leading to the correct service choice.
 
    Example skeleton:
+
    ```mermaid
    flowchart TD
        A[Need async communication?] --> B{Events or Messages?}
