@@ -45,7 +45,8 @@ class TestValidateBlockTimeout:
 
     def test_validate_block_returns_false_on_timeout(self):
         import subprocess
-        with patch("validate_mermaid.subprocess.run", side_effect=subprocess.TimeoutExpired(cmd="mmdc", timeout=60)):
+        timeout_exc = subprocess.TimeoutExpired(cmd="mmdc", timeout=60)
+        with patch("validate_mermaid.subprocess.run", side_effect=timeout_exc):
             result = validate_mermaid.validate_block(1, "graph TD\n  A --> B\n")
         assert result[0] is False
         assert result[1] == "mmdc timed out after 60 s"

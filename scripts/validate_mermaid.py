@@ -9,11 +9,22 @@ import sys
 import tempfile
 
 
+def _extract_from_text(text: str) -> list[str]:
+    """Extract mermaid diagram sources from a Markdown string.
+
+    The regex tolerates trailing whitespace on the opening fence line
+    (e.g. ```mermaid   ) and Windows-style CRLF line endings — both of which
+    would silently produce zero matches with the original ``\\n``-only pattern,
+    causing CI to exit 0 with no diagrams validated (false green).
+    """
+    pattern = re.compile(r"```mermaid\s*\r?\n(.*?)```", re.DOTALL)
+    return pattern.findall(text)
+
+
 def extract_mermaid_blocks(md_path):
     with open(md_path, encoding="utf-8") as f:
         content = f.read()
-    pattern = re.compile(r"```mermaid\n(.*?)```", re.DOTALL)
-    return pattern.findall(content)
+    return _extract_from_text(content)
 
 
 def validate_block(index, diagram_src):
