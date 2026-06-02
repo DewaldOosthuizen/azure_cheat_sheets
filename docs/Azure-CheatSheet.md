@@ -49,6 +49,53 @@ flowchart TD
 
 ---
 
+## API Management (APIM)
+
+### Tier Comparison
+
+| Tier        | VNet Injection          | Scale Units          | Availability Zones | Primary Use Case                                      |
+|-------------|-------------------------|----------------------|--------------------|-------------------------------------------------------|
+| Consumption | None                    | Serverless (auto)    | No                 | Lightweight, event-driven APIs; no portal; cold-start |
+| Developer   | External / Internal     | 1 (no scale-out)     | No                 | Non-production, dev/test, full feature exploration    |
+| Basic       | None                    | Up to 2              | No                 | Entry-level production; no VNet, limited SLA          |
+| Standard    | External / Internal     | Up to 4              | No                 | Production; VNet injection without AZ or multi-region |
+| Premium     | External / Internal     | Up to 31 per region  | Yes (multi-region) | Enterprise; multi-region gateways, AZs, private APIs  |
+
+> **v2 note:** Basic v2 and Standard v2 are GA. They offer faster provisioning and VNet integration via injection (Standard v2) but do not yet support all Premium features (multi-region, self-hosted gateway at scale). Use Premium v1/v2 for full enterprise requirements.
+
+### Policy Evaluation Order
+
+| Layer    | Trigger                              | Typical Use                                           |
+|----------|--------------------------------------|-------------------------------------------------------|
+| Inbound  | Every request on arrival at gateway  | JWT validation, rate limiting, IP filtering, rewriting |
+| Backend  | Just before forwarding to backend    | Load-balance, set backend URL, retry policy            |
+| Outbound | After backend response, before reply | Response transformation, header stripping, caching     |
+| On-Error | Any unhandled exception in the chain | Uniform error responses, logging, alerting             |
+
+### Decision Flow — API Gateway Selection
+
+```mermaid
+flowchart TD
+    A[Need an API gateway?] --> B{Global multi-region\nor CDN required?}
+    B -- Yes --> C[Azure Front Door\n+ optional APIM backend]
+    B -- No --> D{WAF required\nfor web/app traffic?}
+    D -- Yes --> E[Application Gateway + WAF\nor Front Door with WAF]
+    D -- No --> F{Private VNet /\ninternal APIs?}
+    F -- Yes --> G{Full API portal,\npolicies, rate-limiting?}
+    G -- Yes --> H[APIM Premium\nInternal VNet mode]
+    G -- No --> I[Application Gateway\nInternal mode]
+    F -- No --> J{Serverless / no\ndeveloper portal needed?}
+    J -- Yes --> K[APIM Consumption tier\nor raw Functions URL]
+    J -- No --> L[APIM Standard or Premium\nExternal mode]
+```
+
+> **Exam Tips**
+> - Consumption tier is serverless — there is no VNet injection and there is a cold-start on the first call after idle. Choose it only when portal and VNet are not required.
+> - Premium is the only tier that supports multi-region gateway deployment and availability zones. Any exam scenario requiring geo-redundant API exposure points to Premium.
+> - Policy evaluation order matters: Inbound is the correct layer to validate JWTs and enforce auth before the request reaches the backend. Placing auth in Outbound is a common distractor.
+
+---
+
 ## Virtual Networks (VNet)
 
 | Concept | Description | Use Case |
