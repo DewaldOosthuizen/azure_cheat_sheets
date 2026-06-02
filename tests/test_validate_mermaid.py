@@ -80,8 +80,9 @@ class TestPathlibRefactor:
 
     def test_validate_block_unlinks_tmp_via_pathlib(self):
         """Cleanup must use Path.unlink, not os.unlink."""
-        import validate_mermaid as vm
         import inspect
+
+        import validate_mermaid as vm
         src = inspect.getsource(vm.validate_block)
         assert "os.unlink" not in src, "validate_block must not use os.unlink"
         assert "os.path.exists" not in src, "validate_block must not use os.path.exists"
@@ -89,16 +90,19 @@ class TestPathlibRefactor:
 
     def test_main_uses_pathlib_is_file(self):
         """main() must check the markdown file via Path.is_file(), not os.path.isfile()."""
-        import validate_mermaid as vm
         import inspect
+
+        import validate_mermaid as vm
         src = inspect.getsource(vm.main)
         assert "os.path.isfile" not in src, "main() must not use os.path.isfile"
         assert ".is_file()" in src
 
     def test_import_os_removed(self):
         """The script must not import os after the refactor."""
+        import ast
+        import inspect
+
         import validate_mermaid as vm
-        import inspect, ast
         source = inspect.getsource(vm)
         tree = ast.parse(source)
         os_imports = [
@@ -113,8 +117,9 @@ class TestPathlibRefactor:
 
     def test_out_path_derived_with_suffix(self):
         """SVG path must be derived with Path.with_suffix, not string.replace."""
-        import validate_mermaid as vm
         import inspect
+
+        import validate_mermaid as vm
         src = inspect.getsource(vm.validate_block)
         assert '.replace(".mmd"' not in src, "must not use string.replace for suffix"
         assert "with_suffix" in src
