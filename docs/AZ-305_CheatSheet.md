@@ -572,6 +572,19 @@ flowchart TD
 > Entra External ID (external tenant). Do not confuse B2B guest users (workforce tenant) with
 > External ID (separate external tenant).
 
+## Hybrid Identity
+
+| Service | Purpose | Protocol | Use Case | Key Feature |
+| --- | --- | --- | --- | --- |
+| **Entra Connect** | Sync on-prem AD identities to Entra ID | LDAP → OAuth/OIDC | Hybrid orgs needing SSO across on-prem and cloud | Password hash sync, pass-through auth, federation |
+| **Entra Domain Services** | Managed domain services in Azure (no DCs to run) | LDAP / Kerberos / NTLM | Lift-and-shift apps requiring legacy auth in Azure | Fully managed, integrates with Entra ID tenant |
+| **Entra ID-only** | Cloud-native identity with no on-prem dependency | OAuth 2.0 / OIDC / SAML | Greenfield cloud workloads | No infrastructure to manage |
+
+> **Exam tip:** Choose Entra Domain Services when a lift-and-shift workload requires LDAP or
+> Kerberos authentication in Azure and you do not want to deploy and manage domain controllers.
+> Choose Entra Connect when the requirement is to sync existing on-premises Active Directory
+> accounts to the cloud for SSO or hybrid authentication.
+
 ---
 
 ## RBAC
