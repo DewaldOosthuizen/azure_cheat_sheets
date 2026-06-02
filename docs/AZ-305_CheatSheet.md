@@ -162,16 +162,55 @@ flowchart TD
 
 ## Network Security
 
-| Service | Purpose | Key Feature |
-| --- | --- | --- |
-| **NSG (Network Security Group)** | Allow/deny traffic at NIC or subnet | Stateful, rules by port/IP/protocol |
-| **Azure Firewall** | Managed L3-L7 network firewall | FQDN filtering, threat intel, centralized policy |
-| **Azure Firewall Premium** | Advanced threat protection | TLS inspection, IDPS, URL filtering |
-| **DDoS Protection Basic** | Always-on, free | Platform-level protection |
-| **DDoS Protection Standard** | Enhanced mitigation + alerting | Per-VNet cost, SLA guarantee, telemetry |
-| **Web Application Firewall (WAF)** | OWASP rules, custom rules | Deployed on App Gateway or Front Door |
+### NSG and ASG
 
-> **NSG vs Azure Firewall:** NSG = subnet/NIC filtering. Azure Firewall = centralized, stateful, FQDN-aware.
+| Service | Layer | Scope | Use Case | Key Feature |
+| --- | --- | --- | --- | --- |
+| **NSG** | L3/L4 | Subnet or NIC | Allow/deny inbound and outbound traffic by port, protocol, and IP range | Stateful; 5-tuple rules; default-deny inbound from Internet |
+| **ASG** | L3/L4 | NIC (group tag) | Simplify NSG rules for multi-tier apps by grouping NICs logically | Referenced as source/destination in NSG rules; no IP management |
+
+> **Exam tip:** Use ASGs when NSG rules would otherwise require explicit IP lists for
+> multi-tier workloads. ASGs do not replace NSGs — they are used as dynamic address
+> groups inside NSG rules.
+
+### DDoS Protection Tiers
+
+| Service | Layer | Scope | Use Case | Key Feature |
+| --- | --- | --- | --- | --- |
+| **DDoS Network Protection** | L3/L4 | VNet | Enterprise workloads requiring SLA guarantee and telemetry | Per-VNet billing; adaptive tuning; cost protection SLA |
+| **DDoS IP Protection** | L3/L4 | Public IP | Single-resource protection without VNet-wide commitment | Pay-per-protected-IP; lighter entry point |
+| **DDoS Infrastructure Protection** | L3/L4 | Platform (all Azure) | Baseline free protection for every Azure customer | Always-on; no configuration; limited telemetry |
+
+> **Exam tip:** Choose DDoS Network Protection when the requirement mentions volumetric
+> attack mitigation with SLA guarantees, custom thresholds, or attack analytics.
+> Infrastructure Protection is free but provides no per-customer telemetry or SLA.
+
+### Azure Firewall SKUs
+
+| Service | Layer | Scope | Use Case | Key Feature |
+| --- | --- | --- | --- | --- |
+| **Azure Firewall Basic** | L3–L7 | Regional (hub VNet) | SMB workloads, dev/test, cost-sensitive scenarios | Fixed 250 Mbps throughput; no threat intel feed; no IDPS |
+| **Azure Firewall Standard** | L3–L7 | Regional (hub VNet) | Production hub-and-spoke; FQDN filtering | Threat intelligence feed; application/network rules; SNAT |
+| **Azure Firewall Premium** | L3–L7 | Regional (hub VNet) | Regulated or high-security environments | TLS inspection; IDPS; URL filtering; web categories |
+
+> **Exam tip:** Choose Azure Firewall Premium when the requirement mentions TLS
+> inspection, intrusion detection/prevention (IDPS), or URL-category filtering.
+> Standard covers most production scenarios; Basic is not suitable for production
+> workloads requiring threat intelligence.
+
+### Decision Flow — Network Security Selection
+
+```mermaid
+flowchart TD
+    A[Protect a workload?] --> B{Volumetric DDoS\nrisk?}
+    B -- Yes, VNet-wide --> C[DDoS Network Protection]
+    B -- Yes, single IP --> D[DDoS IP Protection]
+    B -- No --> E{Inspect / filter\nnetwork traffic?}
+    E -- Subnet/NIC rules only --> F[NSG + ASG]
+    E -- Centralized FQDN\nor L7 filtering --> G{Compliance /\nTLS inspection?}
+    G -- Yes --> H[Azure Firewall Premium]
+    G -- No --> I[Azure Firewall Standard]
+```
 
 ---
 
