@@ -3,6 +3,7 @@
 
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -37,6 +38,9 @@ def validate_block(index, diagram_src):
             text=True,
         )
         return result.returncode == 0, result.stderr
+    except FileNotFoundError:
+        # Guard against race-condition where mmdc is removed mid-run after the which() check
+        return (False, "mmdc binary not found on PATH")
     finally:
         os.unlink(tmp_path)
         if os.path.exists(out_path):
@@ -44,6 +48,14 @@ def validate_block(index, diagram_src):
 
 
 def main():
+    # Guard: verify mmdc is available before proceeding; exit early with clear message
+    if shutil.which("mmdc") is None:
+        print(
+            "ERROR: mmdc not found. Install with: npm install -g @mermaid-js/mermaid-cli",
+            file=sys.stderr,
+        )
+        sys.exit(2)
+
     if len(sys.argv) < 2:
         print("Usage: validate_mermaid.py <markdown-file>")
         sys.exit(1)
