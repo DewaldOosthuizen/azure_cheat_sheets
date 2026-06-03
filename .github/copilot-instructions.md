@@ -80,6 +80,9 @@ When adding or editing content, follow these rules precisely:
 - Do not document features or claims not already reflected in the content.
 - Scope pull requests to one improvement area where possible.
 - Run `npx markdownlint-cli2 "**/*.md"` locally before opening a PR.
+- Run `python3 scripts/validate_mermaid.py docs/AZ-305_CheatSheet.md` to
+  validate Mermaid diagrams locally. Requires `mmdc` — install once with
+  `npm install -g @mermaid-js/mermaid-cli`.
 - Verify that Markdown formatting and Mermaid blocks render cleanly on GitHub.
 
 ## Mermaid Diagrams
@@ -112,6 +115,13 @@ GRAPH_DIR=$(pwd) npx vite --host 127.0.0.1
 
 Knowledge graph: `.understand-anything/knowledge-graph.json`
 Use for layered architecture questions (layers, communities, entry points).
+
+**Regeneration note:** After any `understand-anything` run that creates or
+regenerates `.understand-anything/knowledge-graph.json`, perform a global
+find-and-replace of `AZ-204` → `AZ-305` across the entire file before
+committing. The generator may propagate an incorrect exam code to
+`project.description`, the cheat-sheet node summary, the guided-tour
+description, and tour-step fields. A single-field patch is insufficient.
 
 Decision order for content tasks:
 
