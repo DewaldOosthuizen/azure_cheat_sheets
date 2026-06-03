@@ -32,19 +32,6 @@ The cheat sheet is organized into ten top-level sections:
 | AZ-104 | Administrator | All sections — administrator-level depth on RBAC, Networking, HA & DR; Messaging & Integration (partial — Service Bus, Event Hub namespace admin) |
 | AZ-305 | Architect     | All sections including Messaging & Integration and Well-Architected Framework |
 
-| Section | AZ-900 | AZ-104 | AZ-305 |
-|---------|--------|--------|--------|
-| Networking | overview only | ✓ | ✓ |
-| Security | — | ✓ | ✓ |
-| Storage | ✓ | ✓ | ✓ |
-| Monitoring & Observability | — | ✓ | ✓ |
-| Compute | ✓ | ✓ | ✓ |
-| Identity & Access | Entra basics | ✓ | ✓ |
-| High Availability & Disaster Recovery | — | ✓ | ✓ |
-| Governance | — | ✓ | ✓ |
-| Messaging & Integration | — | partial | ✓ |
-| Well-Architected Framework | — | — | ✓ |
-
 ## Orientation for AI Agents
 
 This is a documentation-only repository. There is no application code, no
