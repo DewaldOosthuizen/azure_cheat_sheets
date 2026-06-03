@@ -148,3 +148,45 @@ class TestPathlibRefactor:
         src = inspect.getsource(vm.validate_block)
         assert '.replace(".mmd"' not in src, "must not use string.replace for suffix"
         assert "with_suffix" in src
+
+
+class TestMainHappyPath:
+    """main() exits 0 (no SystemExit) when all diagrams pass."""
+
+    def test_main_does_not_raise_when_all_diagrams_pass(self, capsys):
+        with (
+            patch("validate_mermaid.shutil.which", return_value="/usr/bin/mmdc"),
+            patch("validate_mermaid.sys.argv", ["validate_mermaid.py", "docs/AZ-305_CheatSheet.md"]),
+            patch("validate_mermaid.extract_mermaid_blocks", return_value=["graph TD\n  A --> B\n"]),
+            patch("validate_mermaid.validate_block", return_value=(True, "")),
+        ):
+            validate_mermaid.main()  # must not raise
+        captured = capsys.readouterr()
+        assert "All 1 diagram(s) passed" in captured.out
+
+
+class TestMainAggregateFail:
+    """main() exits 1 when one or more diagrams fail."""
+
+    def test_main_exits_1_when_diagram_fails(self):
+        with (
+            patch("validate_mermaid.shutil.which", return_value="/usr/bin/mmdc"),
+            patch("validate_mermaid.sys.argv", ["validate_mermaid.py", "docs/AZ-305_CheatSheet.md"]),
+            patch("validate_mermaid.extract_mermaid_blocks", return_value=["graph TD\n  A --> B\n"]),
+            patch("validate_mermaid.validate_block", return_value=(False, "syntax error")),
+            pytest.raises(SystemExit) as exc_info,
+        ):
+            validate_mermaid.main()
+        assert exc_info.value.code == 1
+
+    def test_main_prints_failure_summary(self, capsys):
+        with (
+            patch("validate_mermaid.shutil.which", return_value="/usr/bin/mmdc"),
+            patch("validate_mermaid.sys.argv", ["validate_mermaid.py", "docs/AZ-305_CheatSheet.md"]),
+            patch("validate_mermaid.extract_mermaid_blocks", return_value=["graph TD\n  A --> B\n"]),
+            patch("validate_mermaid.validate_block", return_value=(False, "syntax error")),
+            pytest.raises(SystemExit),
+        ):
+            validate_mermaid.main()
+        captured = capsys.readouterr()
+        assert "1 diagram(s) failed" in captured.out
