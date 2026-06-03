@@ -295,3 +295,16 @@ class TestMainZeroBlocks:
             validate_mermaid.main()
         captured = capsys.readouterr()
         assert "no mermaid blocks found" in captured.err
+
+
+class TestRealCheatSheet:
+    """Integration tests that read docs/AZ-305_CheatSheet.md from disk."""
+
+    def test_extracts_nonzero_blocks_from_real_cheat_sheet(self):
+        blocks = validate_mermaid.extract_mermaid_blocks("docs/AZ-305_CheatSheet.md")
+        assert len(blocks) > 0, "Expected at least one Mermaid block in the cheat sheet"
+
+    def test_all_blocks_are_non_empty_strings(self):
+        blocks = validate_mermaid.extract_mermaid_blocks("docs/AZ-305_CheatSheet.md")
+        for i, b in enumerate(blocks):
+            assert isinstance(b, str) and b.strip(), f"Block {i+1} is empty or not a string"
