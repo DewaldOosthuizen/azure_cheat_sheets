@@ -63,43 +63,31 @@ def validate_block(index, diagram_src):
         out_path.unlink(missing_ok=True)
 
 
-def main():
-    # Guard: verify mmdc is available before proceeding; exit early with clear message
-    if shutil.which("mmdc") is None:
-        print(
-            "ERROR: mmdc not found. Install with: npm install -g @mermaid-js/mermaid-cli",
-            file=sys.stderr,
-        )
-        sys.exit(2)
-
+def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Validate fenced Mermaid blocks in one or more Markdown files."
+        description="Validate fenced Mermaid blocks in Markdown files using mmdc."
     )
     parser.add_argument("md_files", nargs="+", help="Markdown file(s) to validate")
-    args = parser.parse_args()
+    return parser.parse_args()
 
+
+def run(md_paths: list[str]) -> int:
+    """Orchestrate extraction and validation. Returns exit code (0/1/2)."""
     repo_root = _repo_root()
-
-    total_failed = 0
-    for md_path in args.md_files:
+    for md_path in md_paths:
         if not Path(md_path).is_file():
             print(f"Error: file not found: {md_path}", file=sys.stderr)
-            total_failed += 1
-            continue
+            return 1
         resolved = Path(md_path).resolve()
         if not str(resolved).startswith(str(repo_root) + "/") and resolved != repo_root:
             print(f"Error: path outside repository root: {md_path}", file=sys.stderr)
-            total_failed += 1
-            continue
+            return 1
         blocks = extract_mermaid_blocks(md_path)
         print(f"Found {len(blocks)} mermaid diagram(s) in {md_path}")
         if not blocks:
-            print(
-                f"WARNING: no mermaid blocks found in {md_path} — check fence syntax.",
-                file=sys.stderr,
-            )
-            total_failed += 1
-            continue
+            print("WARNING: no mermaid blocks found — check fence syntax.", file=sys.stderr)
+            return 2
+        failed = 0
         for i, block in enumerate(blocks, start=1):
             ok, stderr = validate_block(i, block)
             if ok:
@@ -108,13 +96,24 @@ def main():
                 print(f"  Diagram {i}: FAIL")
                 if stderr:
                     print(stderr)
-                total_failed += 1
+                failed += 1
+        if failed:
+            print(f"\n{failed} diagram(s) failed validation.")
+            return 1
+        print(f"\nAll {len(blocks)} diagram(s) passed.")
+    return 0
 
-    if total_failed:
-        print(f"\n{total_failed} issue(s) across all files.")
-        sys.exit(1)
-    else:
-        print("\nAll diagrams passed.")
+
+def main():
+    # Guard: verify mmdc is available before proceeding; exit early with clear message
+    if shutil.which("mmdc") is None:
+        print(
+            "ERROR: mmdc not found. Install with: npm install -g @mermaid-js/mermaid-cli",
+            file=sys.stderr,
+        )
+        sys.exit(2)
+    args = parse_args()
+    sys.exit(run(args.md_files))
 
 
 if __name__ == "__main__":
