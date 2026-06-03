@@ -76,6 +76,12 @@ def main():
         sys.exit(1)
     blocks = extract_mermaid_blocks(md_path)
     print(f"Found {len(blocks)} mermaid diagram(s) in {md_path}")
+    if not blocks:
+        print(
+            "WARNING: no mermaid blocks found — check fence syntax.",
+            file=sys.stderr,
+        )
+        sys.exit(2)
 
     failed = 0
     for i, block in enumerate(blocks, start=1):
