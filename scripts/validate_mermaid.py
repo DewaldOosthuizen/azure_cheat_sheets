@@ -2,6 +2,7 @@
 """Validate all fenced mermaid blocks in a Markdown file using mmdc."""
 
 import argparse
+import os
 import re
 import shutil
 import subprocess
@@ -9,7 +10,8 @@ import sys
 import tempfile
 from pathlib import Path
 
-PUPPETEER_CONFIG = Path("/tmp/puppeteer-config.json")
+_default_puppeteer_config = Path(tempfile.gettempdir()) / "puppeteer-config.json"
+PUPPETEER_CONFIG = Path(os.environ.get("PUPPETEER_CONFIG_FILE", str(_default_puppeteer_config)))
 
 
 def _repo_root() -> Path:
