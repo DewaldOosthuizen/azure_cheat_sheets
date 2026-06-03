@@ -204,3 +204,28 @@ class TestMainAggregateFail:
             validate_mermaid.main()
         captured = capsys.readouterr()
         assert "1 diagram(s) failed" in captured.out
+
+
+class TestMainZeroBlocks:
+    """main() exits 2 with a stderr warning when no mermaid blocks are found."""
+
+    def test_main_exits_2_when_no_blocks_found(self):
+        with (
+            patch("validate_mermaid.shutil.which", return_value="/usr/bin/mmdc"),
+            patch("validate_mermaid.sys.argv", _DUMMY_ARGV),
+            patch("validate_mermaid.extract_mermaid_blocks", return_value=[]),
+            pytest.raises(SystemExit) as exc_info,
+        ):
+            validate_mermaid.main()
+        assert exc_info.value.code == 2
+
+    def test_main_prints_warning_to_stderr_when_no_blocks_found(self, capsys):
+        with (
+            patch("validate_mermaid.shutil.which", return_value="/usr/bin/mmdc"),
+            patch("validate_mermaid.sys.argv", _DUMMY_ARGV),
+            patch("validate_mermaid.extract_mermaid_blocks", return_value=[]),
+            pytest.raises(SystemExit),
+        ):
+            validate_mermaid.main()
+        captured = capsys.readouterr()
+        assert "no mermaid blocks found" in captured.err
