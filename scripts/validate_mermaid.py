@@ -8,6 +8,8 @@ import sys
 import tempfile
 from pathlib import Path
 
+PUPPETEER_CONFIG = Path("/tmp/puppeteer-config.json")
+
 
 def _extract_from_text(text: str) -> list[str]:
     """Extract mermaid diagram sources from a Markdown string.
@@ -35,16 +37,11 @@ def validate_block(index, diagram_src):
     tmp_path = Path(tmp.name)
     out_path = tmp_path.with_suffix(".svg")
     try:
+        cmd = ["mmdc", "--input", str(tmp_path), "--output", str(out_path)]
+        if PUPPETEER_CONFIG.exists():
+            cmd += ["--puppeteerConfigFile", str(PUPPETEER_CONFIG)]
         result = subprocess.run(
-            [
-                "mmdc",
-                "--input",
-                str(tmp_path),
-                "--output",
-                str(out_path),
-                "--puppeteerConfigFile",
-                "/tmp/puppeteer-config.json",
-            ],
+            cmd,
             capture_output=True,
             text=True,
             timeout=60,
