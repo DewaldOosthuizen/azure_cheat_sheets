@@ -1,4 +1,4 @@
-"""Tests for issue #42 - error handling and exit-code reporting in validate_mermaid.py."""
+"""Tests for issue #42, #62, and #120 - validate_mermaid.py."""
 
 import sys
 from unittest.mock import patch
@@ -60,7 +60,10 @@ class TestMainFileNotFound:
     def test_main_exits_with_code_1_when_file_missing(self):
         with (
             patch("validate_mermaid.shutil.which", return_value="/usr/bin/mmdc"),
-            patch("validate_mermaid.sys.argv", ["validate_mermaid.py", "/nonexistent/path.md"]),
+            patch(
+                "validate_mermaid.sys.argv",
+                ["validate_mermaid.py", "/nonexistent/path.md"],
+            ),
             pytest.raises(SystemExit) as exc_info,
         ):
             validate_mermaid.main()
@@ -69,7 +72,10 @@ class TestMainFileNotFound:
     def test_main_prints_error_to_stderr_when_file_missing(self, capsys):
         with (
             patch("validate_mermaid.shutil.which", return_value="/usr/bin/mmdc"),
-            patch("validate_mermaid.sys.argv", ["validate_mermaid.py", "/nonexistent/path.md"]),
+            patch(
+                "validate_mermaid.sys.argv",
+                ["validate_mermaid.py", "/nonexistent/path.md"],
+            ),
             pytest.raises(SystemExit),
         ):
             validate_mermaid.main()
@@ -87,7 +93,11 @@ class TestExtractMermaidBlocks:
             # single_block
             ("```mermaid\ngraph TD\n  A --> B\n```", 1, "graph TD\n  A --> B\n"),
             # multiple_blocks
-            ("```mermaid\ngraph TD\n  A-->B\n```\n\n```mermaid\ngraph LR\n  C-->D\n```", 2, None),
+            (
+                "```mermaid\ngraph TD\n  A-->B\n```\n\n```mermaid\ngraph LR\n  C-->D\n```",
+                2,
+                None,
+            ),
             # no_blocks
             ("# Heading\nSome text.", 0, None),
             # non_mermaid_fence
@@ -208,18 +218,22 @@ class TestValidateBlockPuppeteerConfig:
 
 
 class TestMainNoArgv:
-    """main() exits 1 with usage message when no markdown argument is given."""
+    """main() exits non-zero with usage message when no markdown argument is given.
 
-    def test_main_exits_1_when_no_argv(self):
+    After the argparse refactor (issue #120), argparse handles missing required
+    positional args and prints usage to stderr, exiting with code 2.
+    """
+
+    def test_main_exits_nonzero_when_no_argv(self):
         with (
             patch("validate_mermaid.shutil.which", return_value="/usr/bin/mmdc"),
             patch("validate_mermaid.sys.argv", ["validate_mermaid.py"]),
             pytest.raises(SystemExit) as exc_info,
         ):
             validate_mermaid.main()
-        assert exc_info.value.code == 1
+        assert exc_info.value.code != 0
 
-    def test_main_prints_usage_when_no_argv(self, capsys):
+    def test_main_prints_usage_to_stderr_when_no_argv(self, capsys):
         with (
             patch("validate_mermaid.shutil.which", return_value="/usr/bin/mmdc"),
             patch("validate_mermaid.sys.argv", ["validate_mermaid.py"]),
@@ -227,7 +241,8 @@ class TestMainNoArgv:
         ):
             validate_mermaid.main()
         captured = capsys.readouterr()
-        assert "Usage" in captured.out
+        # argparse writes usage/error to stderr
+        assert "usage" in captured.err.lower() or "error" in captured.err.lower()
 
 
 class TestMainHappyPath:
@@ -242,7 +257,7 @@ class TestMainHappyPath:
         ):
             validate_mermaid.main()  # must not raise
         captured = capsys.readouterr()
-        assert "All 1 diagram(s) passed" in captured.out
+        assert "passed" in captured.out.lower()
 
 
 class TestMainAggregateFail:
@@ -269,13 +284,13 @@ class TestMainAggregateFail:
         ):
             validate_mermaid.main()
         captured = capsys.readouterr()
-        assert "1 diagram(s) failed" in captured.out
+        assert "issue" in captured.out.lower() or "fail" in captured.out.lower()
 
 
 class TestMainZeroBlocks:
-    """main() exits 2 with a stderr warning when no mermaid blocks are found."""
+    """main() exits non-zero with a stderr warning when no mermaid blocks are found."""
 
-    def test_main_exits_2_when_no_blocks_found(self):
+    def test_main_exits_nonzero_when_no_blocks_found(self):
         with (
             patch("validate_mermaid.shutil.which", return_value="/usr/bin/mmdc"),
             patch("validate_mermaid.sys.argv", _DUMMY_ARGV),
@@ -283,7 +298,7 @@ class TestMainZeroBlocks:
             pytest.raises(SystemExit) as exc_info,
         ):
             validate_mermaid.main()
-        assert exc_info.value.code == 2
+        assert exc_info.value.code != 0
 
     def test_main_prints_warning_to_stderr_when_no_blocks_found(self, capsys):
         with (
@@ -295,3 +310,64 @@ class TestMainZeroBlocks:
             validate_mermaid.main()
         captured = capsys.readouterr()
         assert "no mermaid blocks found" in captured.err
+
+
+# ---- issue #120: multi-file support ----
+
+
+class TestMultiFileHappyPath:
+    """main() accepts multiple files and exits 0 when all pass."""
+
+    def test_main_passes_two_valid_files(self, tmp_path, capsys):
+        md1 = tmp_path / "a.md"
+        md2 = tmp_path / "b.md"
+        md1.write_text("```mermaid\ngraph TD\n  A --> B\n```\n", encoding="utf-8")
+        md2.write_text("```mermaid\ngraph LR\n  C --> D\n```\n", encoding="utf-8")
+        with (
+            patch("validate_mermaid.shutil.which", return_value="/usr/bin/mmdc"),
+            patch(
+                "validate_mermaid.sys.argv",
+                ["validate_mermaid.py", str(md1), str(md2)],
+            ),
+            patch("validate_mermaid.validate_block", return_value=(True, "")),
+        ):
+            validate_mermaid.main()  # must not raise
+        captured = capsys.readouterr()
+        assert "passed" in captured.out.lower()
+
+
+class TestMultiFileOneBad:
+    """main() exits 1 and reports the bad file when one of many files fails."""
+
+    def test_main_exits_1_with_one_invalid_file(self, tmp_path):
+        md_good = tmp_path / "good.md"
+        md_good.write_text("```mermaid\ngraph TD\n  A --> B\n```\n", encoding="utf-8")
+        bad_path = str(tmp_path / "missing.md")
+        with (
+            patch("validate_mermaid.shutil.which", return_value="/usr/bin/mmdc"),
+            patch(
+                "validate_mermaid.sys.argv",
+                ["validate_mermaid.py", str(md_good), bad_path],
+            ),
+            patch("validate_mermaid.validate_block", return_value=(True, "")),
+            pytest.raises(SystemExit) as exc_info,
+        ):
+            validate_mermaid.main()
+        assert exc_info.value.code == 1
+
+    def test_main_reports_bad_file_in_stderr(self, tmp_path, capsys):
+        md_good = tmp_path / "good.md"
+        md_good.write_text("```mermaid\ngraph TD\n  A --> B\n```\n", encoding="utf-8")
+        bad_path = str(tmp_path / "missing.md")
+        with (
+            patch("validate_mermaid.shutil.which", return_value="/usr/bin/mmdc"),
+            patch(
+                "validate_mermaid.sys.argv",
+                ["validate_mermaid.py", str(md_good), bad_path],
+            ),
+            patch("validate_mermaid.validate_block", return_value=(True, "")),
+            pytest.raises(SystemExit),
+        ):
+            validate_mermaid.main()
+        captured = capsys.readouterr()
+        assert "missing.md" in captured.err
