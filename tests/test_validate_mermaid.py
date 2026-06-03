@@ -164,6 +164,72 @@ _DUMMY_ARGV = ["validate_mermaid.py", "docs/AZ-305_CheatSheet.md"]
 _ONE_BLOCK = ["graph TD\n  A --> B\n"]
 
 
+class TestExtractMermaidBlocksFromFile:
+    """Tests for extract_mermaid_blocks() reading from a real file."""
+
+    def test_extract_reads_file_and_returns_blocks(self, tmp_path):
+        md = tmp_path / "test.md"
+        md.write_text("```mermaid\ngraph TD\n  A --> B\n```\n", encoding="utf-8")
+        result = validate_mermaid.extract_mermaid_blocks(str(md))
+        assert len(result) == 1
+        assert "graph TD" in result[0]
+
+
+class TestValidateBlockPuppeteerConfig:
+    """Tests for puppeteer config branch in validate_block()."""
+
+    def test_validate_block_appends_puppeteer_config_when_present(self):
+        import subprocess
+
+        success_result = subprocess.CompletedProcess(args=[], returncode=0, stdout="", stderr="")
+        with (
+            patch("validate_mermaid.PUPPETEER_CONFIG") as mock_cfg,
+            patch("validate_mermaid.subprocess.run", return_value=success_result) as mock_run,
+        ):
+            mock_cfg.exists.return_value = True
+            mock_cfg.__str__ = lambda s: "/tmp/puppeteer-config.json"
+            ok, _ = validate_mermaid.validate_block(1, "graph TD\n  A --> B\n")
+        assert ok is True
+        call_args = mock_run.call_args[0][0]
+        assert "--puppeteerConfigFile" in call_args
+
+    def test_validate_block_returns_true_on_success(self):
+        import subprocess
+
+        success_result = subprocess.CompletedProcess(args=[], returncode=0, stdout="", stderr="")
+        with (
+            patch("validate_mermaid.PUPPETEER_CONFIG") as mock_cfg,
+            patch("validate_mermaid.subprocess.run", return_value=success_result),
+        ):
+            mock_cfg.exists.return_value = False
+            ok, stderr = validate_mermaid.validate_block(1, "graph TD\n  A --> B\n")
+        assert ok is True
+        assert stderr == ""
+
+
+class TestMainNoArgv:
+    """main() exits 1 with usage message when no markdown argument is given."""
+
+    def test_main_exits_1_when_no_argv(self):
+        with (
+            patch("validate_mermaid.shutil.which", return_value="/usr/bin/mmdc"),
+            patch("validate_mermaid.sys.argv", ["validate_mermaid.py"]),
+            pytest.raises(SystemExit) as exc_info,
+        ):
+            validate_mermaid.main()
+        assert exc_info.value.code == 1
+
+    def test_main_prints_usage_when_no_argv(self, capsys):
+        with (
+            patch("validate_mermaid.shutil.which", return_value="/usr/bin/mmdc"),
+            patch("validate_mermaid.sys.argv", ["validate_mermaid.py"]),
+            pytest.raises(SystemExit),
+        ):
+            validate_mermaid.main()
+        captured = capsys.readouterr()
+        assert "Usage" in captured.out
+
+
 class TestMainHappyPath:
     """main() exits 0 (no SystemExit) when all diagrams pass."""
 
