@@ -90,12 +90,24 @@ npm ci
 
 This installs `markdownlint-cli2` (linter) and `@mermaid-js/mermaid-cli` (`mmdc`).
 
+Install the pre-commit hooks (one-time setup per clone):
+
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+The hooks run automatically on `git commit` and enforce the same ruff and
+markdownlint checks that CI applies on push.
+
 ---
 
 ## 6. Running Checks Locally
 
-Run these commands from the repository root before pushing. CI runs the same
-checks and a failing PR will not be reviewed.
+Run these commands from the repository root before pushing, or rely on the
+pre-commit hooks installed in [Section 5](#5-development-setup) to run them
+automatically on each commit. CI applies the same checks and a failing PR will
+not be reviewed.
 
 Lint all Markdown files:
 
