@@ -253,7 +253,7 @@ flowchart TD
 
 | Service | Type | Best For | Key Feature |
 | --- | --- | --- | --- |
-| **Log Analytics Workspace** | Destination | Query, alerting, dashboards | Kusto (KQL) queries; retention config |
+| **Log Analytics Workspace** | Destination | Query, alerting, dashboards | Kusto (KQL) queries; retention config (fed via Diagnostic Settings; contains Activity Log data, KQL engine) |
 | **Azure Storage Account** | Destination | Long-term archive, compliance | Low cost; no real-time query |
 | **Event Hub** | Destination | SIEM integration, streaming | Real-time export to Splunk, Sentinel |
 | **Partner Solutions** | Destination | Third-party observability | Datadog, Elastic natively integrated |
@@ -271,6 +271,11 @@ graph LR
     E --> F[Sentinel / SIEM]
     C --> G[Alerts / Dashboards]
 ```
+
+> **Exam tip:** Activity Log is a sub-component of Azure Monitor, not a standalone service.
+> Route it to Log Analytics Workspace via Diagnostic Settings to enable KQL querying and
+> long-term retention. For AZ-104, use Azure Policy (DeployIfNotExists) to enforce
+> Diagnostic Settings at scale.
 
 ---
 

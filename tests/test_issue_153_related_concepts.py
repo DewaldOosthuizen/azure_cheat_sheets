@@ -23,7 +23,8 @@ class TestAZ305AzureMonitorAnnotation:
     """Task 1: Azure Monitor Service cell annotated with umbrella components."""
 
     def test_azure_monitor_umbrella_annotation(self, az305_text):
-        assert "umbrella: Activity Log, Metrics, Alerts, Diagnostic Settings, Insights family" in az305_text
+        needle = "umbrella: Activity Log, Metrics, Alerts, Diagnostic Settings, Insights family"
+        assert needle in az305_text
 
 
 class TestAZ305LogAnalyticsAnnotation:
@@ -37,14 +38,19 @@ class TestAZ305AppInsightsAnnotation:
     """Task 3: Application Insights Service cell annotated."""
 
     def test_app_insights_annotation(self, az305_text):
-        assert "contains: Live Metrics, Availability Tests, Dependency Tracking, Smart Detection" in az305_text
+        needle = "contains: Live Metrics, Availability Tests, Dependency Tracking, Smart Detection"
+        assert needle in az305_text
 
 
 class TestAZ305ActivityLogAlertExpanded:
     """Task 4: Activity Log Alert Use Case cell expanded."""
 
     def test_activity_log_alert_use_case_expanded(self, az305_text):
-        assert "Activity Log is a sub-component of Azure Monitor, routed to Log Analytics via Diagnostic Settings" in az305_text
+        needle = (
+            "Activity Log is a sub-component of Azure Monitor, "
+            "routed to Log Analytics via Diagnostic Settings"
+        )
+        assert needle in az305_text
 
 
 class TestAZ305ExamTipAfterActionGroups:
@@ -73,7 +79,11 @@ class TestAZ305DiagnosticSettingsCategories:
         assert "**Activity Log** (control-plane events)" in az305_text
 
     def test_activity_log_not_standalone_bullet(self, az305_text):
-        assert "Activity Log is a sub-component of Azure Monitor routed to Log Analytics Workspace via Diagnostic Settings" in az305_text
+        needle = (
+            "Activity Log is a sub-component of Azure Monitor routed to "
+            "Log Analytics Workspace via Diagnostic Settings"
+        )
+        assert needle in az305_text
 
 
 class TestAZ305MermaidDiagram:
@@ -105,14 +115,16 @@ class TestAZ104ExamTip:
     """Task 10: Exam tip inserted after Diagnostic Settings Routing diagram in AZ-104."""
 
     def test_exam_tip_activity_log_sub_component(self, az104_text):
-        assert "Activity Log is a sub-component of Azure Monitor, not a standalone service" in az104_text
+        needle = "Activity Log is a sub-component of Azure Monitor, not a standalone service"
+        assert needle in az104_text
 
     def test_exam_tip_mentions_deployifnotexists(self, az104_text):
         assert "DeployIfNotExists" in az104_text
 
     def test_exam_tip_appears_after_routing_diagram(self, az104_text):
         diagram_pos = az104_text.find("Diagnostic Settings Routing")
-        tip_pos = az104_text.find("Activity Log is a sub-component of Azure Monitor, not a standalone service")
+        needle = "Activity Log is a sub-component of Azure Monitor, not a standalone service"
+        tip_pos = az104_text.find(needle)
         assert diagram_pos != -1
         assert tip_pos != -1
         assert tip_pos > diagram_pos
