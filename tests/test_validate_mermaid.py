@@ -320,6 +320,32 @@ class TestTraversalGuard:
         assert "outside repository root" not in captured.err
 
 
+class TestValidateBlockDegenerateSvg:
+    """Tests for degenerate (empty/missing) SVG guard in validate_block()."""
+
+    def test_validate_block_returns_false_on_degenerate_svg(self, tmp_path):
+        import subprocess
+
+        def _write_empty_svg_and_succeed(cmd, **kwargs):
+            # Derive out_path the same way validate_block does
+            import re as _re
+            input_flag = cmd.index("--input")
+            tmp_file = cmd[input_flag + 1]
+            out_file = str(tmp_file).replace(".mmd", ".svg")
+            from pathlib import Path as _Path
+            _Path(out_file).write_bytes(b"")
+            return subprocess.CompletedProcess(args=cmd, returncode=0, stdout="", stderr="")
+
+        with (
+            patch("validate_mermaid.PUPPETEER_CONFIG") as mock_cfg,
+            patch("validate_mermaid.subprocess.run", side_effect=_write_empty_svg_and_succeed),
+        ):
+            mock_cfg.exists.return_value = False
+            ok, msg = validate_mermaid.validate_block(1, "graph TD\n  A --> B\n")
+        assert ok is False
+        assert msg == "mmdc produced an empty/degenerate SVG (possible silent render failure)"
+
+
 class TestRealCheatSheet:
     """Integration tests that read docs/AZ-305_CheatSheet.md from disk."""
 
