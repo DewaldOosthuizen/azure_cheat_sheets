@@ -297,6 +297,45 @@ class TestMainZeroBlocks:
         assert "no mermaid blocks found" in captured.err
 
 
+class TestTraversalGuard:
+    """Tests for issue #126 - path traversal / shell-injection guard in main()."""
+
+    def test_main_exits_1_on_path_traversal(self, capsys):
+        """Path resolving outside repo root must be rejected with exit code 1."""
+        from pathlib import Path
+
+        with (
+            patch("validate_mermaid.shutil.which", return_value="/usr/bin/mmdc"),
+            patch("validate_mermaid.sys.argv", ["validate_mermaid.py", "/etc/passwd"]),
+            patch.object(Path, "is_file", return_value=True),
+            patch.object(Path, "resolve", return_value=Path("/etc/passwd")),
+            pytest.raises(SystemExit) as exc_info,
+        ):
+            validate_mermaid.main()
+        assert exc_info.value.code == 1
+        captured = capsys.readouterr()
+        assert "outside repository root" in captured.err
+
+    def test_main_does_not_exit_for_valid_path(self, capsys):
+        """A path within the repo root must pass the traversal guard."""
+        import scripts.validate_mermaid as vm_mod
+        from pathlib import Path
+
+        repo_root = Path(vm_mod.__file__).parent.parent.resolve()
+        valid_path = str(repo_root / "docs" / "AZ-305_CheatSheet.md")
+
+        with (
+            patch("validate_mermaid.shutil.which", return_value="/usr/bin/mmdc"),
+            patch("validate_mermaid.sys.argv", ["validate_mermaid.py", valid_path]),
+            patch.object(Path, "is_file", return_value=True),
+            patch("validate_mermaid.extract_mermaid_blocks", return_value=["graph TD\n  A --> B\n"]),
+            patch("validate_mermaid.validate_block", return_value=(True, "")),
+        ):
+            validate_mermaid.main()  # must not raise SystemExit due to traversal guard
+        captured = capsys.readouterr()
+        assert "outside repository root" not in captured.err
+
+
 class TestRealCheatSheet:
     """Integration tests that read docs/AZ-305_CheatSheet.md from disk."""
 
