@@ -11,7 +11,7 @@ and decision reasoning — not step-by-step walkthroughs or portal labs.
 docs/AZ-305_CheatSheet.md   — the single main cheat sheet
 ```
 
-The cheat sheet is organized into eight top-level sections:
+The cheat sheet is organized into ten top-level sections:
 
 1. Networking
 2. Security
@@ -21,6 +21,8 @@ The cheat sheet is organized into eight top-level sections:
 6. Identity & Access
 7. High Availability & Disaster Recovery
 8. Governance
+9. Messaging & Integration
+10. Well-Architected Framework
 
 ## Exam Overlap
 
