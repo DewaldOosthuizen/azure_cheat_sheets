@@ -46,6 +46,8 @@ The current cheat sheet is organized into these top-level sections:
 6. Identity & Access
 7. High Availability & Disaster Recovery
 8. Governance
+9. Messaging & Integration
+10. Well-Architected Framework
 
 ## Viewing Mermaid Diagrams
 
