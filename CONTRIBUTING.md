@@ -32,10 +32,10 @@ Lint all Markdown files:
 npx markdownlint-cli2 "**/*.md"
 ```
 
-Validate a Mermaid diagram block (replace the input path as needed):
+Validate all Mermaid diagram blocks using the project script (`mmdc` must be on PATH — installed via `npm ci`):
 
 ```bash
-mmdc -i docs/AZ-305_CheatSheet.md -o /dev/null
+python3 scripts/validate_mermaid.py docs/AZ-305_CheatSheet.md
 ```
 
 Both commands must exit cleanly (exit code 0) before pushing.
