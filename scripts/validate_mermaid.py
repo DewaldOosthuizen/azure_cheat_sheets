@@ -74,6 +74,11 @@ def main():
     if not Path(md_path).is_file():
         print(f"Error: file not found: {md_path}", file=sys.stderr)
         sys.exit(1)
+    repo_root = Path(__file__).parent.parent.resolve()
+    resolved = Path(md_path).resolve()
+    if not str(resolved).startswith(str(repo_root) + "/") and resolved != repo_root:
+        print(f"Error: path outside repository root: {md_path}", file=sys.stderr)
+        sys.exit(1)
     blocks = extract_mermaid_blocks(md_path)
     print(f"Found {len(blocks)} mermaid diagram(s) in {md_path}")
     if not blocks:
