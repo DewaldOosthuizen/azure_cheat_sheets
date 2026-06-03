@@ -70,15 +70,20 @@ def main():
     parser = argparse.ArgumentParser(
         description="Validate fenced Mermaid blocks in one or more Markdown files."
     )
-    parser.add_argument(
-        "md_files", nargs="+", help="Markdown file(s) to validate"
-    )
+    parser.add_argument("md_files", nargs="+", help="Markdown file(s) to validate")
     args = parser.parse_args()
+
+    repo_root = Path(__file__).parent.parent.resolve()
 
     total_failed = 0
     for md_path in args.md_files:
         if not Path(md_path).is_file():
             print(f"Error: file not found: {md_path}", file=sys.stderr)
+            total_failed += 1
+            continue
+        resolved = Path(md_path).resolve()
+        if not str(resolved).startswith(str(repo_root) + "/") and resolved != repo_root:
+            print(f"Error: path outside repository root: {md_path}", file=sys.stderr)
             total_failed += 1
             continue
         blocks = extract_mermaid_blocks(md_path)

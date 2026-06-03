@@ -330,8 +330,18 @@ class TestMultiFileHappyPath:
                 ["validate_mermaid.py", str(md1), str(md2)],
             ),
             patch("validate_mermaid.validate_block", return_value=(True, "")),
+            patch(
+                "validate_mermaid.Path.__new__",
+                side_effect=lambda cls, *a, **kw: object.__new__(cls),
+            ),
         ):
-            validate_mermaid.main()  # must not raise
+            # Patch repo_root resolution so tmp_path is treated as repo root
+            with patch.object(
+                validate_mermaid.Path(__file__).parent.parent.__class__,
+                "resolve",
+                return_value=tmp_path,
+            ):
+                validate_mermaid.main()  # must not raise
         captured = capsys.readouterr()
         assert "passed" in captured.out.lower()
 
