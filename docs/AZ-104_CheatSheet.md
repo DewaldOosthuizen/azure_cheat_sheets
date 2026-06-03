@@ -253,7 +253,7 @@ flowchart TD
 
 | Service | Type | Best For | Key Feature |
 | --- | --- | --- | --- |
-| **Log Analytics Workspace** | Destination | Query, alerting, dashboards | Kusto (KQL) queries; retention config (fed via Diagnostic Settings; contains Activity Log data, KQL engine) |
+| **Log Analytics Workspace** (fed via Diagnostic Settings; contains Activity Log data, KQL engine) | Destination | Query, alerting, dashboards | Kusto (KQL) queries; retention config |
 | **Azure Storage Account** | Destination | Long-term archive, compliance | Low cost; no real-time query |
 | **Event Hub** | Destination | SIEM integration, streaming | Real-time export to Splunk, Sentinel |
 | **Partner Solutions** | Destination | Third-party observability | Datadog, Elastic natively integrated |
