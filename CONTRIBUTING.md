@@ -5,8 +5,12 @@ covers everything you need to make a clean, reviewable contribution.
 
 ## Prerequisites
 
-You need `node` and `npm` on your PATH. No Python, ruff, or pytest is required
-— this is a documentation-only repository.
+You need `node` and `npm` on your PATH, and **Python 3.11+** with `ruff` and
+`pytest` for script validation and linting.
+
+```bash
+pip install ruff pytest
+```
 
 ## Local Setup
 
@@ -35,6 +39,19 @@ mmdc -i docs/AZ-305_CheatSheet.md -o /dev/null
 ```
 
 Both commands must exit cleanly (exit code 0) before pushing.
+
+Lint Python scripts:
+
+```bash
+ruff check scripts/
+ruff format --check scripts/
+```
+
+Run tests:
+
+```bash
+pytest tests/ -v
+```
 
 ## Branch Naming
 
@@ -115,6 +132,8 @@ The rules below apply to all content in `docs/`.
 Before requesting review, confirm each item:
 
 - [ ] `npx markdownlint-cli2 "**/*.md"` passes with no violations.
+- [ ] `ruff check scripts/` passes with no violations.
+- [ ] `pytest tests/ -v` passes with no failures.
 - [ ] All Mermaid diagrams render correctly on GitHub.
 - [ ] Change is scoped to one improvement area.
 - [ ] README or CONTRIBUTING updated if any conventions changed.
