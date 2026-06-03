@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Validate all fenced mermaid blocks in a Markdown file using mmdc."""
 
+import argparse
 import re
 import shutil
 import subprocess
@@ -9,6 +10,11 @@ import tempfile
 from pathlib import Path
 
 PUPPETEER_CONFIG = Path("/tmp/puppeteer-config.json")
+
+
+def _repo_root() -> Path:
+    """Return the repository root directory (parent of the scripts/ folder)."""
+    return Path(__file__).parent.parent.resolve()
 
 
 def _extract_from_text(text: str) -> list[str]:
@@ -66,44 +72,49 @@ def main():
         )
         sys.exit(2)
 
-    if len(sys.argv) < 2:
-        print("Usage: validate_mermaid.py <markdown-file>")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(
+        description="Validate fenced Mermaid blocks in one or more Markdown files."
+    )
+    parser.add_argument("md_files", nargs="+", help="Markdown file(s) to validate")
+    args = parser.parse_args()
 
-    md_path = sys.argv[1]
-    if not Path(md_path).is_file():
-        print(f"Error: file not found: {md_path}", file=sys.stderr)
-        sys.exit(1)
-    repo_root = Path(__file__).parent.parent.resolve()
-    resolved = Path(md_path).resolve()
-    if not str(resolved).startswith(str(repo_root) + "/") and resolved != repo_root:
-        print(f"Error: path outside repository root: {md_path}", file=sys.stderr)
-        sys.exit(1)
-    blocks = extract_mermaid_blocks(md_path)
-    print(f"Found {len(blocks)} mermaid diagram(s) in {md_path}")
-    if not blocks:
-        print(
-            "WARNING: no mermaid blocks found — check fence syntax.",
-            file=sys.stderr,
-        )
-        sys.exit(2)
+    repo_root = _repo_root()
 
-    failed = 0
-    for i, block in enumerate(blocks, start=1):
-        ok, stderr = validate_block(i, block)
-        if ok:
-            print(f"  Diagram {i}: PASS")
-        else:
-            print(f"  Diagram {i}: FAIL")
-            if stderr:
-                print(stderr)
-            failed += 1
+    total_failed = 0
+    for md_path in args.md_files:
+        if not Path(md_path).is_file():
+            print(f"Error: file not found: {md_path}", file=sys.stderr)
+            total_failed += 1
+            continue
+        resolved = Path(md_path).resolve()
+        if not str(resolved).startswith(str(repo_root) + "/") and resolved != repo_root:
+            print(f"Error: path outside repository root: {md_path}", file=sys.stderr)
+            total_failed += 1
+            continue
+        blocks = extract_mermaid_blocks(md_path)
+        print(f"Found {len(blocks)} mermaid diagram(s) in {md_path}")
+        if not blocks:
+            print(
+                f"WARNING: no mermaid blocks found in {md_path} — check fence syntax.",
+                file=sys.stderr,
+            )
+            total_failed += 1
+            continue
+        for i, block in enumerate(blocks, start=1):
+            ok, stderr = validate_block(i, block)
+            if ok:
+                print(f"  Diagram {i}: PASS")
+            else:
+                print(f"  Diagram {i}: FAIL")
+                if stderr:
+                    print(stderr)
+                total_failed += 1
 
-    if failed:
-        print(f"\n{failed} diagram(s) failed validation.")
+    if total_failed:
+        print(f"\n{total_failed} issue(s) across all files.")
         sys.exit(1)
     else:
-        print(f"\nAll {len(blocks)} diagram(s) passed.")
+        print("\nAll diagrams passed.")
 
 
 if __name__ == "__main__":

@@ -106,7 +106,7 @@ npx markdownlint-cli2 "**/*.md"
 Validate all Mermaid diagram blocks:
 
 ```bash
-python3 scripts/validate_mermaid.py docs/AZ-305_CheatSheet.md
+python3 scripts/validate_mermaid.py docs/*.md
 ```
 
 Lint Python scripts:
