@@ -27,8 +27,8 @@ The cheat sheet is organized into eight top-level sections:
 | Exam   | Focus         | Relevant Sections |
 |--------|---------------|-------------------|
 | AZ-900 | Fundamentals  | Networking (overview), Storage, Compute, Identity & Access (Entra basics) |
-| AZ-104 | Administrator | All sections — administrator-level depth on RBAC, Networking, HA & DR |
-| AZ-305 | Architect     | All sections — architectural decision-making focus |
+| AZ-104 | Administrator | All sections — administrator-level depth on RBAC, Networking, HA & DR; Messaging & Integration (partial — Service Bus, Event Hub namespace admin) |
+| AZ-305 | Architect     | All sections including Messaging & Integration and Well-Architected Framework |
 
 ## Orientation for AI Agents
 
@@ -85,6 +85,12 @@ For pull requests, scope changes to one improvement area, explain what section
 changed, and verify that Markdown and Mermaid blocks render cleanly on GitHub.
 Run `npx markdownlint-cli2 "**/*.md"` locally before opening a PR to catch
 formatting violations before CI runs them.
+Run `python3 scripts/validate_mermaid.py docs/AZ-305_CheatSheet.md` to
+validate Mermaid diagrams locally. Requires `mmdc` — install once with
+`npm install -g @mermaid-js/mermaid-cli`.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for branch naming, commit style, local
+checks, content conventions, and the PR checklist.
 
 ## Mermaid Diagrams
 
