@@ -200,7 +200,8 @@ class TestParseArgs:
     """Tests for parse_args() in isolation — covers CLI argument parsing."""
 
     def test_parse_args_returns_namespace_with_md_files(self):
-        with patch("validate_mermaid.sys.argv", ["validate_mermaid.py", "docs/AZ-305_CheatSheet.md"]):
+        argv = ["validate_mermaid.py", "docs/AZ-305_CheatSheet.md"]
+        with patch("validate_mermaid.sys.argv", argv):
             args = validate_mermaid.parse_args()
         assert args.md_files == ["docs/AZ-305_CheatSheet.md"]
 
