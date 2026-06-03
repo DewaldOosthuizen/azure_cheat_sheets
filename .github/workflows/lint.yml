@@ -55,9 +55,9 @@ jobs:
         with:
           python-version: "3.11"
       - name: Install test deps
-        run: pip install pytest
+        run: pip install pytest pytest-cov
       - name: Run tests
-        run: pytest tests/ -v
+        run: pytest tests/ -v --cov=scripts --cov-report=term-missing --cov-fail-under=90
 
   link-check:
     runs-on: ubuntu-latest
