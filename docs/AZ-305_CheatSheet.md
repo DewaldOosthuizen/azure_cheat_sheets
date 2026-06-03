@@ -23,22 +23,24 @@
 
 ## Exam Track Index
 
-| Section | AZ-900 | AZ-104 | AZ-305 |
-| --- | --- | --- | --- |
-| [Networking](#networking) | Partial | Full | Full |
-| [Security](#security) | — | Partial | Full |
-| [Storage](#storage) | Partial | Full | Full |
-| [Monitoring & Observability](#monitoring--observability) | — | Partial | Full |
-| [Compute](#compute) | Partial | Full | Full |
-| [Identity & Access](#identity--access) | Partial | Full | Full |
-| [High Availability & Disaster Recovery](#high-availability--disaster-recovery) | — | Full | Full |
-| [Governance](#governance) | — | Partial | Full |
-| [Messaging & Integration](#messaging--integration) | — | — | Full |
-| [Well-Architected Framework](#well-architected-framework) | — | — | Full |
+| Section | AZ-900 | AZ-104 | AZ-305 | AZ-500 | AZ-700 |
+| --- | --- | --- | --- | --- | --- |
+| [Networking](#networking) | Partial | Full | Full | Partial | Full |
+| [Security](#security) | — | Partial | Full | Full | — |
+| [Storage](#storage) | Partial | Full | Full | — | — |
+| [Monitoring & Observability](#monitoring--observability) | — | Partial | Full | Partial | — |
+| [Compute](#compute) | Partial | Full | Full | — | — |
+| [Identity & Access](#identity--access) | Partial | Full | Full | Full | — |
+| [High Availability & Disaster Recovery](#high-availability--disaster-recovery) | — | Full | Full | — | Partial |
+| [Governance](#governance) | — | Partial | Full | Partial | — |
+| [Messaging & Integration](#messaging--integration) | — | — | Full | — | — |
+| [Well-Architected Framework](#well-architected-framework) | — | — | Full | — | — |
 
 > **Exam tip:** AZ-900 rows marked Partial cover conceptual awareness only.
 > AZ-104 Full rows require administrator-level depth. AZ-305 covers all
-> sections with an architectural decision-making focus.
+> sections with an architectural decision-making focus. AZ-500 Full/Partial
+> rows indicate security-engineer depth. AZ-700 Full/Partial rows indicate
+> network-engineer depth.
 
 ---
 
