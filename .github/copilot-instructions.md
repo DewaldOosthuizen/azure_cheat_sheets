@@ -21,7 +21,7 @@ openspec/                   — openspec change workflow artefacts (proposals,
                               specs, impls, archive)
 ```
 
-The cheat sheet is organized into eight top-level sections:
+The cheat sheet is organized into ten top-level sections:
 
 1. Networking
 2. Security
@@ -31,6 +31,18 @@ The cheat sheet is organized into eight top-level sections:
 6. Identity & Access
 7. High Availability & Disaster Recovery
 8. Governance
+9. Messaging & Integration
+10. Well-Architected Framework
+
+## Exam Overlap
+
+| Exam   | Focus             | Relevant Sections |
+|--------|-------------------|-------------------|
+| AZ-900 | Fundamentals      | Networking (overview), Storage, Compute, Identity & Access (Entra basics) |
+| AZ-104 | Administrator     | All sections — administrator-level depth on RBAC, Networking, HA & DR; Messaging & Integration (partial) |
+| AZ-305 | Architect         | All sections including Messaging & Integration and Well-Architected Framework |
+| AZ-500 | Security Engineer | Security (full), Identity & Access (full), Networking (partial), Monitoring & Observability (partial), Governance (partial) |
+| AZ-700 | Network Engineer  | Networking (full), High Availability & Disaster Recovery (partial) |
 
 ## Content Guidelines
 
