@@ -1004,6 +1004,15 @@ flowchart TD
 
 > **Cross-reference:** See [High Availability & Disaster Recovery](#high-availability--disaster-recovery) for Reliability patterns, [Security](#security) for defence-in-depth, [Networking — CDN](#content-delivery-cdn) for CDN/Front Door, [Compute — Caching](#caching) for Redis tier selection, [Networking](#networking) for DDoS, and [Governance](#governance) for cost control tooling.
 
+```mermaid
+flowchart TD
+    A[Requirement keyword?] -->|Scale / latency| B[Performance Efficiency\nCDN · Front Door · VMSS · Redis]
+    A -->|Uptime / SLA| C[Reliability\nAvailability Zones · Traffic Manager · ASR]
+    A -->|Cost / budget| D[Cost Optimization\nReserved Instances · Spot VMs · Advisor]
+    A -->|Breach / threat| E[Security\nDefender · Sentinel · Key Vault · RBAC]
+    A -->|Safe deploy / ops| F[Operational Excellence\nAzure Monitor · Deployment Slots · IaC]
+```
+
 ---
 
 ## Reliability — SLA Target Mapping
