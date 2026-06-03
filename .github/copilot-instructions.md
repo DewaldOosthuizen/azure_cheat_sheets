@@ -3,25 +3,26 @@
 ## Project Overview
 
 This repository contains quick-reference study notes for Azure architecture
-decisions. It is aimed at candidates preparing for AZ-305: Designing Microsoft
-Azure Infrastructure Solutions. The focus is service selection, architectural
-trade-offs, and decision reasoning — not step-by-step walkthroughs, portal
-screenshots, or hands-on labs.
+decisions. It is aimed primarily at candidates preparing for AZ-305: Designing
+Microsoft Azure Infrastructure Solutions. The focus is service selection,
+architectural trade-offs, and decision reasoning — not step-by-step
+walkthroughs, portal screenshots, or hands-on labs.
 
 There is no application code, no build system, and no test suite. All
-meaningful content lives in a single Markdown file.
+meaningful content lives in the Markdown files under `docs/`.
 
 ## Repository Structure
 
 ```
-docs/AZ-305_CheatSheet.md   — the single main cheat sheet
+docs/AZ-305_CheatSheet.md   — AZ-305 architect-focused cheat sheet
+docs/AZ-104_CheatSheet.md   — AZ-104 administrator-focused cheat sheet
 scripts/validate_mermaid.py — CI script that validates Mermaid code blocks
 config/orchestrator.yml     — workspace-orchestrator pipeline config
 openspec/                   — openspec change workflow artefacts (proposals,
                               specs, impls, archive)
 ```
 
-The cheat sheet is organized into ten top-level sections:
+The cheat sheets are organized into ten top-level sections:
 
 1. Networking
 2. Security

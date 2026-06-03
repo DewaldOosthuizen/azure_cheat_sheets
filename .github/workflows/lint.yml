@@ -32,6 +32,8 @@ jobs:
           cache: 'npm'
       - name: Install mermaid-cli
         run: npm ci
+      - name: Audit dependencies
+        run: npm audit --audit-level=high
       - name: Expose local bin on PATH
         run: echo "$GITHUB_WORKSPACE/node_modules/.bin" >> $GITHUB_PATH
       - name: Write puppeteer config
