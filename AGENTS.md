@@ -8,7 +8,8 @@ and decision reasoning — not step-by-step walkthroughs or portal labs.
 ## Repository Structure
 
 ```
-docs/AZ-305_CheatSheet.md   — the single main cheat sheet
+docs/AZ-305_CheatSheet.md   — AZ-305 architect-focused cheat sheet
+docs/AZ-104_CheatSheet.md   — AZ-104 administrator-focused cheat sheet
 ```
 
 The cheat sheet is organized into ten top-level sections:
