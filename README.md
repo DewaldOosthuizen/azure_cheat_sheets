@@ -121,11 +121,9 @@ For pull requests:
   
 ## Contributing
 
-Contributions should keep the repository useful as a quick study and
-decision-reference tool.
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for branch naming, commit style, local
-checks, content conventions, and the PR checklist.
+Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) for
+the full workflow, including how to pick up an issue, branch naming conventions,
+local validation steps, and the pull request process.
 
 ## License
 

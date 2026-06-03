@@ -1,9 +1,79 @@
-# Contributing
+# Contributing to Azure Cheat Sheets
 
-Thank you for contributing to the Azure Cheat Sheets repository. This guide
-covers everything you need to make a clean, reviewable contribution.
+Thank you for contributing. This guide covers the full workflow for making
+clean, reviewable contributions to this repository.
 
-## Prerequisites
+---
+
+## Table of Contents
+
+1. [Code of Conduct](#1-code-of-conduct)
+2. [Getting Started](#2-getting-started)
+3. [Picking Up an Issue](#3-picking-up-an-issue)
+4. [Branch Naming](#4-branch-naming)
+5. [Development Setup](#5-development-setup)
+6. [Running Checks Locally](#6-running-checks-locally)
+7. [Commit Message Style](#7-commit-message-style)
+8. [Pull Request Process](#8-pull-request-process)
+9. [Coding Standards](#9-coding-standards)
+
+---
+
+## 1. Code of Conduct
+
+Be respectful, constructive, and collaborative. Contributions that are
+disrespectful, dismissive, or harmful will not be accepted.
+
+---
+
+## 2. Getting Started
+
+1. Fork the repository.
+2. Clone your fork locally.
+3. Follow the [Development Setup](#5-development-setup) section below.
+
+---
+
+## 3. Picking Up an Issue
+
+**Before you write a single line of content or code:**
+
+1. Browse the [GitHub Issues](../../issues) tab and find an issue you want to work on.
+2. **Assign the issue to yourself** before starting any work.
+   Go to the issue page → Assignees (right sidebar) → assign yourself.
+   This signals to all other contributors that the issue is claimed.
+3. Leave a comment on the issue stating you are picking it up and your
+   intended approach — especially for larger changes.
+4. Only then create your branch and begin work.
+
+> Why this matters: two contributors working on the same issue in parallel
+> wastes effort and creates painful merge conflicts. A self-assignment takes
+> five seconds and saves hours.
+
+If you were assigned an issue but can no longer work on it, unassign yourself
+and leave a comment so someone else can pick it up.
+
+---
+
+## 4. Branch Naming
+
+| Prefix     | Pattern                         | When to use                                |
+|------------|---------------------------------|--------------------------------------------|
+| `feature/` | `feature/<issue-id>-<topic>`    | New cheat sheet section or capability      |
+| `fix/`     | `fix/<issue-id>-<topic>`        | Correction to existing content             |
+| `chore/`   | `chore/<topic>`                 | Tooling, deps, CI, config updates          |
+| `docs/`    | `docs/<topic>`                  | Meta-documentation (README, CONTRIBUTING)  |
+
+Examples:
+- `feature/42-networking-private-endpoints`
+- `fix/17-storage-redundancy-table`
+- `docs/update-contributing-guide`
+
+Always branch from `main`.
+
+---
+
+## 5. Development Setup
 
 You need `node` and `npm` on your PATH, and **Python 3.11+** with `ruff` and
 `pytest` for script validation and linting.
@@ -12,9 +82,7 @@ You need `node` and `npm` on your PATH, and **Python 3.11+** with `ruff` and
 pip install ruff pytest
 ```
 
-## Local Setup
-
-Install the dev dependencies declared in `package.json`:
+Install the Node dev dependencies declared in `package.json`:
 
 ```bash
 npm ci
@@ -22,9 +90,12 @@ npm ci
 
 This installs `markdownlint-cli2` (linter) and `@mermaid-js/mermaid-cli` (`mmdc`).
 
-## Running Checks Locally
+---
 
-Run these commands from the repository root before opening a PR.
+## 6. Running Checks Locally
+
+Run these commands from the repository root before pushing. CI runs the same
+checks and a failing PR will not be reviewed.
 
 Lint all Markdown files:
 
@@ -32,13 +103,11 @@ Lint all Markdown files:
 npx markdownlint-cli2 "**/*.md"
 ```
 
-Validate all Mermaid diagram blocks using the project script (`mmdc` must be on PATH — installed via `npm ci`):
+Validate all Mermaid diagram blocks:
 
 ```bash
 python3 scripts/validate_mermaid.py docs/AZ-305_CheatSheet.md
 ```
-
-Both commands must exit cleanly (exit code 0) before pushing.
 
 Lint Python scripts:
 
@@ -53,23 +122,16 @@ Run tests:
 pytest tests/ -v
 ```
 
-## Branch Naming
+All commands must exit with code `0` before opening a PR.
 
-| Prefix | Pattern | When to use |
-|--------|---------|-------------|
-| `feature/` | `feature/<section>-<topic>` | New content or new capability |
-| `fix/` | `fix/<section>-<topic>` | Correction to existing content |
-| `docs/` | `docs/<topic>` | Meta-documentation (README, CONTRIBUTING, etc.) |
+---
 
-Examples: `feature/networking-private-endpoints`, `fix/storage-redundancy-table`,
-`docs/update-contributing-guide`.
+## 7. Commit Message Style
 
-## Commit Message Style
-
-- Use the **imperative mood** in the subject line ("Add", "Fix", "Remove").
+- Use the **imperative mood** in the subject line: "Add", "Fix", "Remove".
 - Limit the subject line to **72 characters**.
-- Leave one blank line between the subject and the body (if a body is needed).
-- Reference the related issue in the footer with `#<n>`.
+- Leave one blank line between the subject and body when a body is needed.
+- Reference the related issue in the footer with `Closes #<n>`.
 
 Example:
 
@@ -79,9 +141,25 @@ Add Azure Private Endpoint decision flowchart
 Closes #42
 ```
 
-## Content Style Rules
+---
 
-The rules below apply to all content in `docs/`.
+## 8. Pull Request Process
+
+1. Ensure all local checks pass (see [Section 6](#6-running-checks-locally)).
+2. Open the PR against `main`.
+3. Use a scoped, descriptive title: `fix: resolve #17 - correct storage redundancy table`.
+4. In the PR body:
+   - Link the issue: `Closes #<n>`
+   - Describe the user-visible change.
+   - Include screenshots for diagram or layout changes.
+5. Request a review. Do not merge your own PR without a review.
+6. Address review feedback with follow-up commits — do not force-push a reviewed branch unless asked.
+
+---
+
+## 9. Coding Standards
+
+### Content Style
 
 - Keep explanations concise and comparison-oriented.
 - Section headings: top-level domain names in ALL CAPS (`# NETWORKING`).
@@ -90,50 +168,16 @@ The rules below apply to all content in `docs/`.
   Use these column templates:
 
   Networking / compute services:
-  | Service | Layer | Scope | Use Case | Key Feature |
+  `| Service | Layer | Scope | Use Case | Key Feature |`
 
   Data / storage services:
-  | Service | Type | Best For | Key Feature |
+  `| Service | Type | Best For | Key Feature |`
 
   Consistency columns (always present): Service, Key Feature.
   Do not add free-form columns not in the template above.
 
-- Use short exam-tip callouts only when they clarify a likely decision point.
-  Format: place the callout immediately after the relevant table, using:
+### Python Scripts
 
-  > **Exam tip:** Choose Azure Front Door when the requirement mentions
-  > global HTTP load balancing, WAF, or SSL offload at the edge.
-
-  Do not use plain blockquotes, bold sentences, or note/warning admonitions
-  for exam tips.
-
-- Use Mermaid diagrams for branching decision flows. Choose the directive by
-  purpose:
-
-  | Purpose                        | Directive       |
-  |--------------------------------|-----------------|
-  | Decision flows (if/else trees) | flowchart TD    |
-  | Hierarchy / ecosystem maps     | graph TD        |
-  | Connectivity / network paths   | graph LR        |
-
-  Example decision flow:
-
-  ```mermaid
-  flowchart TD
-      A[Need load balancing?] -->|Global HTTP| B[Azure Front Door]
-      A -->|Regional TCP/UDP| C[Azure Load Balancer]
-  ```
-
-- Avoid documenting features or claims that are not yet reflected in the
-  repository content.
-
-## PR Checklist
-
-Before requesting review, confirm each item:
-
-- [ ] `npx markdownlint-cli2 "**/*.md"` passes with no violations.
-- [ ] `ruff check scripts/` passes with no violations.
-- [ ] `pytest tests/ -v` passes with no failures.
-- [ ] All Mermaid diagrams render correctly on GitHub.
-- [ ] Change is scoped to one improvement area.
-- [ ] README or CONTRIBUTING updated if any conventions changed.
+- Follow PEP 8. Use `ruff` for linting and formatting.
+- Keep scripts small and single-purpose.
+- Add or update tests in `tests/` whenever script behaviour changes.
