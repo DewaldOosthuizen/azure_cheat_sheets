@@ -25,16 +25,16 @@
 
 | Section | AZ-900 | AZ-104 | AZ-305 |
 | --- | --- | --- | --- |
-| Networking | Partial | Full | Full |
-| Security | — | Partial | Full |
-| Storage | Partial | Full | Full |
-| Monitoring & Observability | — | Partial | Full |
-| Compute | Partial | Full | Full |
-| Identity & Access | Partial | Full | Full |
-| High Availability & Disaster Recovery | — | Full | Full |
-| Governance | — | Partial | Full |
-| Messaging & Integration | — | — | Full |
-| Well-Architected Framework | — | — | Full |
+| [Networking](#networking) | Partial | Full | Full |
+| [Security](#security) | — | Partial | Full |
+| [Storage](#storage) | Partial | Full | Full |
+| [Monitoring & Observability](#monitoring--observability) | — | Partial | Full |
+| [Compute](#compute) | Partial | Full | Full |
+| [Identity & Access](#identity--access) | Partial | Full | Full |
+| [High Availability & Disaster Recovery](#high-availability--disaster-recovery) | — | Full | Full |
+| [Governance](#governance) | — | Partial | Full |
+| [Messaging & Integration](#messaging--integration) | — | — | Full |
+| [Well-Architected Framework](#well-architected-framework) | — | — | Full |
 
 > **Exam tip:** AZ-900 rows marked Partial cover conceptual awareness only.
 > AZ-104 Full rows require administrator-level depth. AZ-305 covers all
@@ -124,15 +124,15 @@ flowchart TD
 
 ## Virtual Networks (VNet)
 
-| Concept | Description | Use Case |
-| --- | --- | --- |
-| **VNet Peering** | Direct low-latency connection between VNets | Same or cross-region connectivity, no gateway needed |
-| **VNet-to-VNet VPN** | Encrypted tunnel over public internet | Cross-region, cross-subscription (older pattern) |
-| **ExpressRoute** | Private dedicated circuit via provider | Enterprise, compliance, predictable bandwidth |
-| **VPN Gateway** | IPSec tunnel over internet | On-prem to Azure, cost-effective |
-| **Azure Bastion** | Browser-based RDP/SSH via Azure portal | Secure jump-host, no public IP on VMs |
-| **Private Endpoint** | Private IP for PaaS service in your VNet | Secure PaaS access, no public internet exposure |
-| **Service Endpoint** | Extends VNet identity to PaaS service | Simpler than Private Endpoint, still uses public IP |
+| Service | Layer | Scope | Use Case | Key Feature |
+| --- | --- | --- | --- | --- |
+| **VNet Peering** | L3 | Regional / Global | Same or cross-region VNet connectivity without a gateway | Low latency; no gateway required; non-transitive by default |
+| **VNet-to-VNet VPN** | L3 | Global | Cross-region or cross-subscription encrypted connectivity | IPSec/IKE tunnel; older pattern superseded by peering in most cases |
+| **ExpressRoute** | L3 | Global | Private dedicated circuit for enterprise workloads | SLA-backed; avoids public internet; supports up to 100 Gbps |
+| **VPN Gateway** | L3 | Regional | On-premises to Azure encrypted tunnel | Site-to-site, point-to-site, and VNet-to-VNet; cost-effective |
+| **Azure Bastion** | L7 | Regional | Secure browser-based RDP/SSH without public VM IPs | Deployed per VNet; no jump-box VM required |
+| **Private Endpoint** | L3 | Regional | Private IP access to PaaS services inside a VNet | NIC injected into VNet; DNS integration required |
+| **Service Endpoint** | L3 | Regional | Route PaaS traffic over Azure backbone from a subnet | No private IP; PaaS firewall can restrict to specific subnets |
 
 > **Private Endpoint vs Service Endpoint:**
 >
@@ -152,26 +152,65 @@ flowchart TD
 
 ## DNS
 
-| Service | Use Case |
-| --- | --- |
-| **Azure DNS** | Host public DNS zones in Azure |
-| **Azure Private DNS Zones** | Name resolution within VNets |
-| **Private DNS Resolver** | Hybrid DNS — forward on-prem queries to Azure Private DNS |
+| Service | Layer | Scope | Use Case | Key Feature |
+| --- | --- | --- | --- | --- |
+| **Azure DNS** | DNS | Global | Host public DNS zones in Azure | Authoritative DNS; delegates to Azure name servers |
+| **Azure Private DNS Zones** | DNS | Regional (VNet-linked) | Name resolution within VNets | Auto-registration of VM records; linked to one or more VNets |
+| **Private DNS Resolver** | DNS | Regional | Hybrid DNS — forward on-prem queries to Azure Private DNS | Inbound/outbound endpoints; replaces custom DNS VM |
 
 ---
 
 ## Network Security
 
-| Service | Purpose | Key Feature |
-| --- | --- | --- |
-| **NSG (Network Security Group)** | Allow/deny traffic at NIC or subnet | Stateful, rules by port/IP/protocol |
-| **Azure Firewall** | Managed L3-L7 network firewall | FQDN filtering, threat intel, centralized policy |
-| **Azure Firewall Premium** | Advanced threat protection | TLS inspection, IDPS, URL filtering |
-| **DDoS Protection Basic** | Always-on, free | Platform-level protection |
-| **DDoS Protection Standard** | Enhanced mitigation + alerting | Per-VNet cost, SLA guarantee, telemetry |
-| **Web Application Firewall (WAF)** | OWASP rules, custom rules | Deployed on App Gateway or Front Door |
+### NSG and ASG
 
-> **NSG vs Azure Firewall:** NSG = subnet/NIC filtering. Azure Firewall = centralized, stateful, FQDN-aware.
+| Service | Layer | Scope | Use Case | Key Feature |
+| --- | --- | --- | --- | --- |
+| **NSG** | L3/L4 | Subnet or NIC | Allow/deny inbound and outbound traffic by port, protocol, and IP range | Stateful; 5-tuple rules; default-deny inbound from Internet |
+| **ASG** | L3/L4 | NIC (group tag) | Simplify NSG rules for multi-tier apps by grouping NICs logically | Referenced as source/destination in NSG rules; no IP management |
+
+> **Exam tip:** Use ASGs when NSG rules would otherwise require explicit IP lists for
+> multi-tier workloads. ASGs do not replace NSGs — they are used as dynamic address
+> groups inside NSG rules.
+
+### DDoS Protection Tiers
+
+| Service | Layer | Scope | Use Case | Key Feature |
+| --- | --- | --- | --- | --- |
+| **DDoS Network Protection** | L3/L4 | VNet | Enterprise workloads requiring SLA guarantee and telemetry | Per-VNet billing; adaptive tuning; cost protection SLA |
+| **DDoS IP Protection** | L3/L4 | Public IP | Single-resource protection without VNet-wide commitment | Pay-per-protected-IP; lighter entry point |
+| **DDoS Infrastructure Protection** | L3/L4 | Platform (all Azure) | Baseline free protection for every Azure customer | Always-on; no configuration; limited telemetry |
+
+> **Exam tip:** Choose DDoS Network Protection when the requirement mentions volumetric
+> attack mitigation with SLA guarantees, custom thresholds, or attack analytics.
+> Infrastructure Protection is free but provides no per-customer telemetry or SLA.
+
+### Azure Firewall SKUs
+
+| Service | Layer | Scope | Use Case | Key Feature |
+| --- | --- | --- | --- | --- |
+| **Azure Firewall Basic** | L3–L7 | Regional (hub VNet) | SMB workloads, dev/test, cost-sensitive scenarios | Fixed 250 Mbps throughput; no threat intel feed; no IDPS |
+| **Azure Firewall Standard** | L3–L7 | Regional (hub VNet) | Production hub-and-spoke; FQDN filtering | Threat intelligence feed; application/network rules; SNAT |
+| **Azure Firewall Premium** | L3–L7 | Regional (hub VNet) | Regulated or high-security environments | TLS inspection; IDPS; URL filtering; web categories |
+
+> **Exam tip:** Choose Azure Firewall Premium when the requirement mentions TLS
+> inspection, intrusion detection/prevention (IDPS), or URL-category filtering.
+> Standard covers most production scenarios; Basic is not suitable for production
+> workloads requiring threat intelligence.
+
+### Decision Flow — Network Security Selection
+
+```mermaid
+flowchart TD
+    A[Protect a workload?] --> B{Volumetric DDoS\nrisk?}
+    B -- Yes, VNet-wide --> C[DDoS Network Protection]
+    B -- Yes, single IP --> D[DDoS IP Protection]
+    B -- No --> E{Inspect / filter\nnetwork traffic?}
+    E -- Subnet/NIC rules only --> F[NSG + ASG]
+    E -- Centralized FQDN\nor L7 filtering --> G{Compliance /\nTLS inspection?}
+    G -- Yes --> H[Azure Firewall Premium]
+    G -- No --> I[Azure Firewall Standard]
+```
 
 ---
 
@@ -558,6 +597,33 @@ flowchart TD
 
 ---
 
+## Serverless / Event-Driven Selection
+
+```mermaid
+flowchart TD
+    A[Serverless / Event-Driven workload?] --> B{Execution duration\n< 10 minutes?}
+    B -- Yes --> C{Stateless with\nHTTP / queue / timer trigger?}
+    B -- No --> D{Need long-running\norchestration / stateful?}
+    C -- Yes --> E{Code-first preference?}
+    C -- No --> F{Enterprise workflow\nor B2B integration?}
+    D -- Yes --> DURABLE[Azure Functions Premium/Dedicated\nwith Durable Functions]
+    D -- No --> ACA_LONG[Azure Container Apps]
+    E -- Yes --> FUNC_CONS[Azure Functions Consumption]
+    E -- No --> LOGIC_CONS[Logic Apps Consumption]
+    F -- Yes --> G{Low-code / visual designer?}
+    F -- No --> FUNC_CONS
+    G -- Yes --> LOGIC_CONS
+    G -- No --> LOGIC_STD[Logic Apps Standard]
+```
+
+> **Exam tip:** Use Azure Functions (Consumption) for short-lived, stateless, code-first triggers.
+> Use Durable Functions (Premium/Dedicated) for stateful orchestration or fan-out patterns.
+> Use Logic Apps Consumption for simple enterprise/B2B workflows with low-code connectors.
+> Use Logic Apps Standard when you need ISE-like VNet isolation or single-tenant deployment.
+> Use Azure Container Apps when execution duration exceeds Functions limits or you need a custom runtime.
+
+---
+
 ## Azure Container Apps vs AKS vs ACI
 
 | Dimension | ACI | ACA | AKS |
@@ -572,20 +638,27 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A[Container workload?] --> B{Need K8s API\nor custom controllers?}
+    A[Container workload?] --> B{Existing Kubernetes\nteam expertise or\ncustom K8s API access?}
     B -- Yes --> AKS[Azure Kubernetes Service]
-    B -- No --> C{Need event-driven scale\nor Dapr without K8s ops?}
-    C -- Yes --> ACA[Azure Container Apps]
-    C -- No --> D{Single burst container\nno long-lived scale?}
-    D -- Yes --> ACI[Azure Container Instances]
-    D -- No --> ACA
+    B -- No --> C{Scale-to-zero\nrequirement?}
+    C -- Yes --> D{Microservice complexity\nor Dapr integration?}
+    C -- No --> E{Simple web app\nor single container?}
+    D -- Yes --> ACA[Azure Container Apps]
+    D -- No --> F{Single burst / short-lived\ntask, no persistent scale?}
+    F -- Yes --> ACI[Azure Container Instances]
+    F -- No --> ACA
+    E -- Yes --> APPSVC[App Service Containers]
+    E -- No --> ACA
 ```
 
 > **Exam tip:** ACA uses KEDA under the hood and supports **scale-to-zero** for HTTP and
 > queue-based triggers — similar to Consumption plan Functions but for containerised workloads.
-> Choose ACA over Functions when you need: a custom runtime, Dapr service invocation, or
+> Choose ACA over Functions when you need a custom runtime, Dapr service invocation, or
 > revision-based traffic splitting. Choose AKS when the scenario requires direct Kubernetes
 > API access, custom admission webhooks, or specific CNI configuration.
+> Choose App Service Containers for simple, single-container web apps that benefit from
+> built-in deployment slots and App Service features without microservice overhead.
+> Use ACI for one-off batch jobs or CI/CD pipeline steps that need an isolated container burst.
 
 ---
 

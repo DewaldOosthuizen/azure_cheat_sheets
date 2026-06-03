@@ -45,7 +45,8 @@ class TestValidateBlockTimeout:
 
     def test_validate_block_returns_false_on_timeout(self):
         import subprocess
-        with patch("validate_mermaid.subprocess.run", side_effect=subprocess.TimeoutExpired(cmd="mmdc", timeout=60)):
+        timeout_exc = subprocess.TimeoutExpired(cmd="mmdc", timeout=60)
+        with patch("validate_mermaid.subprocess.run", side_effect=timeout_exc):
             result = validate_mermaid.validate_block(1, "graph TD\n  A --> B\n")
         assert result[0] is False
         assert result[1] == "mmdc timed out after 60 s"
@@ -73,3 +74,53 @@ class TestMainFileNotFound:
         captured = capsys.readouterr()
         assert "file not found" in captured.err
         assert "/nonexistent/path.md" in captured.err
+
+
+class TestPathlibRefactor:
+    """Tests for issue #62 — pathlib usage in validate_block() and main()."""
+
+    def test_validate_block_unlinks_tmp_via_pathlib(self):
+        """Cleanup must use Path.unlink, not os.unlink."""
+        import inspect
+
+        import validate_mermaid as vm
+        src = inspect.getsource(vm.validate_block)
+        assert "os.unlink" not in src, "validate_block must not use os.unlink"
+        assert "os.path.exists" not in src, "validate_block must not use os.path.exists"
+        assert "unlink(missing_ok=True)" in src
+
+    def test_main_uses_pathlib_is_file(self):
+        """main() must check the markdown file via Path.is_file(), not os.path.isfile()."""
+        import inspect
+
+        import validate_mermaid as vm
+        src = inspect.getsource(vm.main)
+        assert "os.path.isfile" not in src, "main() must not use os.path.isfile"
+        assert ".is_file()" in src
+
+    def test_import_os_removed(self):
+        """The script must not import os after the refactor."""
+        import ast
+        import inspect
+
+        import validate_mermaid as vm
+        source = inspect.getsource(vm)
+        tree = ast.parse(source)
+        os_imports = [
+            node for node in ast.walk(tree)
+            if isinstance(node, (ast.Import, ast.ImportFrom))
+            and any(
+                (alias.name == "os" if isinstance(node, ast.Import) else node.module == "os")
+                for alias in node.names
+            )
+        ]
+        assert not os_imports, "import os must be removed after pathlib refactor"
+
+    def test_out_path_derived_with_suffix(self):
+        """SVG path must be derived with Path.with_suffix, not string.replace."""
+        import inspect
+
+        import validate_mermaid as vm
+        src = inspect.getsource(vm.validate_block)
+        assert '.replace(".mmd"' not in src, "must not use string.replace for suffix"
+        assert "with_suffix" in src

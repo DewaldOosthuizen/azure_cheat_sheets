@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """Validate all fenced mermaid blocks in a Markdown file using mmdc."""
 
-import os
 import re
 import shutil
 import subprocess
 import sys
 import tempfile
+from pathlib import Path
+
+PUPPETEER_CONFIG = Path("/tmp/puppeteer-config.json")
 
 
 def extract_mermaid_blocks(md_path):
@@ -21,19 +23,14 @@ def validate_block(index, diagram_src):
         mode="w", suffix=".mmd", delete=False, encoding="utf-8"
     ) as tmp:
         tmp.write(diagram_src)
-        tmp_path = tmp.name
-    out_path = tmp_path.replace(".mmd", ".svg")
+    tmp_path = Path(tmp.name)
+    out_path = tmp_path.with_suffix(".svg")
     try:
+        cmd = ["mmdc", "--input", str(tmp_path), "--output", str(out_path)]
+        if PUPPETEER_CONFIG.exists():
+            cmd += ["--puppeteerConfigFile", str(PUPPETEER_CONFIG)]
         result = subprocess.run(
-            [
-                "mmdc",
-                "--input",
-                tmp_path,
-                "--output",
-                out_path,
-                "--puppeteerConfigFile",
-                "/tmp/puppeteer-config.json",
-            ],
+            cmd,
             capture_output=True,
             text=True,
             timeout=60,
@@ -45,9 +42,8 @@ def validate_block(index, diagram_src):
         # Guard against race-condition where mmdc is removed mid-run after the which() check
         return (False, "mmdc binary not found on PATH")
     finally:
-        os.unlink(tmp_path)
-        if os.path.exists(out_path):
-            os.unlink(out_path)
+        tmp_path.unlink(missing_ok=True)
+        out_path.unlink(missing_ok=True)
 
 
 def main():
@@ -64,7 +60,7 @@ def main():
         sys.exit(1)
 
     md_path = sys.argv[1]
-    if not os.path.isfile(md_path):
+    if not Path(md_path).is_file():
         print(f"Error: file not found: {md_path}", file=sys.stderr)
         sys.exit(1)
     blocks = extract_mermaid_blocks(md_path)
