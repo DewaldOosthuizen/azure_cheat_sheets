@@ -35,8 +35,8 @@ of this material, but the repository is not yet organized around those tracks.
 
 ## Repository Structure
 
-- [`docs/AZ-305_CheatSheet.md`](docs/AZ-305_CheatSheet.md) - the main cheat sheet
-  for Azure infrastructure design topics.
+- [`docs/AZ-305_CheatSheet.md`](docs/AZ-305_CheatSheet.md) — AZ-305 architect-focused cheat sheet
+- [`docs/AZ-104_CheatSheet.md`](docs/AZ-104_CheatSheet.md) — AZ-104 administrator-focused cheat sheet
 
 The current cheat sheet is organized into these top-level sections:
 

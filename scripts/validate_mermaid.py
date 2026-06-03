@@ -12,6 +12,11 @@ from pathlib import Path
 PUPPETEER_CONFIG = Path("/tmp/puppeteer-config.json")
 
 
+def _repo_root() -> Path:
+    """Return the repository root directory (parent of the scripts/ folder)."""
+    return Path(__file__).parent.parent.resolve()
+
+
 def _extract_from_text(text: str) -> list[str]:
     """Extract mermaid diagram sources from a Markdown string.
 
@@ -73,7 +78,7 @@ def main():
     parser.add_argument("md_files", nargs="+", help="Markdown file(s) to validate")
     args = parser.parse_args()
 
-    repo_root = Path(__file__).parent.parent.resolve()
+    repo_root = _repo_root()
 
     total_failed = 0
     for md_path in args.md_files:

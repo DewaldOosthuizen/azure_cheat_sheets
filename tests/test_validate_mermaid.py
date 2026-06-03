@@ -330,18 +330,9 @@ class TestMultiFileHappyPath:
                 ["validate_mermaid.py", str(md1), str(md2)],
             ),
             patch("validate_mermaid.validate_block", return_value=(True, "")),
-            patch(
-                "validate_mermaid.Path.__new__",
-                side_effect=lambda cls, *a, **kw: object.__new__(cls),
-            ),
+            patch("validate_mermaid._repo_root", return_value=tmp_path),
         ):
-            # Patch repo_root resolution so tmp_path is treated as repo root
-            with patch.object(
-                validate_mermaid.Path(__file__).parent.parent.__class__,
-                "resolve",
-                return_value=tmp_path,
-            ):
-                validate_mermaid.main()  # must not raise
+            validate_mermaid.main()  # must not raise
         captured = capsys.readouterr()
         assert "passed" in captured.out.lower()
 
@@ -360,6 +351,7 @@ class TestMultiFileOneBad:
                 ["validate_mermaid.py", str(md_good), bad_path],
             ),
             patch("validate_mermaid.validate_block", return_value=(True, "")),
+            patch("validate_mermaid._repo_root", return_value=tmp_path),
             pytest.raises(SystemExit) as exc_info,
         ):
             validate_mermaid.main()
@@ -376,8 +368,75 @@ class TestMultiFileOneBad:
                 ["validate_mermaid.py", str(md_good), bad_path],
             ),
             patch("validate_mermaid.validate_block", return_value=(True, "")),
+            patch("validate_mermaid._repo_root", return_value=tmp_path),
             pytest.raises(SystemExit),
         ):
             validate_mermaid.main()
         captured = capsys.readouterr()
         assert "missing.md" in captured.err
+
+
+# ---- issue #126: path traversal guard ----
+
+
+class TestTraversalGuard:
+    """Tests for issue #126 - path traversal / shell-injection guard in main()."""
+
+    def test_main_exits_1_on_path_traversal(self, capsys):
+        """Path resolving outside repo root must be rejected with exit code 1."""
+        from pathlib import Path
+
+        original_resolve = Path.resolve
+
+        def fake_resolve(self, strict=False):
+            if str(self) == "/etc/passwd":
+                return Path("/etc/passwd")
+            return original_resolve(self, strict=strict)
+
+        with (
+            patch("validate_mermaid.shutil.which", return_value="/usr/bin/mmdc"),
+            patch("validate_mermaid.sys.argv", ["validate_mermaid.py", "/etc/passwd"]),
+            patch.object(Path, "is_file", return_value=True),
+            patch.object(Path, "resolve", fake_resolve),
+            pytest.raises(SystemExit) as exc_info,
+        ):
+            validate_mermaid.main()
+        assert exc_info.value.code == 1
+        captured = capsys.readouterr()
+        assert "outside repository root" in captured.err
+
+    def test_main_does_not_exit_for_valid_path(self, capsys):
+        """A path within the repo root must pass the traversal guard."""
+        from pathlib import Path
+
+        import scripts.validate_mermaid as vm_mod
+
+        repo_root = Path(vm_mod.__file__).parent.parent.resolve()
+        valid_path = str(repo_root / "docs" / "AZ-305_CheatSheet.md")
+
+        with (
+            patch("validate_mermaid.shutil.which", return_value="/usr/bin/mmdc"),
+            patch("validate_mermaid.sys.argv", ["validate_mermaid.py", valid_path]),
+            patch.object(Path, "is_file", return_value=True),
+            patch(
+                "validate_mermaid.extract_mermaid_blocks",
+                return_value=["graph TD\n  A --> B\n"],
+            ),
+            patch("validate_mermaid.validate_block", return_value=(True, "")),
+        ):
+            validate_mermaid.main()  # must not raise SystemExit due to traversal guard
+        captured = capsys.readouterr()
+        assert "outside repository root" not in captured.err
+
+
+class TestRealCheatSheet:
+    """Integration tests that read docs/AZ-305_CheatSheet.md from disk."""
+
+    def test_extracts_nonzero_blocks_from_real_cheat_sheet(self):
+        blocks = validate_mermaid.extract_mermaid_blocks("docs/AZ-305_CheatSheet.md")
+        assert len(blocks) > 0, "Expected at least one Mermaid block in the cheat sheet"
+
+    def test_all_blocks_are_non_empty_strings(self):
+        blocks = validate_mermaid.extract_mermaid_blocks("docs/AZ-305_CheatSheet.md")
+        for i, b in enumerate(blocks):
+            assert isinstance(b, str) and b.strip(), f"Block {i + 1} is empty or not a string"
