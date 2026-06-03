@@ -487,9 +487,9 @@ graph TD
 
 | Service | Purpose | Key Concepts |
 | --- | --- | --- |
-| **Azure Monitor** | Central telemetry platform | Metrics, Logs, Alerts, Workbooks (umbrella: Activity Log, Metrics, Alerts, Diagnostic Settings, Insights family) |
-| **Log Analytics Workspace** | Store and query logs (KQL) | Retention (30–730 days), data export (contains: KQL engine, retention tiers; fed via Diagnostic Settings) |
-| **Application Insights** | APM for apps | Live metrics, dependency tracking, availability tests (contains: Live Metrics, Availability Tests, Dependency Tracking, Smart Detection) |
+| **Azure Monitor** (umbrella: Activity Log, Metrics, Alerts, Diagnostic Settings, Insights family) | Central telemetry platform | Metrics, Logs, Alerts, Workbooks |
+| **Log Analytics Workspace** (contains: KQL engine, retention tiers; fed via Diagnostic Settings) | Store and query logs (KQL) | Retention (30–730 days), data export |
+| **Application Insights** (contains: Live Metrics, Availability Tests, Dependency Tracking, Smart Detection) | APM for apps | Live metrics, dependency tracking, availability tests |
 | **VM Insights** | Perf + map for VMs | Relies on Log Analytics agent/AMA |
 | **Container Insights** | AKS monitoring | Pod/node metrics, log collection |
 | **Network Watcher** | Network diagnostics | Packet capture, flow logs, connection monitor |
