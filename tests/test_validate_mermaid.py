@@ -1,5 +1,6 @@
 """Tests for issue #42 - error handling and exit-code reporting in validate_mermaid.py."""
 
+import shutil
 import sys
 from unittest.mock import patch
 
@@ -331,3 +332,15 @@ class TestRealCheatSheet:
         blocks = validate_mermaid.extract_mermaid_blocks("docs/AZ-305_CheatSheet.md")
         for i, b in enumerate(blocks):
             assert isinstance(b, str) and b.strip(), f"Block {i + 1} is empty or not a string"
+
+
+@pytest.mark.skipif(shutil.which("mmdc") is None, reason="mmdc not installed")
+class TestRealCheatSheetIntegration:
+    """Integration tests that invoke validate_block against the real cheat sheet."""
+
+    def test_all_diagrams_pass(self):
+        blocks = validate_mermaid.extract_mermaid_blocks("docs/AZ-305_CheatSheet.md")
+        assert len(blocks) > 0, "Expected at least one Mermaid block in the cheat sheet"
+        for i, block in enumerate(blocks):
+            ok, err = validate_mermaid.validate_block(i, block)
+            assert ok, f"Diagram {i + 1} failed: {err}"
