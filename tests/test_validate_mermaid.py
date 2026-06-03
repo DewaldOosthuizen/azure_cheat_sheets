@@ -1,4 +1,5 @@
 """Tests for issue #42 - error handling and exit-code reporting in validate_mermaid.py."""
+
 import sys
 from unittest.mock import patch
 
@@ -45,6 +46,7 @@ class TestValidateBlockTimeout:
 
     def test_validate_block_returns_false_on_timeout(self):
         import subprocess
+
         timeout_exc = subprocess.TimeoutExpired(cmd="mmdc", timeout=60)
         with patch("validate_mermaid.subprocess.run", side_effect=timeout_exc):
             result = validate_mermaid.validate_block(1, "graph TD\n  A --> B\n")
@@ -79,20 +81,23 @@ class TestMainFileNotFound:
 class TestExtractMermaidBlocks:
     """Parametrised tests for _extract_from_text() helper."""
 
-    @pytest.mark.parametrize("text,expected_count,expected_content", [
-        # single_block
-        ("```mermaid\ngraph TD\n  A --> B\n```", 1, "graph TD\n  A --> B\n"),
-        # multiple_blocks
-        ("```mermaid\ngraph TD\n  A-->B\n```\n\n```mermaid\ngraph LR\n  C-->D\n```", 2, None),
-        # no_blocks
-        ("# Heading\nSome text.", 0, None),
-        # non_mermaid_fence
-        ("```python\nprint('hi')\n```", 0, None),
-        # trailing_whitespace_fence
-        ("```mermaid   \ngraph TD\n  A-->B\n```", 1, None),
-        # crlf_line_endings
-        ("```mermaid\r\ngraph TD\r\n  A-->B\r\n```", 1, None),
-    ])
+    @pytest.mark.parametrize(
+        "text,expected_count,expected_content",
+        [
+            # single_block
+            ("```mermaid\ngraph TD\n  A --> B\n```", 1, "graph TD\n  A --> B\n"),
+            # multiple_blocks
+            ("```mermaid\ngraph TD\n  A-->B\n```\n\n```mermaid\ngraph LR\n  C-->D\n```", 2, None),
+            # no_blocks
+            ("# Heading\nSome text.", 0, None),
+            # non_mermaid_fence
+            ("```python\nprint('hi')\n```", 0, None),
+            # trailing_whitespace_fence
+            ("```mermaid   \ngraph TD\n  A-->B\n```", 1, None),
+            # crlf_line_endings
+            ("```mermaid\r\ngraph TD\r\n  A-->B\r\n```", 1, None),
+        ],
+    )
     def test_extract(self, text, expected_count, expected_content):
         result = validate_mermaid._extract_from_text(text)
         assert len(result) == expected_count
@@ -108,6 +113,7 @@ class TestPathlibRefactor:
         import inspect
 
         import validate_mermaid as vm
+
         src = inspect.getsource(vm.validate_block)
         assert "os.unlink" not in src, "validate_block must not use os.unlink"
         assert "os.path.exists" not in src, "validate_block must not use os.path.exists"
@@ -118,6 +124,7 @@ class TestPathlibRefactor:
         import inspect
 
         import validate_mermaid as vm
+
         src = inspect.getsource(vm.main)
         assert "os.path.isfile" not in src, "main() must not use os.path.isfile"
         assert ".is_file()" in src
@@ -128,10 +135,12 @@ class TestPathlibRefactor:
         import inspect
 
         import validate_mermaid as vm
+
         source = inspect.getsource(vm)
         tree = ast.parse(source)
         os_imports = [
-            node for node in ast.walk(tree)
+            node
+            for node in ast.walk(tree)
             if isinstance(node, (ast.Import, ast.ImportFrom))
             and any(
                 (alias.name == "os" if isinstance(node, ast.Import) else node.module == "os")
@@ -145,6 +154,7 @@ class TestPathlibRefactor:
         import inspect
 
         import validate_mermaid as vm
+
         src = inspect.getsource(vm.validate_block)
         assert '.replace(".mmd"' not in src, "must not use string.replace for suffix"
         assert "with_suffix" in src
