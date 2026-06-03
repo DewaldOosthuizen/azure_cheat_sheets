@@ -4,6 +4,6 @@
   "description": "Azure architecture cheat sheets for AZ-305",
   "private": true,
   "devDependencies": {
-    "@mermaid-js/mermaid-cli": "11.15.0"
+    "@mermaid-js/mermaid-cli": "^11.15.0"
   }
 }

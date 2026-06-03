@@ -28,8 +28,8 @@ of this material, but the repository is not yet organized around those tracks.
 | Exam | Focus | Relevant Sections |
 |------|-------|-------------------|
 | AZ-900 | Fundamentals | Networking (overview), Storage, Compute, Identity & Access (Entra basics) |
-| AZ-104 | Administrator | All sections — administrator-level depth on RBAC, Networking, HA & DR |
-| AZ-305 | Architect | All sections — architectural decision-making focus |
+| AZ-104 | Administrator | All sections — administrator-level depth on RBAC, Networking, HA & DR; Messaging & Integration (partial — Service Bus, Event Hub namespace admin) |
+| AZ-305 | Architect | All sections including Messaging & Integration and Well-Architected Framework |
 
 ## Repository Structure
 
@@ -56,11 +56,6 @@ The cheat sheet includes Mermaid flowcharts for service-selection patterns.
   `Markdown Preview Mermaid Support` to render diagrams in the editor preview.
 - Other local Markdown viewers may show the code block only unless Mermaid
   rendering is enabled.
-
-## Contributing
-
-Contributions should keep the repository useful as a quick study and
-decision-reference tool.
 
 When editing or adding material:
 
@@ -119,6 +114,14 @@ For pull requests:
   `npm install -g @mermaid-js/mermaid-cli`.
 - Verify that Markdown formatting and Mermaid blocks still render cleanly on
   GitHub.
+  
+## Contributing
+
+Contributions should keep the repository useful as a quick study and
+decision-reference tool.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for branch naming, commit style, local
+checks, content conventions, and the PR checklist.
 
 ## License
 
