@@ -12,6 +12,11 @@ from pathlib import Path
 PUPPETEER_CONFIG = Path("/tmp/puppeteer-config.json")
 
 
+def _repo_root() -> Path:
+    """Return the repository root directory (parent of the scripts/ folder)."""
+    return Path(__file__).parent.parent.resolve()
+
+
 def _extract_from_text(text: str) -> list[str]:
     """Extract mermaid diagram sources from a Markdown string.
 
@@ -68,9 +73,14 @@ def parse_args() -> argparse.Namespace:
 
 def run(md_paths: list[str]) -> int:
     """Orchestrate extraction and validation. Returns exit code (0/1/2)."""
+    repo_root = _repo_root()
     for md_path in md_paths:
         if not Path(md_path).is_file():
             print(f"Error: file not found: {md_path}", file=sys.stderr)
+            return 1
+        resolved = Path(md_path).resolve()
+        if not str(resolved).startswith(str(repo_root) + "/") and resolved != repo_root:
+            print(f"Error: path outside repository root: {md_path}", file=sys.stderr)
             return 1
         blocks = extract_mermaid_blocks(md_path)
         print(f"Found {len(blocks)} mermaid diagram(s) in {md_path}")

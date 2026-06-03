@@ -1,6 +1,12 @@
-# Rate-limited / auth-gated — consistently returns 429 or redirects to login
+# Rate-limited — returns 429 on automated scans
 https://learn.microsoft.com
+
+# Auth-gated — redirects to login page
 https://portal.azure.com
 
-# Redirects aggressively to learn.microsoft.com; lychee follows the chain and hits the rate limit
+# Aggressively redirecting — causes false-positive failures
 https://docs.microsoft.com
+
+# Repository-relative links unresolvable in GitHub Actions runner context
+../../issues
+../../pulls
