@@ -119,8 +119,8 @@ class TestPathlibRefactor:
         assert "os.path.isfile" not in src, "run() must not use os.path.isfile"
         assert ".is_file()" in src
 
-    def test_import_os_removed(self):
-        """The script must not import os after the refactor."""
+    def test_import_os_present(self):
+        """The script must import os (needed for os.environ.get in PUPPETEER_CONFIG)."""
         import ast
         import inspect
 
@@ -137,7 +137,7 @@ class TestPathlibRefactor:
                 for alias in node.names
             )
         ]
-        assert not os_imports, "import os must be removed after pathlib refactor"
+        assert os_imports, "import os must be present for env-var-driven PUPPETEER_CONFIG"
 
     def test_out_path_derived_with_suffix(self):
         """SVG path must be derived with Path.with_suffix, not string.replace."""
