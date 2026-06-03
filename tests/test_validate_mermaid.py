@@ -173,6 +173,7 @@ class TestValidateBlockPuppeteerConfig:
         def _write_svg_and_succeed(cmd, **kwargs):
             input_flag = cmd.index("--input")
             from pathlib import Path as _Path
+
             out_file = _Path(cmd[input_flag + 1]).with_suffix(".svg")
             out_file.write_bytes(b"<svg>" + b"x" * 200 + b"</svg>")
             return subprocess.CompletedProcess(args=cmd, returncode=0, stdout="", stderr="")
@@ -197,6 +198,7 @@ class TestValidateBlockPuppeteerConfig:
         def _write_svg_and_succeed(cmd, **kwargs):
             input_flag = cmd.index("--input")
             from pathlib import Path as _Path
+
             out_file = _Path(cmd[input_flag + 1]).with_suffix(".svg")
             out_file.write_bytes(b"<svg>" + b"x" * 200 + b"</svg>")
             return subprocess.CompletedProcess(args=cmd, returncode=0, stdout="", stderr="")
@@ -347,6 +349,7 @@ class TestValidateBlockDegenerateSvg:
             tmp_file = cmd[input_flag + 1]
             out_file = str(tmp_file).replace(".mmd", ".svg")
             from pathlib import Path as _Path
+
             _Path(out_file).write_bytes(b"")
             return subprocess.CompletedProcess(args=cmd, returncode=0, stdout="", stderr="")
 
