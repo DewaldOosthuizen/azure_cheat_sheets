@@ -31,19 +31,6 @@ of this material, but the repository is not yet organized around those tracks.
 | AZ-104 | Administrator | All sections — administrator-level depth on RBAC, Networking, HA & DR; Messaging & Integration (partial — Service Bus, Event Hub namespace admin) |
 | AZ-305 | Architect | All sections including Messaging & Integration and Well-Architected Framework |
 
-| Section | AZ-900 | AZ-104 | AZ-305 |
-|---------|--------|--------|--------|
-| Networking | overview only | ✓ | ✓ |
-| Security | — | ✓ | ✓ |
-| Storage | ✓ | ✓ | ✓ |
-| Monitoring & Observability | — | ✓ | ✓ |
-| Compute | ✓ | ✓ | ✓ |
-| Identity & Access | Entra basics | ✓ | ✓ |
-| High Availability & Disaster Recovery | — | ✓ | ✓ |
-| Governance | — | ✓ | ✓ |
-| Messaging & Integration | — | partial | ✓ |
-| Well-Architected Framework | — | — | ✓ |
-
 ## Repository Structure
 
 - [`docs/AZ-305_CheatSheet.md`](docs/AZ-305_CheatSheet.md) - the main cheat sheet
