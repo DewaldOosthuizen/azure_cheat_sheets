@@ -76,6 +76,30 @@ class TestMainFileNotFound:
         assert "/nonexistent/path.md" in captured.err
 
 
+class TestExtractMermaidBlocks:
+    """Parametrised tests for _extract_from_text() helper."""
+
+    @pytest.mark.parametrize("text,expected_count,expected_content", [
+        # single_block
+        ("```mermaid\ngraph TD\n  A --> B\n```", 1, "graph TD\n  A --> B\n"),
+        # multiple_blocks
+        ("```mermaid\ngraph TD\n  A-->B\n```\n\n```mermaid\ngraph LR\n  C-->D\n```", 2, None),
+        # no_blocks
+        ("# Heading\nSome text.", 0, None),
+        # non_mermaid_fence
+        ("```python\nprint('hi')\n```", 0, None),
+        # trailing_whitespace_fence
+        ("```mermaid   \ngraph TD\n  A-->B\n```", 1, None),
+        # crlf_line_endings
+        ("```mermaid\r\ngraph TD\r\n  A-->B\r\n```", 1, None),
+    ])
+    def test_extract(self, text, expected_count, expected_content):
+        result = validate_mermaid._extract_from_text(text)
+        assert len(result) == expected_count
+        if expected_content is not None:
+            assert result[0] == expected_content
+
+
 class TestPathlibRefactor:
     """Tests for issue #62 — pathlib usage in validate_block() and main()."""
 
