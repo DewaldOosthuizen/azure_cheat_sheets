@@ -11,3 +11,4 @@ config:
 
 ignores:
   - "openspec/**"
+  - "node_modules/**"
