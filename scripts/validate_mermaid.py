@@ -95,7 +95,7 @@ def run(md_paths: list[str]) -> int:
         print(f"Found {len(blocks)} mermaid diagram(s) in {md_path}")
         if not blocks:
             print("WARNING: no mermaid blocks found — check fence syntax.", file=sys.stderr)
-            return 2
+            continue
         failed = 0
         for i, block in enumerate(blocks, start=1):
             ok, stderr = validate_block(i, block)
