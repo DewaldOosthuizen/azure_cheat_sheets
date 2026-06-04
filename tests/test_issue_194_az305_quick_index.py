@@ -1,6 +1,9 @@
 """Tests for issue #194 - FEATURE: Add AZ-305 Quick Index section to AZ-305_CheatSheet.md."""
 
+from __future__ import annotations
+
 from pathlib import Path
+from typing import ClassVar
 
 CHEAT_SHEET = Path("docs/AZ-305_CheatSheet.md")
 
@@ -19,7 +22,7 @@ class TestAZ305QuickIndexExists:
 
 
 class TestAZ305QuickIndexPlacement:
-    """Verify placement: after ## Exam Track Index, before ## AZ-500 Quick Index, before # NETWORKING."""
+    """Verify placement relative to Exam Track Index, AZ-500 Quick Index, and NETWORKING."""
 
     def test_az305_quick_index_before_az500_quick_index(self):
         content = _content()
@@ -49,14 +52,17 @@ class TestAZ305QuickIndexPlacement:
 class TestAZ305QuickIndexContent:
     """Verify all ten domain rows with correct GitHub anchor links."""
 
-    EXPECTED_ROWS = [
+    EXPECTED_ROWS: ClassVar[list[tuple[str, str]]] = [
         ("[NETWORKING](#networking)", "Networking"),
         ("[SECURITY](#security)", "Security"),
         ("[STORAGE](#storage)", "Storage"),
         ("[MONITORING & OBSERVABILITY](#monitoring--observability)", "Monitoring & Observability"),
         ("[COMPUTE](#compute)", "Compute"),
         ("[IDENTITY & ACCESS](#identity--access)", "Identity & Access"),
-        ("[HIGH AVAILABILITY & DISASTER RECOVERY](#high-availability--disaster-recovery)", "High Availability & Disaster Recovery"),
+        (
+            "[HIGH AVAILABILITY & DISASTER RECOVERY](#high-availability--disaster-recovery)",
+            "High Availability & Disaster Recovery",
+        ),
         ("[GOVERNANCE](#governance)", "Governance"),
         ("[MESSAGING & INTEGRATION](#messaging--integration)", "Messaging & Integration"),
         ("[WELL-ARCHITECTED FRAMEWORK](#well-architected-framework)", "Well-Architected Framework"),
