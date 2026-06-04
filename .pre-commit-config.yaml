@@ -3,8 +3,9 @@ repos:
     rev: v0.11.13
     hooks:
       - id: ruff
-        args: [--fix]
+        args: [--fix, scripts/, tests/]
       - id: ruff-format
+        args: [scripts/, tests/]
 
   - repo: https://github.com/DavidAnson/markdownlint-cli2
     rev: v0.17.2
