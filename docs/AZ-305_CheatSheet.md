@@ -506,8 +506,9 @@ graph TD
 ```mermaid
 graph TD
     Sources["Data Sources\n(VMs, Apps, PaaS, Logs)"] --> Monitor[Azure Monitor]
+    ActivityLog["Activity Log\n(control-plane events)"] --> Monitor
     Monitor --> Metrics[Metrics]
-    Monitor --> Logs[Log Analytics Workspace]
+    Monitor -->|"via Diagnostic Settings"| Logs[Log Analytics Workspace]
     Monitor --> Alerts[Alerts & Action Groups]
     Monitor --> Insights[Insights: VM, Container, App]
     Logs --> Sentinel[Microsoft Sentinel]
@@ -521,9 +522,9 @@ graph TD
 
 | Service | Purpose | Key Concepts |
 | --- | --- | --- |
-| **Azure Monitor** | Central telemetry platform | Metrics, Logs, Alerts, Workbooks |
-| **Log Analytics Workspace** | Store and query logs (KQL) | Retention (30–730 days), data export |
-| **Application Insights** | APM for apps | Live metrics, dependency tracking, availability tests |
+| **Azure Monitor** (umbrella: Activity Log, Metrics, Alerts, Diagnostic Settings, Insights family) | Central telemetry platform | Metrics, Logs, Alerts, Workbooks |
+| **Log Analytics Workspace** (contains: KQL engine, retention tiers; fed via Diagnostic Settings) | Store and query logs (KQL) | Retention (30–730 days), data export |
+| **Application Insights** (contains: Live Metrics, Availability Tests, Dependency Tracking, Smart Detection) | APM for apps | Live metrics, dependency tracking, availability tests |
 | **VM Insights** | Perf + map for VMs | Relies on Log Analytics agent/AMA |
 | **Container Insights** | AKS monitoring | Pod/node metrics, log collection |
 | **Network Watcher** | Network diagnostics | Packet capture, flow logs, connection monitor |
@@ -539,10 +540,15 @@ graph TD
 | --- | --- | --- |
 | **Metric Alert** | Threshold on metric value | CPU > 80%, response time > 2s |
 | **Log Alert** | KQL query result count/value | Error count in last 5 min > 10 |
-| **Activity Log Alert** | Azure control-plane events | Who deleted a resource, policy assignment |
+| **Activity Log Alert** | Azure control-plane events | Who deleted a resource, policy assignment (Activity Log is a sub-component of Azure Monitor, routed to Log Analytics via Diagnostic Settings) |
 | **Smart Detection** | AI-based anomaly in App Insights | Failure rate spikes, perf degradation |
 
 > **Action Groups** decouple alert routing from alert rules. One action group → multiple rules.
+
+> **Exam tip:** When an answer option names a specific sub-component (e.g. Activity Log,
+> Live Metrics, Smart Detection), prefer it over the umbrella service (e.g. Azure Monitor,
+> Application Insights). Select the umbrella only when the sub-component is absent from
+> the options.
 
 ---
 
@@ -550,7 +556,8 @@ graph TD
 
 - Send to: **Log Analytics Workspace**, **Storage Account**, **Event Hub**, **Partner solution**
 - Configure per resource (or via Azure Policy at scale)
-- Categories: AllMetrics, Audit, Operational, etc.
+- Categories: AllMetrics, Audit, Operational, **Activity Log** (control-plane events), etc.
+- Activity Log is a sub-component of Azure Monitor routed to Log Analytics Workspace via Diagnostic Settings — not a standalone service.
 
 ---
 
