@@ -2,6 +2,12 @@
 name = "azure-cheat-sheets"
 version = "0.1.0"
 
+[tool.setuptools]
+# No Python packages to distribute — this repo is scripts + tests only.
+# Explicit empty list prevents setuptools flat-layout discovery from
+# mis-identifying config/, openspec/, or node_modules/ as packages.
+packages = []
+
 [project.optional-dependencies]
 dev = [
     "pytest>=9.0.3,<10",

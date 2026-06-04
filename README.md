@@ -115,11 +115,11 @@ For pull requests:
 
 - Keep changes scoped to one improvement area where possible.
 - Explain what section changed and why it improves the cheat sheet for readers.
-- Run `npx markdownlint-cli2 "**/*.md"` locally before opening a PR to
-  catch formatting violations before CI runs them.
-- Run `python3 scripts/validate_mermaid.py docs/AZ-305_CheatSheet.md` to
-  validate Mermaid diagrams locally. Requires `mmdc` — install once with
-  `npm install -g @mermaid-js/mermaid-cli`.
+- Run `make ci` locally before opening a PR — it replicates the full CI
+  pipeline (markdownlint, Mermaid validation, ruff lint + format check,
+  pytest with coverage). See the [Makefile](Makefile) for individual targets.
+- Run `make install` once after cloning to create the `.venv` and install
+  all Python and Node dev dependencies.
 - Verify that Markdown formatting and Mermaid blocks still render cleanly on
   GitHub.
   

@@ -80,26 +80,23 @@ Always branch from `main`.
 You need `node` and `npm` on your PATH, and **Python 3.11+** for script
 validation and linting.
 
-Install all Python dev dependencies (pytest, pytest-cov, ruff) declared in
-`pyproject.toml` via the editable install:
+Run the one-time setup from the repository root:
 
 ```bash
-pip install -e '.[dev]'
+make install
 ```
 
-Install the Node dev dependencies declared in `package.json`:
-
-```bash
-npm ci
-```
-
-This installs `markdownlint-cli2` (linter) and `@mermaid-js/mermaid-cli` (`mmdc`).
+This creates a `.venv` virtual environment, installs all Python dev
+dependencies (pytest, pytest-cov, ruff) declared in `pyproject.toml` into it,
+and then runs `npm ci` to install the Node dev dependencies (`markdownlint-cli2`
+and `@mermaid-js/mermaid-cli`). The venv is rebuilt automatically whenever
+`pyproject.toml` changes.
 
 Install the pre-commit hooks (one-time setup per clone):
 
 ```bash
-pip install pre-commit
-pre-commit install
+.venv/bin/pip install pre-commit
+.venv/bin/pre-commit install
 ```
 
 The hooks run automatically on `git commit` and enforce the same ruff and
@@ -109,21 +106,28 @@ markdownlint checks that CI applies on push.
 
 ## 6. Running Checks Locally
 
-Run these commands from the repository root before pushing, or rely on the
-pre-commit hooks installed in [Section 5](#5-development-setup) to run them
-automatically on each commit. CI applies the same checks and a failing PR will
-not be reviewed.
+The canonical way to run all checks before pushing is:
+
+```bash
+make ci
+```
+
+This runs the full pipeline in order: markdownlint, Mermaid diagram validation,
+ruff lint + format check, and pytest with coverage. A failing `make ci` means
+the GitHub Actions pipeline will also fail — fix it before opening a PR.
+
+Individual targets are available when you want to run one gate in isolation:
 
 Lint all Markdown files:
 
 ```bash
-npx markdownlint-cli2 "**/*.md"
+make markdownlint
 ```
 
 Validate all Mermaid diagram blocks:
 
 ```bash
-python3 scripts/validate_mermaid.py docs/*.md
+make mermaid-check
 ```
 
 `validate_mermaid.py` exit codes:
@@ -132,25 +136,30 @@ python3 scripts/validate_mermaid.py docs/*.md
 |-----------|---------|
 | `0` | All diagrams passed validation (or no diagrams found — see note below). |
 | `1` | One or more diagrams failed validation, or a specified file was not found. |
-| `2` | `mmdc` is not installed or not on `PATH`. Install with `npm install -g @mermaid-js/mermaid-cli`. |
+| `2` | `mmdc` is not installed or not on `PATH`. |
 
-> **Exam tip:** When no Mermaid blocks are found the script emits a WARNING to
-> stderr and exits `0` — it does not treat missing diagrams as an error (exit 2).
+> **Note:** When no Mermaid blocks are found the script emits a WARNING to
+> stderr and exits `0` — it does not treat missing diagrams as an error.
 
 Lint Python scripts:
 
 ```bash
-ruff check scripts/ tests/
-Run ruff format --check scripts/ tests/
+make python-lint
 ```
 
-Run tests:
+Auto-fix safe ruff violations:
 
 ```bash
-pytest tests/ -v
+make python-lint-fix
 ```
 
-All commands must exit with code `0` before opening a PR.
+Run tests with coverage:
+
+```bash
+make python-test
+```
+
+All checks must exit with code `0` before opening a PR.
 
 ---
 
