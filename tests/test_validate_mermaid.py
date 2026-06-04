@@ -165,6 +165,24 @@ class TestExtractMermaidBlocksFromFile:
         assert "graph TD" in result[0]
 
 
+class TestExtractMermaidBlocksFileErrors:
+    """Tests for extract_mermaid_blocks() file-read error paths."""
+
+    def test_raises_on_permission_error(self, tmp_path):
+        md = tmp_path / "locked.md"
+        md.write_text("```mermaid\ngraph TD\n  A-->B\n```", encoding="utf-8")
+        md.chmod(0o000)
+        with pytest.raises((RuntimeError, PermissionError)):
+            validate_mermaid.extract_mermaid_blocks(str(md))
+        md.chmod(0o644)  # restore so pytest can clean up tmp_path
+
+    def test_raises_on_encoding_error(self, tmp_path):
+        md = tmp_path / "binary.md"
+        md.write_bytes(b"\xff\xfe invalid utf-8")
+        with pytest.raises((RuntimeError, UnicodeDecodeError)):
+            validate_mermaid.extract_mermaid_blocks(str(md))
+
+
 class TestValidateBlockPuppeteerConfig:
     """Tests for puppeteer config branch in validate_block()."""
 
