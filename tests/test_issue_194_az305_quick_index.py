@@ -28,25 +28,19 @@ class TestAZ305QuickIndexPlacement:
         content = _content()
         pos_305 = content.index("## AZ-305 Quick Index")
         pos_500 = content.index("## AZ-500 Quick Index")
-        assert pos_305 < pos_500, (
-            "## AZ-305 Quick Index must appear before ## AZ-500 Quick Index"
-        )
+        assert pos_305 < pos_500, "## AZ-305 Quick Index must appear before ## AZ-500 Quick Index"
 
     def test_az305_quick_index_after_exam_track_index(self):
         content = _content()
         pos_exam = content.index("## Exam Track Index")
         pos_305 = content.index("## AZ-305 Quick Index")
-        assert pos_exam < pos_305, (
-            "## AZ-305 Quick Index must appear after ## Exam Track Index"
-        )
+        assert pos_exam < pos_305, "## AZ-305 Quick Index must appear after ## Exam Track Index"
 
     def test_az305_quick_index_before_networking_heading(self):
         content = _content()
         pos_305 = content.index("## AZ-305 Quick Index")
         pos_net = content.index("\n# NETWORKING")
-        assert pos_305 < pos_net, (
-            "## AZ-305 Quick Index must appear before # NETWORKING"
-        )
+        assert pos_305 < pos_net, "## AZ-305 Quick Index must appear before # NETWORKING"
 
 
 class TestAZ305QuickIndexContent:
