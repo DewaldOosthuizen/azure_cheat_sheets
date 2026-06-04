@@ -438,6 +438,15 @@ as the credential-free pattern — no secrets stored in application configuratio
 > through tiers. Archive blobs must be rehydrated to Hot or Cool before access;
 > plan for rehydration latency in recovery scenarios.
 
+```mermaid
+flowchart TD
+    A[Access frequency?] -->|Frequent reads/writes| B[Hot tier]
+    A -->|Infrequent, cost-sensitive; 30-day min| C[Cool tier]
+    A -->|Rarely accessed; 90-day min| D[Cold tier]
+    A -->|Archival, rare access; 180-day min| E[Archive tier]
+    E --> F[Note: requires rehydration to Hot or Cool before read]
+```
+
 ---
 
 ## Storage Redundancy
