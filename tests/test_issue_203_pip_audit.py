@@ -20,13 +20,14 @@ CONTRIBUTING = REPO_ROOT / "CONTRIBUTING.md"
 # pyproject.toml
 # ---------------------------------------------------------------------------
 
+
 class TestPyprojectPipAudit:
     """pip-audit is declared in [project.optional-dependencies] dev."""
 
     def _dev_section(self) -> str:
         text = PYPROJECT.read_text()
         # Extract the dev = [...] block
-        m = re.search(r'\[project\.optional-dependencies\].*?dev\s*=\s*\[(.*?)\]', text, re.S)
+        m = re.search(r"\[project\.optional-dependencies\].*?dev\s*=\s*\[(.*?)\]", text, re.S)
         assert m, "Could not locate dev extras in pyproject.toml"
         return m.group(1)
 
@@ -37,20 +38,17 @@ class TestPyprojectPipAudit:
 
     def test_pip_audit_has_lower_bound(self):
         section = self._dev_section()
-        assert "pip-audit>=2.7" in section, (
-            "pip-audit lower bound must be >=2.7"
-        )
+        assert "pip-audit>=2.7" in section, "pip-audit lower bound must be >=2.7"
 
     def test_pip_audit_has_upper_bound(self):
         section = self._dev_section()
-        assert "pip-audit>=2.7,<3" in section, (
-            "pip-audit upper bound must be <3"
-        )
+        assert "pip-audit>=2.7,<3" in section, "pip-audit upper bound must be <3"
 
 
 # ---------------------------------------------------------------------------
 # .github/workflows/lint.yml
 # ---------------------------------------------------------------------------
+
 
 class TestCIAuditStep:
     """python-lint job has an Audit Python dependencies step running pip-audit."""
@@ -66,15 +64,13 @@ class TestCIAuditStep:
     def test_audit_step_runs_pip_audit(self):
         text = self._workflow_text()
         # Step must declare: run: pip-audit
-        assert re.search(r'run:\s*pip-audit', text), (
-            "Audit step must run 'pip-audit'"
-        )
+        assert re.search(r"run:\s*pip-audit", text), "Audit step must run 'pip-audit'"
 
     def test_audit_step_has_no_continue_on_error(self):
         text = self._workflow_text()
         # Find the audit step block and confirm continue-on-error is absent from it
         m = re.search(
-            r'- name: Audit Python dependencies(.*?)(?=\n      - name:|\Z)',
+            r"- name: Audit Python dependencies(.*?)(?=\n      - name:|\Z)",
             text,
             re.S,
         )
@@ -90,14 +86,12 @@ class TestCIAuditStep:
         audit_pos = text.find("Audit Python dependencies")
         assert format_pos != -1, "Format check step not found"
         assert audit_pos != -1, "Audit Python dependencies step not found"
-        assert audit_pos > format_pos, (
-            "Audit step must appear after Format check step"
-        )
+        assert audit_pos > format_pos, "Audit step must appear after Format check step"
 
     def test_audit_step_inside_python_lint_job(self):
         text = self._workflow_text()
         # python-lint job block starts at "python-lint:" and runs until the next top-level job
-        m = re.search(r'python-lint:.*?(?=\n  \w[\w-]*:|\Z)', text, re.S)
+        m = re.search(r"python-lint:.*?(?=\n  \w[\w-]*:|\Z)", text, re.S)
         assert m, "python-lint job not found"
         assert "Audit Python dependencies" in m.group(0), (
             "Audit step must be inside the python-lint job, not another job"
@@ -108,13 +102,14 @@ class TestCIAuditStep:
 # CONTRIBUTING.md
 # ---------------------------------------------------------------------------
 
+
 class TestContributingPipAudit:
     """Section 6 documents pip-audit after the Run tests block."""
 
     def _section6(self) -> str:
         text = CONTRIBUTING.read_text()
         # Extract section 6 content up to the next ## heading
-        m = re.search(r'## 6\. Running Checks Locally(.*?)(?=\n## |\Z)', text, re.S)
+        m = re.search(r"## 6\. Running Checks Locally(.*?)(?=\n## |\Z)", text, re.S)
         assert m, "Section 6 'Running Checks Locally' not found in CONTRIBUTING.md"
         return m.group(1)
 
@@ -139,14 +134,12 @@ class TestContributingPipAudit:
         closing_pos = section.find("All commands must exit")
         assert audit_pos != -1, "'pip-audit' not found in section 6"
         assert closing_pos != -1, "'All commands must exit' sentence not found"
-        assert audit_pos < closing_pos, (
-            "pip-audit block must appear before the closing sentence"
-        )
+        assert audit_pos < closing_pos, "pip-audit block must appear before the closing sentence"
 
     def test_pip_audit_in_code_fence(self):
         section = self._section6()
         # pip-audit must appear inside a ```bash ... ``` block
-        fenced = re.findall(r'```bash(.*?)```', section, re.S)
+        fenced = re.findall(r"```bash(.*?)```", section, re.S)
         assert any("pip-audit" in block for block in fenced), (
             "pip-audit must be documented inside a ```bash code fence"
         )
