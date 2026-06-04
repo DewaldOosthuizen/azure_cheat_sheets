@@ -87,12 +87,12 @@ class TestCIPythonTestJob:
 
 
 class TestContributingDevSetup:
-    """CONTRIBUTING.md Section 5 must point to the editable install."""
+    """CONTRIBUTING.md Section 5 must point to the Makefile-based setup."""
 
     def test_editable_install_present(self):
         content = CONTRIBUTING.read_text()
-        assert "pip install -e '.[dev]'" in content, (
-            "CONTRIBUTING.md must document pip install -e '.[dev]' for dev setup"
+        assert "make install" in content, (
+            "CONTRIBUTING.md must document 'make install' as the dev setup command"
         )
 
     def test_bare_pip_install_removed(self):
