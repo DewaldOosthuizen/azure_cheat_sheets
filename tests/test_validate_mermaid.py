@@ -96,7 +96,7 @@ class TestExtractMermaidBlocks:
             # python_block_with_backtick_string_precedes_mermaid — greedy matching must not
             # capture the Python block as part of the diagram
             (
-                "```python\nx = \"```\"\n```\n\n```mermaid\ngraph TD\n  A-->B\n```",
+                '```python\nx = "```"\n```\n\n```mermaid\ngraph TD\n  A-->B\n```',
                 1,
                 "graph TD\n  A-->B\n",
             ),

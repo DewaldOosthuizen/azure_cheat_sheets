@@ -97,7 +97,7 @@ class TestAZ305MermaidDiagram:
         assert "--> Monitor" in az305_text
 
     def test_diagnostic_settings_edge_label(self, az305_text):
-        assert 'via Diagnostic Settings' in az305_text
+        assert "via Diagnostic Settings" in az305_text
 
     def test_no_bare_monitor_to_logs_edge(self, az305_text):
         # The old plain edge "Monitor --> Logs[Log Analytics" should be replaced
