@@ -223,3 +223,25 @@ Rules:
 - Always name the recommended replacement.
 - Include the retirement date when officially announced.
 - Do NOT use the exam-tip format for deprecation notices — they serve different purposes.
+
+---
+
+## 11. Dependabot update strategy
+
+Dependabot monitors three ecosystems on a weekly schedule:
+
+| Ecosystem       | Scope                                      | Grouping                  |
+|-----------------|--------------------------------------------|---------------------------|
+| `github-actions`| CI action versions in `.github/workflows/` | Individual PRs (no group) |
+| `npm`           | Node dev deps (`markdownlint-cli2`, `mmdc`) | Single grouped PR         |
+| `pip`           | Python dev deps (`ruff`, `pytest`, etc.)   | Single grouped PR         |
+
+Both `npm` and `pip` bumps are batched into a single PR via a `groups: dev-dependencies`
+block with pattern `"*"` in `.github/dependabot.yml`. This prevents reviewer fatigue from
+a flood of individual version-bump PRs.
+
+The `pip` entry additionally specifies `target-branch: main` to avoid branch-mismatch
+issues when the default branch resolution differs from the intended merge target.
+
+Do not remove the `groups` or `target-branch` fields from `.github/dependabot.yml` during
+maintenance — their absence would revert to ungrouped, potentially noisy Dependabot PRs.

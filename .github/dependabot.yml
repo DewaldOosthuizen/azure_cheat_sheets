@@ -10,11 +10,20 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    groups:
+      dev-dependencies:
+        patterns:
+          - "*"
     assignees:
       - DewaldOosthuizen
   - package-ecosystem: pip
     directory: /
     schedule:
       interval: weekly
+    target-branch: main
+    groups:
+      dev-dependencies:
+        patterns:
+          - "*"
     assignees:
       - DewaldOosthuizen
