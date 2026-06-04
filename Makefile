@@ -38,6 +38,7 @@ MD_FILES_VALIDATE = docs/*.md
         markdownlint \
         puppeteer-config mermaid-check \
         python-lint python-lint-fix \
+        python-audit \
         python-test python-test-311 python-test-312 python-test-313 python-test-all \
         link-check \
         ci ci-full \
@@ -54,6 +55,7 @@ help:
 	@echo "  make mermaid-check     Validate Mermaid diagrams"
 	@echo "  make python-lint       ruff check + format check (inside .venv)"
 	@echo "  make python-lint-fix   Auto-fix safe ruff violations"
+	@echo "  make python-audit      pip-audit CVE scan (inside .venv)"
 	@echo "  make python-test       pytest with coverage (inside .venv)"
 	@echo "  make python-test-all   pytest on Python 3.11, 3.12, and 3.13"
 	@echo "  make link-check        Dead-link check (requires lychee)"
@@ -105,6 +107,12 @@ python-lint-fix: venv
 	@echo "--- python-lint-fix ---"
 	$(VENV_BIN)/ruff check --fix $(LINT_TARGETS)
 	$(VENV_BIN)/ruff format $(LINT_TARGETS)
+
+# ── Python audit ──────────────────────────────────────────────────────────────
+# Mirrors: Audit Python dependencies step in the python-lint CI job.
+python-audit: venv
+	@echo "--- python-audit ---"
+	$(VENV_BIN)/pip-audit
 
 # ── Python test ───────────────────────────────────────────────────────────────
 # Default: uses the venv created from $(PYTHON) (python3 unless overridden).
@@ -158,11 +166,11 @@ link-check:
 	  docs/**/*.md README.md CONTRIBUTING.md AGENTS.md
 
 # ── Full CI pipeline ──────────────────────────────────────────────────────────
-ci: markdownlint mermaid-check python-lint python-test
+ci: markdownlint mermaid-check python-lint python-audit python-test
 	@echo ""
 	@echo "=== CI passed ==="
 
-ci-full: markdownlint mermaid-check python-lint python-test link-check
+ci-full: markdownlint mermaid-check python-lint python-audit python-test link-check
 	@echo ""
 	@echo "=== CI (full, including link-check) passed ==="
 

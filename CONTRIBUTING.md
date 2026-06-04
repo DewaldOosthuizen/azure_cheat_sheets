@@ -159,6 +159,12 @@ Run tests with coverage:
 make python-test
 ```
 
+Audit Python dependencies for known CVEs:
+
+```bash
+make python-audit
+```
+
 All checks must exit with code `0` before opening a PR.
 
 ---
