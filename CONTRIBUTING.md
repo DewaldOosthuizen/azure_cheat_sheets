@@ -16,6 +16,7 @@ clean, reviewable contributions to this repository.
 7. [Commit Message Style](#7-commit-message-style)
 8. [Pull Request Process](#8-pull-request-process)
 9. [Coding Standards](#9-coding-standards)
+10. [Deprecation warnings](#10-deprecation-warnings)
 
 ---
 
@@ -65,6 +66,7 @@ and leave a comment so someone else can pick it up.
 | `docs/`    | `docs/<topic>`                  | Meta-documentation (README, CONTRIBUTING)  |
 
 Examples:
+
 - `feature/42-networking-private-endpoints`
 - `fix/17-storage-redundancy-table`
 - `docs/update-contributing-guide`
@@ -193,3 +195,20 @@ Closes #42
 - Follow PEP 8. Use `ruff` for linting and formatting.
 - Keep scripts small and single-purpose.
 - Add or update tests in `tests/` whenever script behaviour changes.
+
+---
+
+## 10. Deprecation warnings
+
+Use a deprecation callout immediately after the affected table row or section heading when a service
+is retired, retiring, or superseded. Format:
+
+> **⚠️ Deprecation warning:** \<Service\> is retired / retiring \<date if known\>. Migrate to
+> \<replacement\>. See: [announcement link]
+
+Rules:
+
+- Place the callout directly after the table that contains the deprecated service.
+- Always name the recommended replacement.
+- Include the retirement date when officially announced.
+- Do NOT use the exam-tip format for deprecation notices — they serve different purposes.

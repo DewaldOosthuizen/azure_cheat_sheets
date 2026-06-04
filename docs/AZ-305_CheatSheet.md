@@ -154,6 +154,11 @@ flowchart TD
 | **Private Endpoint** | L3 | Regional | Private IP access to PaaS services inside a VNet | NIC injected into VNet; DNS integration required |
 | **Service Endpoint** | L3 | Regional | Route PaaS traffic over Azure backbone from a subnet | No private IP; PaaS firewall can restrict to specific subnets |
 
+> **⚠️ Deprecation warning:** VNet-to-VNet VPN is superseded by VNet Peering for most
+> cross-region and cross-subscription connectivity scenarios. Prefer peering (lower latency,
+> no gateway required). Retain VNet-to-VNet VPN only when IPSec encryption across the Azure
+> backbone is an explicit requirement.
+
 > **Private Endpoint vs Service Endpoint:**
 >
 > - Private Endpoint = PaaS resource gets a NIC in your VNet (true private)
@@ -247,9 +252,13 @@ flowchart TD
 | **Azure Front Door** | L7 (HTTP/S) | Global | CDN + WAF + global LB combined | Anycast PoP, WAF, SSL offload, caching rules |
 | **Azure CDN (Microsoft)** | L7 (HTTP/S) | Global | Static asset delivery, simple CDN | Verizon/Akamai PoPs, rules engine, legacy option |
 
-> **Exam tip:** Azure CDN classic profiles (Verizon, Akamai) are being retired. For new
-> architectures requiring CDN, Microsoft recommends Azure Front Door. Choose Front Door when
-> the requirement mentions CDN *plus* WAF, global load balancing, or SSL offload at the edge.
+> **⚠️ Deprecation warning:** Azure CDN classic profiles (Verizon and Akamai) are retiring
+> 30 September 2027. Migrate to **Azure Front Door** (CDN + WAF + global LB) or
+> **Azure CDN Standard from Microsoft** for pure CDN workloads.
+> See: [Microsoft retirement announcement](https://learn.microsoft.com/en-us/azure/cdn/classic-cdn-retirement-faq)
+
+> **Exam tip:** Choose Azure Front Door when the requirement mentions global HTTP load balancing,
+> WAF, or SSL offload at the edge.
 
 ---
 
@@ -291,11 +300,13 @@ graph LR
 
 ---
 
-> **Exam tip (AZ-500):** Microsoft Defender for Cloud is the current name —
-> "Security Center" and "Azure Defender" are legacy names that may appear
-> in older questions. JIT VM Access (under Defender for Servers) locks down
-> management ports and opens them only on approved request; choose it when
-> the requirement mentions reducing the attack surface on VM management ports.
+> **⚠️ Deprecation warning:** "Security Center" and "Azure Defender" are legacy names.
+> The current product is **Microsoft Defender for Cloud**. Older exam questions may still
+> use the former names.
+
+> **Exam tip (AZ-500):** JIT VM Access (under Defender for Servers) locks down management
+> ports and opens them only on approved request; choose it when the requirement mentions
+> reducing the attack surface on VM management ports.
 
 ## Azure Key Vault
 
@@ -317,6 +328,10 @@ graph LR
 | --- | --- | --- | --- | --- |
 | **Key Vault** | Vault Access Policies (legacy) | Per-vault log; no per-operation identity trail | Coarse — get/list/set apply to all secrets | Simple setup; max 1024 policies per vault |
 | **Key Vault** | Azure RBAC | Full Azure Activity Log + Entra audit trail | Fine-grained — role assignment per secret/key/cert | Entra-native; supports PIM, Conditional Access |
+
+> **⚠️ Deprecation warning:** Vault Access Policies are the legacy authorization model for
+> Key Vault. Microsoft recommends migrating to **Azure RBAC** for new and existing vaults.
+> RBAC provides Entra-native granularity, PIM support, and a unified audit trail.
 
 > **Exam tip:** Choose Azure RBAC for Key Vault when the requirement mentions
 > Entra integration, Privileged Identity Management (PIM), per-resource
@@ -820,7 +835,9 @@ flowchart TD
 | **Custom Roles** | Define your own action list |
 | **Deny Assignments** | Block actions regardless of role (used by Blueprints) |
 
-> Prefer RBAC over legacy Access Policies (Key Vault, Storage). RBAC is auditable and centralized.
+> **⚠️ Deprecation warning:** Vault Access Policies (Key Vault) and legacy Storage access
+> policies are superseded by **Azure RBAC**. RBAC is Entra-native, auditable, and centrally
+> managed. Migrate new and existing resources to RBAC.
 
 ---
 
@@ -889,7 +906,9 @@ graph TD
 | Azure Blobs | Backup Vault | Operational backup (no vault egress) |
 | PostgreSQL / MySQL | Backup Vault | Managed DB backup |
 
-> **Recovery Services Vault** = legacy + VMs + SQL.  **Backup Vault** = newer PaaS services.
+> **⚠️ Deprecation warning:** Recovery Services Vault is the legacy backup store (VMs, SQL
+> in VM, Azure Files). For new PaaS-based backup targets (Blobs, managed databases), use
+> **Backup Vault** — Microsoft's current backup store model.
 
 ---
 
@@ -928,7 +947,7 @@ graph TD
 | **Terraform** | Multi-cloud IaC | Yes (plan) | Stateful | Active |
 | **Azure Blueprints** | Governance packages (policy + RBAC + ARM) | Partial (locking) | Artifact-tracked | **RETIRED July 2026** |
 
-> **Azure Blueprints is retired (July 2026).** Migrate to:
+> **⚠️ Deprecation warning:** Azure Blueprints is retired (11 July 2026). Migrate to:
 >
 > - **ARM/Bicep Template Specs** — for reusable, versioned IaC artifacts.
 > - **Azure Policy** — for compliance rules and auto-remediation.
