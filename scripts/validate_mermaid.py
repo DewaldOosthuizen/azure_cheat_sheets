@@ -43,8 +43,11 @@ def _extract_from_text(text: str) -> list[str]:
 
 
 def extract_mermaid_blocks(md_path):
-    with open(md_path, encoding="utf-8") as f:
-        content = f.read()
+    try:
+        with open(md_path, encoding="utf-8") as f:
+            content = f.read()
+    except (OSError, UnicodeDecodeError) as exc:
+        raise RuntimeError(f"Cannot read {md_path}: {exc}") from exc
     return _extract_from_text(content)
 
 
@@ -102,7 +105,11 @@ def run(md_paths: list[str]) -> int:
         if not str(resolved).startswith(str(repo_root) + "/") and resolved != repo_root:
             print(f"Error: path outside repository root: {md_path}", file=sys.stderr)
             return 1
-        blocks = extract_mermaid_blocks(md_path)
+        try:
+            blocks = extract_mermaid_blocks(md_path)
+        except RuntimeError as exc:
+            print(str(exc), file=sys.stderr)
+            return 1
         print(f"Found {len(blocks)} mermaid diagram(s) in {md_path}")
         if not blocks:
             print("WARNING: no mermaid blocks found — check fence syntax.", file=sys.stderr)

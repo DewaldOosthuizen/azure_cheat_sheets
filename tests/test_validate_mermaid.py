@@ -204,11 +204,13 @@ class TestRunFileReadErrors:
     def test_run_returns_1_on_runtime_error(self, tmp_path):
         md = tmp_path / "test.md"
         md.write_text("# test", encoding="utf-8")
+        error_msg = f"Cannot read {md}: permission denied"
         with (
             patch("validate_mermaid.Path.is_file", return_value=True),
+            patch("validate_mermaid._repo_root", return_value=tmp_path),
             patch(
                 "validate_mermaid.extract_mermaid_blocks",
-                side_effect=RuntimeError(f"Cannot read {md}: permission denied"),
+                side_effect=RuntimeError(error_msg),
             ),
         ):
             result = validate_mermaid.run([str(md)])
@@ -220,6 +222,7 @@ class TestRunFileReadErrors:
         error_msg = f"Cannot read {md}: permission denied"
         with (
             patch("validate_mermaid.Path.is_file", return_value=True),
+            patch("validate_mermaid._repo_root", return_value=tmp_path),
             patch(
                 "validate_mermaid.extract_mermaid_blocks",
                 side_effect=RuntimeError(error_msg),
