@@ -150,6 +150,12 @@ Run tests:
 pytest tests/ -v
 ```
 
+Audit Python dependencies for known CVEs:
+
+```bash
+pip-audit
+```
+
 All commands must exit with code `0` before opening a PR.
 
 ---
