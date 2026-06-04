@@ -67,6 +67,10 @@ When asked to add or update content:
   Do not use plain blockquotes, bold sentences, or note/warning admonitions
   for exam tips.
 
+- For retired, retiring, or superseded services, use a deprecation callout
+  instead of an exam-tip. See the [Deprecation warnings](CONTRIBUTING.md#10-deprecation-warnings)
+  section in CONTRIBUTING.md for the required format.
+
 - Use Mermaid diagrams for branching decision flows. Choose the directive by
   purpose:
 
@@ -87,7 +91,8 @@ When asked to add or update content:
 - Do not document features or claims not already reflected in the content.
 
 For pull requests, scope changes to one improvement area, explain what section
-changed, and verify that Markdown and Mermaid blocks render cleanly on GitHub.
+changed and why it improves the cheat sheet for readers, and verify that
+Markdown and Mermaid blocks render cleanly on GitHub.
 Run `npx markdownlint-cli2 "**/*.md"` locally before opening a PR to catch
 formatting violations before CI runs them.
 Run `python3 scripts/validate_mermaid.py docs/AZ-305_CheatSheet.md` to
