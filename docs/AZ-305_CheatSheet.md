@@ -1175,12 +1175,6 @@ flowchart TD
 > the requirement mentions Event Hubs Capture, Schema Registry, or compact binary serialisation
 > for streaming pipelines.
 
----
-
-*Last updated for AZ-305 exam preparation — review official Microsoft Learn documentation for latest service updates.*
-
----
-
 # WELL-ARCHITECTED FRAMEWORK
 
 > **Exam Focus:** Use WAF pillars to *justify* design decisions in
@@ -1280,3 +1274,9 @@ Composite = 1 − (1 − SLA₁) × (1 − SLA₂) for parallel components.
 > least one WAF pillar. When asked *why* a solution is recommended, frame
 > your answer using the pillar: "This satisfies the **Reliability** pillar
 > because it adds zone redundancy, raising the composite SLA above 99.95 %."
+
+---
+
+*Last updated for AZ-305 exam preparation — review official Microsoft Learn documentation for latest service updates.*
+
+---
