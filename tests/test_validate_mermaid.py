@@ -289,15 +289,15 @@ class TestMainAggregateFail:
 
 
 class TestMainZeroBlocks:
-    """run() returns 2 with a stderr warning when no mermaid blocks are found."""
+    """run() skips files with no mermaid blocks (returns 0) but prints a stderr warning."""
 
-    def test_run_returns_2_when_no_blocks_found(self):
+    def test_run_returns_0_when_no_blocks_found(self):
         with (
             patch("validate_mermaid.extract_mermaid_blocks", return_value=[]),
             patch("validate_mermaid.Path.is_file", return_value=True),
         ):
             result = validate_mermaid.run(["docs/AZ-305_CheatSheet.md"])
-        assert result == 2
+        assert result == 0
 
     def test_run_prints_warning_to_stderr_when_no_blocks_found(self, capsys):
         with (
