@@ -1062,6 +1062,24 @@ graph TD
 
 ---
 
+## Governance Enforcement Decision Flow
+
+```mermaid
+flowchart TD
+    A[Governance requirement?] -->|Enforce compliance rules / auto-remediate| B[Azure Policy]
+    A -->|Organise subscriptions + inherit controls| C[Management Groups]
+    A -->|Provision repeatable governed environment| D[Template Specs + Policy + RBAC]
+    A -->|Cap or alert on spend| E[Budgets + Cost Management]
+    D -->|Legacy environment uses Blueprints?| F[Migrate: Template Specs + Policy + RBAC\nBlueprints retired July 2026]
+```
+
+> **Exam tip:** When a question mentions enforcing a rule that blocks or auto-remediates
+> non-compliant resources across subscriptions, the answer is Azure Policy — not Locks
+> (which only prevent delete/write) and not Management Groups (which are the scope, not the
+> enforcement tool).
+
+---
+
 ## Cost Management
 
 | Tool | Purpose |

@@ -160,5 +160,6 @@ class TestGovernanceDecisionFlowPlacement:
         assert idx_dep != -1, "Blueprints deprecation warning not found"
         assert idx_flow != -1, "Governance Enforcement Decision Flow subsection not found"
         assert idx_dep < idx_flow, (
-            "Governance Enforcement Decision Flow must appear after the Blueprints deprecation block"
+            "Governance Enforcement Decision Flow must appear after "
+            "the Blueprints deprecation block"
         )
