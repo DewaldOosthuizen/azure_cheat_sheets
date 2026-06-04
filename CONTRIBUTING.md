@@ -123,6 +123,17 @@ Validate all Mermaid diagram blocks:
 python3 scripts/validate_mermaid.py docs/*.md
 ```
 
+`validate_mermaid.py` exit codes:
+
+| Exit code | Meaning |
+|-----------|---------|
+| `0` | All diagrams passed validation (or no diagrams found — see note below). |
+| `1` | One or more diagrams failed validation, or a specified file was not found. |
+| `2` | `mmdc` is not installed or not on `PATH`. Install with `npm install -g @mermaid-js/mermaid-cli`. |
+
+> **Exam tip:** When no Mermaid blocks are found the script emits a WARNING to
+> stderr and exits `0` — it does not treat missing diagrams as an error (exit 2).
+
 Lint Python scripts:
 
 ```bash

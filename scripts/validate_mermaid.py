@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
-"""Validate all fenced mermaid blocks in a Markdown file using mmdc."""
+"""Validate all fenced mermaid blocks in a Markdown file using mmdc.
+
+Exit codes
+----------
+0 — All diagrams passed validation. Also returned when a file contains no
+    Mermaid blocks (a WARNING is emitted to stderr, but the absence of
+    diagrams is not treated as an error).
+1 — One or more diagrams failed validation, or a specified Markdown file
+    was not found or lies outside the repository root.
+2 — ``mmdc`` is not installed or not on PATH. Install it with:
+        npm install -g @mermaid-js/mermaid-cli
+"""
 
 import argparse
 import os
