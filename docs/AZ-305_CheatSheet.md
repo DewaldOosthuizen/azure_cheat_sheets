@@ -485,6 +485,23 @@ graph TD
 
 ---
 
+## Data Integration & Movement
+
+| Service | Type | Best For | Key Feature |
+| --- | --- | --- | --- |
+| **Azure Data Factory** | Cloud ETL / orchestration | Batch data pipelines between cloud and on-prem stores | 90+ connectors, pipeline scheduling, data flows |
+| **Azure-SSIS Integration Runtime** | Lift-and-shift ETL | Running existing SSIS packages in ADF without rewrite | Managed SSIS runtime inside ADF; supports Azure SQL MI as SSISDB host |
+| **Azure Data Box** | Offline bulk transfer | Initial migration of large datasets (TB–PB) to Azure when bandwidth is constrained | Physical device shipped by Microsoft; encrypted, tamper-evident |
+| **Azure Data Box Gateway** | Edge ingestion | Continuous data upload from on-prem to Azure Blob/Files | Virtual appliance; no physical device needed |
+| **Azure Data Box Edge** | Edge compute + transfer | Data processing and inference at the edge before upload | Runs Azure IoT Edge modules and FPGA-accelerated ML inference |
+
+> **Exam tip:** Choose Azure Data Factory when the requirement mentions pipeline orchestration,
+> scheduled data movement, or running SSIS packages in the cloud (via Azure-SSIS IR). Choose
+> Data Box (physical) for offline migrations where internet transfer would take weeks. Choose
+> Data Box Gateway for ongoing edge-to-cloud ingestion without a physical device.
+
+---
+
 ## Database Storage Options
 
 | Service | Type | Best For | Key Feature |
@@ -496,6 +513,32 @@ graph TD
 | **Azure Database for MySQL** | Relational PaaS | OSS MySQL | Flexible server |
 | **Azure Synapse Analytics** | Analytics DW | OLAP, big data | Spark + SQL pool |
 | **Azure Data Lake Storage Gen2** | Hierarchical Blob | Analytics at scale | POSIX ACL, Spark-optimized |
+
+---
+
+## Azure File Sync
+
+| Service | Type | Best For | Key Feature |
+| --- | --- | --- | --- |
+| **Azure File Sync Agent** | Hybrid tiering | On-prem Windows Server local cache for an Azure Files share | Cloud tiering stubs cold files locally and retrieves them on access; multiple server endpoints per sync group |
+
+> **Exam tip:** Choose Azure File Sync when the requirement mentions keeping on-prem Windows
+> file server access while centralising storage in Azure Files. Cloud tiering frees local disk
+> by replacing infrequently accessed files with stubs that are transparently fetched from Azure.
+
+---
+
+## Azure SQL Purchasing Models
+
+| Service | Type | Best For | Key Feature |
+| --- | --- | --- | --- |
+| **vCore model** | Provisioned or Serverless | New deployments, Azure Hybrid Benefit, Managed Instance | Decouples compute and storage; supports Serverless tier; required for SQL MI |
+| **DTU model** | Bundled compute+storage | Legacy workloads, simple cost predictability | Fixed ratio of CPU/memory/IO; Basic/Standard/Premium tiers; not available on SQL MI |
+
+> **Exam tip:** Prefer vCore when you need Azure Hybrid Benefit (bring your own SQL Server
+> licence), Serverless auto-pause, or are deploying SQL Managed Instance (DTU not supported).
+> DTU is simpler but less flexible — expect AZ-305 questions to favour vCore for new
+> cloud-native designs.
 
 ---
 
@@ -726,6 +769,29 @@ flowchart TD
 
 ---
 
+## AKS Scaling Mechanisms
+
+| Service | Layer | Scope | Use Case | Key Feature |
+| --- | --- | --- | --- | --- |
+| **Horizontal Pod Autoscaler (HPA)** | Pod | Namespace | Scale pod replicas based on CPU/memory or custom metrics | Built-in K8s controller; works with KEDA for custom metrics |
+| **Cluster Autoscaler** | Node | Node pool | Add or remove VM nodes when pods cannot be scheduled | Integrated with AKS node pools; respects PodDisruptionBudgets |
+| **Virtual Nodes (Virtual Kubelet)** | Node (virtual) | Cluster | Burst overflow pods to Azure Container Instances instantly | No node provisioning delay; serverless burst; ACI pricing |
+
+```mermaid
+flowchart TD
+    A[AKS workload needs to scale?] --> B{Too many pods for current nodes?}
+    B -- No --> C[HPA adds pod replicas within current node capacity]
+    B -- Yes --> D{Sustained load or burst?}
+    D -- Sustained --> E[Cluster Autoscaler provisions new VM nodes]
+    D -- Short burst --> F[Virtual Nodes burst overflow pods to ACI]
+```
+
+> **Exam tip:** HPA scales pods; Cluster Autoscaler scales nodes. Virtual Nodes
+> (Virtual Kubelet) burst workloads to ACI with no node-provisioning delay — choose
+> this when the requirement mentions instant scale-out or cost-optimised spikes.
+
+---
+
 ## Virtual Machine SKU Families
 
 | Family | Purpose |
@@ -737,6 +803,33 @@ flowchart TD
 | **L-series** | Storage optimized — NoSQL, data warehousing |
 | **M-series** | Large memory — SAP HANA |
 | **B-series** | Burstable — dev/test, low-sustained CPU |
+
+---
+
+## HPC Networking — RDMA
+
+Remote Direct Memory Access (RDMA) enables VM-to-VM communication that bypasses the OS kernel,
+delivering microsecond latency and high throughput for tightly coupled HPC and AI training
+workloads. RDMA-capable VM sizes (H-series, HB-series, HC-series, ND-series) must be deployed
+in an **InfiniBand-enabled** cluster via a Placement Group or proximity placement group.
+
+> **Exam tip:** Choose RDMA-capable VM sizes (H, HB, HC, ND series) when the requirement
+> mentions MPI workloads, tightly coupled HPC, or GPU-to-GPU training that cannot tolerate
+> standard Ethernet latency. RDMA is not available on general-purpose D/E-series VMs.
+
+---
+
+## CI/CD — Azure Pipelines Agent
+
+| Service | Layer | Scope | Use Case | Key Feature |
+| --- | --- | --- | --- | --- |
+| **Microsoft-hosted agent** | Managed PaaS | Public internet | Standard builds with no VNet or private resource access | Fresh VM per job; no maintenance; limited to public endpoints |
+| **Self-hosted agent** | IaaS / container | Customer VNet | Builds needing private registry, on-prem artifact feeds, or VNet-isolated resources | Agent runs as a service on a VM or container; persists between jobs |
+
+> **Exam tip:** Choose a self-hosted Azure Pipelines agent when the build must access resources
+> inside a private VNet (e.g. Azure Container Registry with private endpoint, on-prem NuGet feed,
+> or private AKS API server). Microsoft-hosted agents run outside your VNet and cannot reach
+> private endpoints without additional networking configuration.
 
 ---
 
@@ -1000,6 +1093,24 @@ graph TD
 > DeployIfNotExists (auto-remediates). Resource Locks (ReadOnly / Delete) protect
 > against accidental change or deletion but do not enforce configuration compliance.
 
+## Azure Lighthouse
+
+Azure Lighthouse enables **cross-tenant management** — a service provider (MSP) or central IT
+team can manage customer or subsidiary tenant resources from their own tenant without switching
+directories or maintaining guest accounts.
+
+| Service | Type | Best For | Key Feature |
+| --- | --- | --- | --- |
+| **Azure Lighthouse** | Cross-tenant delegation | MSP managing multiple customer tenants; enterprise hub managing subsidiaries | Azure Resource Manager delegation; no credential sharing; full Azure RBAC applies |
+
+> **Exam tip:** Choose Azure Lighthouse when the requirement mentions an MSP or central IT team
+> managing resources across multiple Azure tenants without separate logins. Lighthouse uses
+> Azure Delegated Resource Management — the customer retains ownership; the provider sees and
+> acts on customer resources from their own tenant. Distinguish from Azure B2B guest access,
+> which is per-user and not suited for at-scale managed service operations.
+
+---
+
 # MESSAGING & INTEGRATION
 
 > Also relevant for: **AZ-104** (Service Bus namespace administration,
@@ -1056,6 +1167,13 @@ flowchart TD
 > **Sessions & Partitioning:** Enable sessions on a Service Bus queue/topic to guarantee ordered processing per session key — all messages with the same session ID are delivered to the same consumer in order. Enable partitioning to distribute load across multiple message brokers and increase throughput; note that sessions and partitioning can be combined but partitioned entities have a 1 GB size limit per partition.
 
 > **Consumer Groups & Retention (Event Hub):** Each consumer group maintains its own independent offset/cursor, allowing multiple downstream systems to read the same stream at their own pace without interference. Configure retention (1–90 days, up to 7 days on Standard tier) to enable event replay for late-joining consumers, reprocessing after failures, or auditing.
+
+> **Avro & Schema Registry (Event Hub):** Event Hubs Capture writes events to Azure Blob or
+> Data Lake Storage in **Avro** format by default — a compact binary format with embedded schema.
+> Event Hubs Schema Registry enforces producer/consumer schema contracts (Avro or JSON Schema),
+> preventing incompatible messages from breaking downstream consumers. Choose Avro when
+> the requirement mentions Event Hubs Capture, Schema Registry, or compact binary serialisation
+> for streaming pipelines.
 
 ---
 
