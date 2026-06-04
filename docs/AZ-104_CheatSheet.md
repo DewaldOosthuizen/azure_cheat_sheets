@@ -112,6 +112,10 @@ flowchart TD
 | **Key Vault - Azure RBAC** | Role-based model | Consistent RBAC governance | Entra ID roles; supports PIM; audit trail |
 | **Managed Identity** | Identity type | App-to-Key Vault auth | No credentials; auto-rotated by Azure |
 
+> **⚠️ Deprecation warning:** Vault Access Policies are the legacy authorization model for
+> Key Vault. Microsoft recommends migrating to **Azure RBAC** for new and existing vaults.
+> RBAC provides Entra-native granularity, PIM support, and a unified audit trail.
+
 > **Exam tip:** Microsoft recommends Key Vault Azure RBAC over Access Policies for new deployments. RBAC supports Privileged Identity Management (PIM) for just-in-time access.
 
 ### Key Vault Access Decision Flow
@@ -230,6 +234,10 @@ flowchart TD
 | **MMA / OMS Agent (legacy)** | OS-level | VM | Being retired (Aug 2024) | Single workspace; no DCR support |
 | **Diagnostics Extension (WAD/LAD)** | OS-level | VM | Guest OS metrics/logs to Azure Storage | XML config; not Log Analytics native |
 | **Dependency Agent** | Network | VM | Service Map, VM Insights connectivity | Requires AMA or MMA; maps processes |
+
+> **⚠️ Deprecation warning:** The MMA/OMS (Microsoft Monitoring Agent / OMS Agent) is retired
+> (August 2024). Migrate all VM monitoring deployments to **Azure Monitor Agent (AMA)** with
+> Data Collection Rules (DCR).
 
 > **Exam tip:** The MMA/OMS agent is retired. For AZ-104, always choose AMA with Data Collection Rules for new deployments. DCRs allow filtering and routing to multiple destinations.
 
@@ -430,6 +438,10 @@ graph TD
     B --> F[Azure Files]
     C --> G[Replicated VMs - failover ready]
 ```
+
+> **⚠️ Deprecation warning:** Recovery Services Vault is the legacy backup store (VMs, SQL
+> in VM, Azure Files). For new PaaS-based backup targets (Blobs, managed databases), use
+> **Backup Vault** — Microsoft's current backup store model.
 
 ---
 
