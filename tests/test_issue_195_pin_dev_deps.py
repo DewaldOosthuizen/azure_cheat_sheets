@@ -22,9 +22,7 @@ class TestPyprojectUpperBounds:
 
     def test_pytest_has_upper_bound(self):
         content = PYPROJECT.read_text()
-        assert "pytest>=9.0.3,<10" in content, (
-            "pytest constraint must include upper bound <10"
-        )
+        assert "pytest>=9.0.3,<10" in content, "pytest constraint must include upper bound <10"
 
     def test_pytest_cov_has_upper_bound(self):
         content = PYPROJECT.read_text()
@@ -34,9 +32,7 @@ class TestPyprojectUpperBounds:
 
     def test_ruff_has_upper_bound(self):
         content = PYPROJECT.read_text()
-        assert "ruff>=0.15.15,<1" in content, (
-            "ruff constraint must include upper bound <1"
-        )
+        assert "ruff>=0.15.15,<1" in content, "ruff constraint must include upper bound <1"
 
     def test_no_open_ended_pytest(self):
         content = PYPROJECT.read_text()

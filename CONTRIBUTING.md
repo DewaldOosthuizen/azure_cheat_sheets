@@ -77,11 +77,14 @@ Always branch from `main`.
 
 ## 5. Development Setup
 
-You need `node` and `npm` on your PATH, and **Python 3.11+** with `ruff` and
-`pytest` for script validation and linting.
+You need `node` and `npm` on your PATH, and **Python 3.11+** for script
+validation and linting.
+
+Install all Python dev dependencies (pytest, pytest-cov, ruff) declared in
+`pyproject.toml` via the editable install:
 
 ```bash
-pip install ruff pytest
+pip install -e '.[dev]'
 ```
 
 Install the Node dev dependencies declared in `package.json`:
