@@ -140,8 +140,8 @@ python3 scripts/validate_mermaid.py docs/*.md
 Lint Python scripts:
 
 ```bash
-ruff check scripts/
-ruff format --check scripts/
+ruff check scripts/ tests/
+Run ruff format --check scripts/ tests/
 ```
 
 Run tests:

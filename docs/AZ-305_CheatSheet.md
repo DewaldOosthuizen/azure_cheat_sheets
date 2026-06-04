@@ -44,6 +44,23 @@
 
 ---
 
+## AZ-305 Quick Index
+
+| Domain | Section |
+| --- | --- |
+| Networking | [NETWORKING](#networking) |
+| Security | [SECURITY](#security) |
+| Storage | [STORAGE](#storage) |
+| Monitoring & Observability | [MONITORING & OBSERVABILITY](#monitoring--observability) |
+| Compute | [COMPUTE](#compute) |
+| Identity & Access | [IDENTITY & ACCESS](#identity--access) |
+| High Availability & Disaster Recovery | [HIGH AVAILABILITY & DISASTER RECOVERY](#high-availability--disaster-recovery) |
+| Governance | [GOVERNANCE](#governance) |
+| Messaging & Integration | [MESSAGING & INTEGRATION](#messaging--integration) |
+| Well-Architected Framework | [WELL-ARCHITECTED FRAMEWORK](#well-architected-framework) |
+
+---
+
 ## AZ-500 Quick Index
 
 Key sub-topics for AZ-500 Security Engineer candidates:
@@ -1059,6 +1076,24 @@ graph TD
 > See: [Microsoft retirement announcement](https://azure.microsoft.com/en-us/updates/azure-blueprints-is-being-retired-on-11-july-2026/)
 
 > **Exam tip:** Questions about Blueprints reference legacy or existing environments. For new governance designs always specify Template Specs + Policy + RBAC as the replacement pattern.
+
+---
+
+## Governance Enforcement Decision Flow
+
+```mermaid
+flowchart TD
+    A[Governance requirement?] -->|Enforce compliance rules / auto-remediate| B[Azure Policy]
+    A -->|Organise subscriptions + inherit controls| C[Management Groups]
+    A -->|Provision repeatable governed environment| D[Template Specs + Policy + RBAC]
+    A -->|Cap or alert on spend| E[Budgets + Cost Management]
+    D -->|Legacy environment uses Blueprints?| F[Migrate: Template Specs + Policy + RBAC\nBlueprints retired July 2026]
+```
+
+> **Exam tip:** When a question mentions enforcing a rule that blocks or auto-remediates
+> non-compliant resources across subscriptions, the answer is Azure Policy — not Locks
+> (which only prevent delete/write) and not Management Groups (which are the scope, not the
+> enforcement tool).
 
 ---
 
