@@ -44,6 +44,24 @@
 
 ---
 
+## AZ-500 Quick Index
+
+Key sub-topics for AZ-500 Security Engineer candidates:
+
+- [Microsoft Defender for Cloud](#microsoft-defender-for-cloud)
+- [Azure Key Vault & Access Models](#azure-key-vault)
+- [Encryption](#encryption)
+- [Policy & Compliance](#policy--compliance)
+- [Authentication & Password Security — PIM, Conditional Access, Identity Protection](#authentication--password-security)
+- [Microsoft Sentinel](#microsoft-sentinel)
+- [Network Security — NSGs, Azure Firewall, DDoS](#network-security)
+- [RBAC](#rbac)
+- [PIM Key Concepts](#pim-key-concepts)
+- [Log Analytics & Diagnostic Settings](#diagnostic-settings)
+- [Governance — Management Hierarchy, Locks](#management-hierarchy)
+
+---
+
 # NETWORKING
 
 > Also relevant for: **AZ-900** (foundational networking concepts) and **AZ-104**
@@ -216,6 +234,12 @@ flowchart TD
 
 ---
 
+> **Exam tip (AZ-500):** For AZ-500, know the layered network security model:
+> NSG = layer-4 allow/deny on subnet or NIC; Azure Firewall = stateful L3-L7
+> with FQDN rules and threat intelligence; NVA = third-party deep inspection.
+> DDoS Protection Standard (not Basic) is required when the question mentions
+> SLA-backed mitigation, telemetry, or cost protection for volumetric attacks.
+
 ## Content Delivery (CDN)
 
 | Service | Layer | Scope | Use Case | Key Feature |
@@ -266,6 +290,12 @@ graph LR
 | **Defender CSPM** | Cloud posture | Attack path analysis, governance |
 
 ---
+
+> **Exam tip (AZ-500):** Microsoft Defender for Cloud is the current name —
+> "Security Center" and "Azure Defender" are legacy names that may appear
+> in older questions. JIT VM Access (under Defender for Servers) locks down
+> management ports and opens them only on approved request; choose it when
+> the requirement mentions reducing the attack surface on VM management ports.
 
 ## Azure Key Vault
 
@@ -357,6 +387,11 @@ as the credential-free pattern — no secrets stored in application configuratio
 > Sentinel = SIEM + SOAR. Defender for Cloud = CSPM + workload protection. They integrate but serve different roles.
 
 ---
+
+> **Exam tip (AZ-500):** Sentinel is a cloud-native SIEM + SOAR; Defender for
+> Cloud is CSPM + workload protection. AZ-500 questions that mention "incident
+> response automation" or "playbook" point to Sentinel. Questions that mention
+> "secure score" or "recommendations" point to Defender for Cloud.
 
 # STORAGE
 
@@ -518,6 +553,11 @@ graph TD
 - Categories: AllMetrics, Audit, Operational, etc.
 
 ---
+
+> **Exam tip (AZ-500):** Diagnostic Settings are the bridge between Azure
+> resources and Microsoft Sentinel. Route Activity Logs, Entra audit logs, and
+> resource diagnostic logs to a Log Analytics Workspace that Sentinel reads from.
+> Without Diagnostic Settings configured, Sentinel data connectors receive no data.
 
 ## Log Analytics Retention & Cost Tiers
 
@@ -789,6 +829,12 @@ flowchart TD
 
 ---
 
+> **Exam tip (AZ-500):** AZ-500 tests PIM activation depth — know the difference
+> between eligible (requires activation) and active (always on) role assignments.
+> Access Reviews are the recurring compliance mechanism; PIM is the just-in-time
+> access mechanism. Conditional Access is the Zero Trust policy enforcement point
+> — combine it with Identity Protection risk signals to auto-block risky sign-ins.
+
 # HIGH AVAILABILITY & DISASTER RECOVERY
 
 > Also relevant for: **AZ-104** (Availability Sets, Availability Zones, Backup,
@@ -922,6 +968,11 @@ graph TD
 > Source: [Azure Lock Resources — Microsoft Learn](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/lock-resources)
 
 ---
+
+> **Exam tip (AZ-500):** Azure Policy is the primary compliance enforcement tool
+> in AZ-500 — know Deny (blocks creation), Audit (flags without blocking), and
+> DeployIfNotExists (auto-remediates). Resource Locks (ReadOnly / Delete) protect
+> against accidental change or deletion but do not enforce configuration compliance.
 
 # MESSAGING & INTEGRATION
 
