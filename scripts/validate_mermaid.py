@@ -54,7 +54,14 @@ def validate_block(index, diagram_src):
             text=True,
             timeout=60,
         )
-        return result.returncode == 0, result.stderr
+        if result.returncode == 0:
+            if not out_path.exists() or out_path.stat().st_size < 100:
+                return (
+                    False,
+                    "mmdc produced an empty/degenerate SVG (possible silent render failure)",
+                )
+            return True, result.stderr
+        return False, result.stderr
     except subprocess.TimeoutExpired:
         return (False, "mmdc timed out after 60 s")
     except FileNotFoundError:

@@ -170,10 +170,20 @@ class TestValidateBlockPuppeteerConfig:
     def test_validate_block_appends_puppeteer_config_when_present(self):
         import subprocess
 
-        success_result = subprocess.CompletedProcess(args=[], returncode=0, stdout="", stderr="")
+        def _write_svg_and_succeed(cmd, **kwargs):
+            input_flag = cmd.index("--input")
+            from pathlib import Path as _Path
+
+            out_file = _Path(cmd[input_flag + 1]).with_suffix(".svg")
+            out_file.write_bytes(b"<svg>" + b"x" * 200 + b"</svg>")
+            return subprocess.CompletedProcess(args=cmd, returncode=0, stdout="", stderr="")
+
         with (
             patch("validate_mermaid.PUPPETEER_CONFIG") as mock_cfg,
-            patch("validate_mermaid.subprocess.run", return_value=success_result) as mock_run,
+            patch(
+                "validate_mermaid.subprocess.run",
+                side_effect=_write_svg_and_succeed,
+            ) as mock_run,
         ):
             mock_cfg.exists.return_value = True
             mock_cfg.__str__ = lambda s: "/tmp/puppeteer-config.json"
@@ -185,10 +195,17 @@ class TestValidateBlockPuppeteerConfig:
     def test_validate_block_returns_true_on_success(self):
         import subprocess
 
-        success_result = subprocess.CompletedProcess(args=[], returncode=0, stdout="", stderr="")
+        def _write_svg_and_succeed(cmd, **kwargs):
+            input_flag = cmd.index("--input")
+            from pathlib import Path as _Path
+
+            out_file = _Path(cmd[input_flag + 1]).with_suffix(".svg")
+            out_file.write_bytes(b"<svg>" + b"x" * 200 + b"</svg>")
+            return subprocess.CompletedProcess(args=cmd, returncode=0, stdout="", stderr="")
+
         with (
             patch("validate_mermaid.PUPPETEER_CONFIG") as mock_cfg,
-            patch("validate_mermaid.subprocess.run", return_value=success_result),
+            patch("validate_mermaid.subprocess.run", side_effect=_write_svg_and_succeed),
         ):
             mock_cfg.exists.return_value = False
             ok, stderr = validate_mermaid.validate_block(1, "graph TD\n  A --> B\n")
@@ -318,6 +335,32 @@ class TestTraversalGuard:
         assert result == 0
         captured = capsys.readouterr()
         assert "outside repository root" not in captured.err
+
+
+class TestValidateBlockDegenerateSvg:
+    """Tests for degenerate (empty/missing) SVG guard in validate_block()."""
+
+    def test_validate_block_returns_false_on_degenerate_svg(self, tmp_path):
+        import subprocess
+
+        def _write_empty_svg_and_succeed(cmd, **kwargs):
+            # Derive out_path the same way validate_block does
+            input_flag = cmd.index("--input")
+            tmp_file = cmd[input_flag + 1]
+            out_file = str(tmp_file).replace(".mmd", ".svg")
+            from pathlib import Path as _Path
+
+            _Path(out_file).write_bytes(b"")
+            return subprocess.CompletedProcess(args=cmd, returncode=0, stdout="", stderr="")
+
+        with (
+            patch("validate_mermaid.PUPPETEER_CONFIG") as mock_cfg,
+            patch("validate_mermaid.subprocess.run", side_effect=_write_empty_svg_and_succeed),
+        ):
+            mock_cfg.exists.return_value = False
+            ok, msg = validate_mermaid.validate_block(1, "graph TD\n  A --> B\n")
+        assert ok is False
+        assert msg == "mmdc produced an empty/degenerate SVG (possible silent render failure)"
 
 
 class TestRealCheatSheet:
