@@ -626,7 +626,7 @@ flowchart TD
     D -- No --> AS[App Service]
     C -- Yes --> E{Need K8s API or custom controllers?}
     E -- Yes --> AKS[AKS]
-    E -- No --> F{Single burst / no long-lived scale?}
+    E -- No --> F{Single burst / long-lived scale?}
     F -- Yes --> ACI[ACI]
     F -- No --> ACA[Azure Container Apps]
 ```
