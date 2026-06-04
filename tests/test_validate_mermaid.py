@@ -87,6 +87,19 @@ class TestExtractMermaidBlocks:
             ("```mermaid   \ngraph TD\n  A-->B\n```", 1, None),
             # crlf_line_endings
             ("```mermaid\r\ngraph TD\r\n  A-->B\r\n```", 1, None),
+            # mermaid_followed_by_other_language_fence — regex must not bleed across fences
+            (
+                "```mermaid\ngraph TD\n  A-->B\n```\n\n```python\nprint('hi')\n```",
+                1,
+                "graph TD\n  A-->B\n",
+            ),
+            # python_block_with_backtick_string_precedes_mermaid — greedy matching must not
+            # capture the Python block as part of the diagram
+            (
+                "```python\nx = \"```\"\n```\n\n```mermaid\ngraph TD\n  A-->B\n```",
+                1,
+                "graph TD\n  A-->B\n",
+            ),
         ],
     )
     def test_extract(self, text, expected_count, expected_content):
