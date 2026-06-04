@@ -405,3 +405,37 @@ class TestRealCheatSheetIntegration:
         for i, block in enumerate(blocks):
             ok, err = validate_mermaid.validate_block(i, block)
             assert ok, f"Diagram {i + 1} failed: {err}"
+
+
+class TestMainMultiFile:
+    """Tests for run() when called with more than one Markdown file."""
+
+    def test_run_validates_second_file_when_first_has_no_blocks(self, capsys):
+        with (
+            patch(
+                "validate_mermaid.extract_mermaid_blocks",
+                side_effect=[[], ["graph TD\n  A --> B\n"]],
+            ),
+            patch("validate_mermaid.validate_block", return_value=(True, "")),
+            patch("validate_mermaid.Path.is_file", return_value=True),
+        ):
+            result = validate_mermaid.run(["empty.md", "docs/AZ-305_CheatSheet.md"])
+        assert result == 0
+
+    def test_run_returns_1_when_second_file_has_failing_diagram(self):
+        with (
+            patch(
+                "validate_mermaid.extract_mermaid_blocks",
+                side_effect=[
+                    ["graph TD\n  A --> B\n"],
+                    ["graph TD\n  A --> B\n"],
+                ],
+            ),
+            patch(
+                "validate_mermaid.validate_block",
+                side_effect=[(True, ""), (False, "syntax error")],
+            ),
+            patch("validate_mermaid.Path.is_file", return_value=True),
+        ):
+            result = validate_mermaid.run(["file1.md", "file2.md"])
+        assert result == 1
