@@ -185,15 +185,49 @@ class TestExtractMermaidBlocksFileErrors:
         md = tmp_path / "locked.md"
         md.write_text("```mermaid\ngraph TD\n  A-->B\n```", encoding="utf-8")
         md.chmod(0o000)
-        with pytest.raises((RuntimeError, PermissionError)):
+        with pytest.raises(RuntimeError) as excinfo:
             validate_mermaid.extract_mermaid_blocks(str(md))
         md.chmod(0o644)  # restore so pytest can clean up tmp_path
+        assert str(md) in str(excinfo.value)
 
     def test_raises_on_encoding_error(self, tmp_path):
         md = tmp_path / "binary.md"
         md.write_bytes(b"\xff\xfe invalid utf-8")
-        with pytest.raises((RuntimeError, UnicodeDecodeError)):
+        with pytest.raises(RuntimeError) as excinfo:
             validate_mermaid.extract_mermaid_blocks(str(md))
+        assert str(md) in str(excinfo.value)
+
+
+class TestRunFileReadErrors:
+    """Tests for run() handling RuntimeError raised by extract_mermaid_blocks."""
+
+    def test_run_returns_1_on_runtime_error(self, tmp_path):
+        md = tmp_path / "test.md"
+        md.write_text("# test", encoding="utf-8")
+        with (
+            patch("validate_mermaid.Path.is_file", return_value=True),
+            patch(
+                "validate_mermaid.extract_mermaid_blocks",
+                side_effect=RuntimeError(f"Cannot read {md}: permission denied"),
+            ),
+        ):
+            result = validate_mermaid.run([str(md)])
+        assert result == 1
+
+    def test_run_prints_error_to_stderr_on_runtime_error(self, tmp_path, capsys):
+        md = tmp_path / "test.md"
+        md.write_text("# test", encoding="utf-8")
+        error_msg = f"Cannot read {md}: permission denied"
+        with (
+            patch("validate_mermaid.Path.is_file", return_value=True),
+            patch(
+                "validate_mermaid.extract_mermaid_blocks",
+                side_effect=RuntimeError(error_msg),
+            ),
+        ):
+            validate_mermaid.run([str(md)])
+        captured = capsys.readouterr()
+        assert error_msg in captured.err
 
 
 class TestValidateBlockPuppeteerConfig:
