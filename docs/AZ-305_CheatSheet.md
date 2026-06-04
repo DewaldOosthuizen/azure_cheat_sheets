@@ -44,6 +44,23 @@
 
 ---
 
+## AZ-305 Quick Index
+
+| Domain | Section |
+| --- | --- |
+| Networking | [NETWORKING](#networking) |
+| Security | [SECURITY](#security) |
+| Storage | [STORAGE](#storage) |
+| Monitoring & Observability | [MONITORING & OBSERVABILITY](#monitoring--observability) |
+| Compute | [COMPUTE](#compute) |
+| Identity & Access | [IDENTITY & ACCESS](#identity--access) |
+| High Availability & Disaster Recovery | [HIGH AVAILABILITY & DISASTER RECOVERY](#high-availability--disaster-recovery) |
+| Governance | [GOVERNANCE](#governance) |
+| Messaging & Integration | [MESSAGING & INTEGRATION](#messaging--integration) |
+| Well-Architected Framework | [WELL-ARCHITECTED FRAMEWORK](#well-architected-framework) |
+
+---
+
 ## AZ-500 Quick Index
 
 Key sub-topics for AZ-500 Security Engineer candidates:
