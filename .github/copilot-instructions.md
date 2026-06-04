@@ -73,6 +73,11 @@ When adding or editing content, follow these rules precisely:
   Do not use plain blockquotes, bold sentences, or note/warning admonitions
   for exam tips.
 
+- For retired, retiring, or superseded services, use a deprecation callout
+  instead of an exam-tip. See the
+  [Deprecation warnings](CONTRIBUTING.md#10-deprecation-warnings) section in
+  CONTRIBUTING.md for the required format.
+
 - Use Mermaid diagrams for branching decision flows. Choose the directive by
   purpose:
 
