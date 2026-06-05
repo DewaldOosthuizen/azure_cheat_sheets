@@ -1,0 +1,7 @@
+# Minimal Python dependencies for building the MkDocs documentation site.
+# Kept separate from pyproject.toml dev extras so Vercel only installs
+# what it needs to produce site/ — no pytest, ruff, or pip-audit required.
+#
+# Keep the version constraint in sync with pyproject.toml:
+#   [project.optional-dependencies] dev -> mkdocs-material
+mkdocs-material>=9.5,<10

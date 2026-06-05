@@ -99,7 +99,10 @@ When editing or adding material:
   | Service | Type | Best For | Key Feature |
 
   Consistency columns (always present): Service, Key Feature.
-  Do not add free-form columns not in the template above.
+  Do not add free-form columns not in the template above. If an other type of
+  comparison is needed, consider whether a Mermaid diagram would be more effective.
+  Otherwise document the table structure below the table section above, and apply
+  it consistently across the cheat sheet where a similar comparison is needed.
 
 - Use short exam-tip callouts only when they clarify a likely decision point.
   Format: place the callout immediately after the relevant table, using:
@@ -163,6 +166,16 @@ For pull requests:
 Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) for
 the full workflow, including how to pick up an issue, branch naming conventions,
 local validation steps, and the pull request process.
+
+## Hosting
+
+The documentation site is hosted on Vercel. Every push to `main` triggers a
+production deploy. Every pull request gets an automatic preview deployment URL
+from Vercel, visible in the PR checks section on GitHub.
+
+To deploy your own fork: import the repository on [vercel.com](https://vercel.com),
+leave the Framework Preset as **Other**, and Vercel will pick up `vercel.json`
+automatically.
 
 ## License
 

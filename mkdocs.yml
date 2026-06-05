@@ -2,7 +2,7 @@ site_name: Azure Cheat Sheets
 site_description: >-
   Quick-reference study notes for Azure architecture decisions.
   Covers AZ-305, AZ-104, AZ-900, AZ-500, and AZ-700.
-site_url: https://dewaldoosthuizen.github.io/azure-cheat-sheets/
+site_url: https://azure-cheat-sheets.vercel.app/
 
 repo_name: DewaldOosthuizen/azure-cheat-sheets
 repo_url: https://github.com/DewaldOosthuizen/azure-cheat-sheets
