@@ -66,6 +66,9 @@ def _expand_snippet(block_src: str, base_dir: Path) -> str | None:
     """If *block_src* is a snippet directive, return the referenced file's
     content.  Returns *None* if *block_src* is not a snippet directive.
 
+    *base_dir* must match the PyMdown Snippets ``base_path`` configured in
+    mkdocs.yml (default: ``docs/``), NOT the Markdown file's parent directory.
+
     Raises ``RuntimeError`` if the referenced file cannot be read.
     """
     stripped = block_src.strip()
@@ -80,12 +83,25 @@ def _expand_snippet(block_src: str, base_dir: Path) -> str | None:
         raise RuntimeError(f"Cannot read snippet file {abs_path}: {exc}") from exc
 
 
-def extract_mermaid_blocks(md_path, *, expand_snippets: bool = True) -> list[str]:
+def extract_mermaid_blocks(
+    md_path,
+    *,
+    expand_snippets: bool = True,
+    snippet_base: Path | None = None,
+) -> list[str]:
     """Extract (and optionally expand) mermaid blocks from a Markdown file.
 
     When *expand_snippets* is True (the default), each block that contains
     a ``--8<-- "..."`` directive is replaced with the content of the
     referenced ``.mmd`` file so the actual diagram source is validated.
+
+    *snippet_base* controls the root directory used to resolve snippet paths.
+    It must match the ``base_path`` entry in the ``pymdownx.snippets``
+    configuration in mkdocs.yml.  When ``None`` it defaults to ``repo_root/docs``
+    (i.e. ``<repo>/docs/``), which is the value configured in this project.
+    Using the Markdown file's parent directory would be wrong: the cheat-sheet
+    files live in ``docs/cheat_sheets/`` but snippets are authored relative to
+    ``docs/`` so that ``diagrams/…`` resolves to ``docs/diagrams/…``.
     """
     try:
         with open(md_path, encoding="utf-8") as f:
@@ -97,11 +113,13 @@ def extract_mermaid_blocks(md_path, *, expand_snippets: bool = True) -> list[str
     if not expand_snippets:
         return raw_blocks
 
-    base_dir = Path(md_path).parent
+    if snippet_base is None:
+        snippet_base = _repo_root() / "docs"
+
     expanded: list[str] = []
     for block in raw_blocks:
         try:
-            resolved = _expand_snippet(block, base_dir)
+            resolved = _expand_snippet(block, snippet_base)
         except RuntimeError:
             raise
         expanded.append(resolved if resolved is not None else block)

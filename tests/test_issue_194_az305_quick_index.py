@@ -81,13 +81,13 @@ class TestAZ305QuickIndexContent:
 
 
 class TestAZ305QuickIndexSeparator:
-    """Verify --- separator exists between AZ-305 Quick Index and AZ-500 Quick Index."""
+    """Verify no --- separator precedes ## AZ-500 Quick Index (separators are for # headings only)."""
 
-    def test_separator_between_az305_and_az500_quick_index(self):
+    def test_no_separator_before_az500_quick_index(self):
         content = _content()
         start = content.index("## AZ-305 Quick Index")
         end = content.index("## AZ-500 Quick Index")
         section = content[start:end]
-        assert "\n---\n" in section, (
-            "Expected '---' separator between ## AZ-305 Quick Index and ## AZ-500 Quick Index"
+        assert "\n---\n" not in section, (
+            "--- separators must only appear before top-level # headings, not ## headings"
         )

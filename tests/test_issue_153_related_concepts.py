@@ -3,6 +3,7 @@
 import pathlib
 
 import pytest
+from conftest import expand_snippets
 
 REPO_ROOT = pathlib.Path(__file__).parent.parent
 AZ305 = REPO_ROOT / "docs" / "cheat_sheets/AZ-305.md"
@@ -11,7 +12,8 @@ AZ104 = REPO_ROOT / "docs" / "cheat_sheets/AZ-104.md"
 
 @pytest.fixture(scope="module")
 def az305_text():
-    return AZ305.read_text()
+    # Expand --8<-- snippet directives so diagram content is visible to assertions.
+    return expand_snippets(AZ305.read_text())
 
 
 @pytest.fixture(scope="module")

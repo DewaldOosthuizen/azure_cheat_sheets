@@ -49,3 +49,7 @@ source = ["scripts"]
 
 [tool.coverage.report]
 fail_under = 90
+
+[tool.pytest.ini_options]
+# Add tests/ to sys.path so test modules can import shared helpers from conftest.
+pythonpath = ["tests"]

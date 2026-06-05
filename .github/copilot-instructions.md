@@ -113,42 +113,6 @@ GitHub renders Mermaid natively. For local preview, install the
 The CI lint workflow runs `scripts/validate_mermaid.py` to catch broken
 Mermaid blocks before merge.
 
-## Code Exploration
-
-Two analysis tool artefacts are present. Use them before opening raw source.
-
-### codegraph
-
-```bash
-codegraph context "<task description>" -p .   # focused file+symbol context
-codegraph query "<symbol>" -p .               # where is X defined / used
-codegraph sync .                              # after any content change
-```
-
-### understand-anything
-
-```bash
-# Interactive dashboard
-cd ~/.understand-anything-plugin/packages/dashboard
-GRAPH_DIR=$(pwd) npx vite --host 127.0.0.1
-```
-
-Knowledge graph: `.understand-anything/knowledge-graph.json`
-Use for layered architecture questions (layers, communities, entry points).
-
-**Regeneration note:** After any `understand-anything` run that creates or
-regenerates `.understand-anything/knowledge-graph.json`, perform a global
-find-and-replace of `AZ-204` → `AZ-305` across the entire file before
-committing. The generator may propagate an incorrect exam code to
-`project.description`, the cheat-sheet node summary, the guided-tour
-description, and tour-step fields. A single-field patch is insufficient.
-
-Decision order for content tasks:
-
-1. codegraph context       — which symbols or sections matter?
-2. understand-anything     — where in the structure does this live?
-3. Read raw source         — only the file(s) that actually matter.
-
 ## License
 
 GPL-3.0 — see LICENSE.
