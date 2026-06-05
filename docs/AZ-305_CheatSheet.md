@@ -4,8 +4,6 @@
 
 > **Exam Focus:** Architectural decision-making — *which* service, *why*, *when*. Not how to configure.
 
----
-
 ## Table of Contents
 
 1. [Networking](#networking)
@@ -18,8 +16,6 @@
 8. [Governance](#governance)
 9. [Messaging & Integration](#messaging--integration)
 10. [Well-Architected Framework](#well-architected-framework)
-
----
 
 ## Exam Track Index
 
@@ -42,8 +38,6 @@
 > rows indicate security-engineer depth. AZ-700 Full/Partial rows indicate
 > network-engineer depth.
 
----
-
 ## AZ-305 Quick Index
 
 | Domain | Section |
@@ -58,8 +52,6 @@
 | Governance | [GOVERNANCE](#governance) |
 | Messaging & Integration | [MESSAGING & INTEGRATION](#messaging--integration) |
 | Well-Architected Framework | [WELL-ARCHITECTED FRAMEWORK](#well-architected-framework) |
-
----
 
 ## AZ-500 Quick Index
 
@@ -103,7 +95,6 @@ Key sub-topics for AZ-500 Security Engineer candidates:
 ```mermaid
 --8<-- "diagrams/networking/az305-decision-flow.mmd"
 ```
----
 
 ## API Management (APIM)
 
@@ -139,8 +130,6 @@ Key sub-topics for AZ-500 Security Engineer candidates:
 > - Premium is the only tier that supports multi-region gateway deployment and availability zones. Any exam scenario requiring geo-redundant API exposure points to Premium.
 > - Policy evaluation order matters: Inbound is the correct layer to validate JWTs and enforce auth before the request reaches the backend. Placing auth in Outbound is a common distractor.
 
----
-
 ## Virtual Networks (VNet)
 
 | Service | Layer | Scope | Use Case | Key Feature |
@@ -166,7 +155,6 @@ Key sub-topics for AZ-500 Security Engineer candidates:
 ```mermaid
 --8<-- "diagrams/networking/az305-virtual-networks-vnet.mmd"
 ```
----
 
 ## DNS
 
@@ -175,8 +163,6 @@ Key sub-topics for AZ-500 Security Engineer candidates:
 | **Azure DNS** | DNS | Global | Host public DNS zones in Azure | Authoritative DNS; delegates to Azure name servers |
 | **Azure Private DNS Zones** | DNS | Regional (VNet-linked) | Name resolution within VNets | Auto-registration of VM records; linked to one or more VNets |
 | **Private DNS Resolver** | DNS | Regional | Hybrid DNS — forward on-prem queries to Azure Private DNS | Inbound/outbound endpoints; replaces custom DNS VM |
-
----
 
 ## Network Security
 
@@ -221,7 +207,6 @@ Key sub-topics for AZ-500 Security Engineer candidates:
 ```mermaid
 --8<-- "diagrams/networking/az305-decision-flow-network-security-selection.mmd"
 ```
----
 
 > **Exam tip (AZ-500):** For AZ-500, know the layered network security model:
 > NSG = layer-4 allow/deny on subnet or NIC; Azure Firewall = stateful L3-L7
@@ -243,8 +228,6 @@ Key sub-topics for AZ-500 Security Engineer candidates:
 
 > **Exam tip:** Choose Azure Front Door when the requirement mentions global HTTP load balancing,
 > WAF, or SSL offload at the edge.
-
----
 
 ## Connectivity Patterns
 
@@ -275,8 +258,6 @@ Key sub-topics for AZ-500 Security Engineer candidates:
 | **Defender for Key Vault** | Key Vault | Suspicious access pattern alerts |
 | **Defender for DNS** | DNS layer | Detect C2 communication |
 | **Defender CSPM** | Cloud posture | Attack path analysis, governance |
-
----
 
 > **⚠️ Deprecation warning:** "Security Center" and "Azure Defender" are legacy names.
 > The current product is **Microsoft Defender for Cloud**. Older exam questions may still
@@ -318,8 +299,6 @@ Key sub-topics for AZ-500 Security Engineer candidates:
 Use **Managed Identity** bound to an Azure RBAC role (e.g. Key Vault Secrets User)
 as the credential-free pattern — no secrets stored in application configuration.
 
----
-
 ## Encryption
 
 | Type | Description | Service |
@@ -331,8 +310,6 @@ as the credential-free pattern — no secrets stored in application configuratio
 | **Encryption in transit** | TLS enforced | All Azure services |
 | **Azure Disk Encryption** | BitLocker (Windows) / dm-crypt (Linux) | VM OS and data disks |
 | **SSE (Server-Side Encryption)** | Storage service encrypts before writing | Azure Blob, Files, Queues |
-
----
 
 ## Policy & Compliance
 
@@ -349,8 +326,6 @@ as the credential-free pattern — no secrets stored in application configuratio
 
 > Exam tip: **DeployIfNotExists** requires a managed identity for the policy assignment to execute remediation.
 
----
-
 ## Authentication & Password Security
 
 | Feature | Description | Use Case |
@@ -363,8 +338,6 @@ as the credential-free pattern — no secrets stored in application configuratio
 | **Password Protection** | Block weak/known-bad passwords | On-prem AD + Azure AD |
 | **PIM (Privileged Identity Management)** | Just-in-time privileged access | Admin roles activated on demand |
 | **Access Reviews** | Periodic review of group/role membership | Compliance, least-privilege enforcement |
-
----
 
 ## Microsoft Sentinel
 
@@ -379,12 +352,12 @@ as the credential-free pattern — no secrets stored in application configuratio
 
 > Sentinel = SIEM + SOAR. Defender for Cloud = CSPM + workload protection. They integrate but serve different roles.
 
----
-
 > **Exam tip (AZ-500):** Sentinel is a cloud-native SIEM + SOAR; Defender for
 > Cloud is CSPM + workload protection. AZ-500 questions that mention "incident
 > response automation" or "playbook" point to Sentinel. Questions that mention
 > "secure score" or "recommendations" point to Defender for Cloud.
+
+---
 
 # STORAGE
 
@@ -400,8 +373,6 @@ as the credential-free pattern — no secrets stored in application configuratio
 | **Premium Block Blobs** | Block Blob only | Low-latency blob I/O, analytics |
 | **Premium File Shares** | Azure Files only | High-performance SMB/NFS shares |
 | **Premium Page Blobs** | Page Blob only | Unmanaged VM disks |
-
----
 
 ## Blob Storage Access Tiers
 
@@ -419,7 +390,6 @@ as the credential-free pattern — no secrets stored in application configuratio
 ```mermaid
 --8<-- "diagrams/storage/az305-blob-storage-access-tiers.mmd"
 ```
----
 
 ## Storage Redundancy
 
@@ -441,8 +411,6 @@ as the credential-free pattern — no secrets stored in application configuratio
 > and geo-redundancy — GZRS is strictly more resilient than RA-GRS for the
 > same read-availability requirement.
 
----
-
 ## Azure Files vs Blob vs Disk vs NetApp
 
 | Service | Protocol | Use Case |
@@ -453,8 +421,6 @@ as the credential-free pattern — no secrets stored in application configuratio
 | **Azure Managed Disks** | iSCSI (internal) | VM OS and data disks |
 | **Azure Queue Storage** | REST | Decoupled async messaging (simple) |
 | **Azure Table Storage** | REST | NoSQL key-value, schema-less |
-
----
 
 ## Data Integration & Movement
 
@@ -477,8 +443,6 @@ as the credential-free pattern — no secrets stored in application configuratio
 > processing. Choose Synapse when a unified SQL + Spark analytics workspace is the
 > stronger requirement.
 
----
-
 ## Database Storage Options
 
 | Service | Type | Best For | Key Feature |
@@ -491,8 +455,6 @@ as the credential-free pattern — no secrets stored in application configuratio
 | **Azure Synapse Analytics** | Analytics DW | OLAP, big data | Spark + SQL pool |
 | **Azure Data Lake Storage Gen2** | Hierarchical Blob | Analytics at scale | POSIX ACL, Spark-optimized |
 
----
-
 ## Azure File Sync
 
 | Service | Type | Best For | Key Feature |
@@ -502,8 +464,6 @@ as the credential-free pattern — no secrets stored in application configuratio
 > **Exam tip:** Choose Azure File Sync when the requirement mentions keeping on-prem Windows
 > file server access while centralising storage in Azure Files. Cloud tiering frees local disk
 > by replacing infrequently accessed files with stubs that are transparently fetched from Azure.
-
----
 
 ## Azure SQL Purchasing Models
 
@@ -516,8 +476,6 @@ as the credential-free pattern — no secrets stored in application configuratio
 > licence), Serverless auto-pause, or are deploying SQL Managed Instance (DTU not supported).
 > DTU is simpler but less flexible — expect AZ-305 questions to favour vCore for new
 > cloud-native designs.
-
----
 
 ## Cosmos DB Consistency Levels (strong → weak)
 
@@ -541,7 +499,6 @@ as the credential-free pattern — no secrets stored in application configuratio
 ```mermaid
 --8<-- "diagrams/monitoring/az305-azure-monitor-ecosystem.mmd"
 ```
----
 
 ## Key Services
 
@@ -556,8 +513,6 @@ as the credential-free pattern — no secrets stored in application configuratio
 | **Azure Advisor** | Best practice recommendations | Cost, security, reliability, performance |
 | **Service Health** | Azure platform health | Planned maintenance, incidents |
 | **Resource Health** | Your resource health | Is *your* resource healthy right now |
-
----
 
 ## Alerts
 
@@ -575,16 +530,12 @@ as the credential-free pattern — no secrets stored in application configuratio
 > Application Insights). Select the umbrella only when the sub-component is absent from
 > the options.
 
----
-
 ## Diagnostic Settings
 
 - Send to: **Log Analytics Workspace**, **Storage Account**, **Event Hub**, **Partner solution**
 - Configure per resource (or via Azure Policy at scale)
 - Categories: AllMetrics, Audit, Operational, **Activity Log** (control-plane events), etc.
 - Activity Log is a sub-component of Azure Monitor routed to Log Analytics Workspace via Diagnostic Settings — not a standalone service.
-
----
 
 > **Exam tip (AZ-500):** Diagnostic Settings are the bridge between Azure
 > resources and Microsoft Sentinel. Route Activity Logs, Entra audit logs, and
@@ -637,8 +588,6 @@ as the credential-free pattern — no secrets stored in application configuratio
 > serverless vs. always-on. ACA is the default for containerised
 > microservices when you do not need full Kubernetes API access.
 
----
-
 ## App Service Plans (Tiers)
 
 | Tier | Category | Features |
@@ -655,8 +604,6 @@ as the credential-free pattern — no secrets stored in application configuratio
 > that require a formal uptime guarantee should point to paid production tiers
 > with redundant instances.
 
----
-
 ## Azure Functions Hosting Plans
 
 | Plan | Scale | Cold Start | Use Case |
@@ -668,8 +615,6 @@ as the credential-free pattern — no secrets stored in application configuratio
 > **SLA note:** Consumption is optimized for elastic execution and can include
 > cold starts. For strict uptime or latency guarantees, exam scenarios typically
 > favour Premium or Dedicated hosting with warm capacity.
-
----
 
 ## Runtime & Language Fit (Functions vs Logic Apps vs App Service)
 
@@ -687,8 +632,6 @@ as the credential-free pattern — no secrets stored in application configuratio
 > workflow-first and typically uses connectors plus optional inline code or
 > Function calls for custom logic.
 
----
-
 ## Serverless / Event-Driven Selection
 
 ```mermaid
@@ -699,8 +642,6 @@ as the credential-free pattern — no secrets stored in application configuratio
 > Use Logic Apps Consumption for simple enterprise/B2B workflows with low-code connectors.
 > Use Logic Apps Standard when you need ISE-like VNet isolation or single-tenant deployment.
 > Use Azure Container Apps when execution duration exceeds Functions limits or you need a custom runtime.
-
----
 
 ## Azure Container Apps vs AKS vs ACI
 
@@ -726,8 +667,6 @@ as the credential-free pattern — no secrets stored in application configuratio
 > built-in deployment slots and App Service features without microservice overhead.
 > Use ACI for one-off batch jobs or CI/CD pipeline steps that need an isolated container burst.
 
----
-
 ## AKS Scaling Mechanisms
 
 | Service | Layer | Scope | Use Case | Key Feature |
@@ -743,8 +682,6 @@ as the credential-free pattern — no secrets stored in application configuratio
 > (Virtual Kubelet) burst workloads to ACI with no node-provisioning delay — choose
 > this when the requirement mentions instant scale-out or cost-optimised spikes.
 
----
-
 ## Virtual Machine SKU Families
 
 | Family | Purpose |
@@ -757,8 +694,6 @@ as the credential-free pattern — no secrets stored in application configuratio
 | **M-series** | Large memory — SAP HANA |
 | **B-series** | Burstable — dev/test, low-sustained CPU |
 
----
-
 ## HPC Networking — RDMA
 
 Remote Direct Memory Access (RDMA) enables VM-to-VM communication that bypasses the OS kernel,
@@ -769,8 +704,6 @@ in an **InfiniBand-enabled** cluster via a Placement Group or proximity placemen
 > **Exam tip:** Choose RDMA-capable VM sizes (H, HB, HC, ND series) when the requirement
 > mentions MPI workloads, tightly coupled HPC, or GPU-to-GPU training that cannot tolerate
 > standard Ethernet latency. RDMA is not available on general-purpose D/E-series VMs.
-
----
 
 ## CI/CD — Azure Pipelines Agent
 
@@ -783,8 +716,6 @@ in an **InfiniBand-enabled** cluster via a Placement Group or proximity placemen
 > inside a private VNet (e.g. Azure Container Registry with private endpoint, on-prem NuGet feed,
 > or private AKS API server). Microsoft-hosted agents run outside your VNet and cannot reach
 > private endpoints without additional networking configuration.
-
----
 
 ## Caching
 
@@ -812,6 +743,7 @@ in an **InfiniBand-enabled** cluster via a Placement Group or proximity placemen
 ```mermaid
 --8<-- "diagrams/compute/az305-azure-cache-for-redis.mmd"
 ```
+
 ---
 
 # IDENTITY & ACCESS
@@ -839,8 +771,6 @@ in an **InfiniBand-enabled** cluster via a Placement Group or proximity placemen
 ```
 > **Exam tip:** Prefer Managed Identity over Service Principal whenever the
 > workload runs in Azure and supports Entra-based managed identity auth.
-
----
 
 ## Entra Identity Scenarios
 
@@ -873,8 +803,6 @@ in an **InfiniBand-enabled** cluster via a Placement Group or proximity placemen
 > Choose Entra Connect when the requirement is to sync existing on-premises Active Directory
 > accounts to the cloud for SSO or hybrid authentication.
 
----
-
 ## RBAC
 
 | Concept | Description |
@@ -890,8 +818,6 @@ in an **InfiniBand-enabled** cluster via a Placement Group or proximity placemen
 > policies are superseded by **Azure RBAC**. RBAC is Entra-native, auditable, and centrally
 > managed. Migrate new and existing resources to RBAC.
 
----
-
 ## PIM Key Concepts
 
 | Feature | Detail |
@@ -902,13 +828,13 @@ in an **InfiniBand-enabled** cluster via a Placement Group or proximity placemen
 | **Approval Workflow** | Require approver before activation |
 | **Access Reviews** | Periodic certify that users still need roles |
 
----
-
 > **Exam tip (AZ-500):** AZ-500 tests PIM activation depth — know the difference
 > between eligible (requires activation) and active (always on) role assignments.
 > Access Reviews are the recurring compliance mechanism; PIM is the just-in-time
 > access mechanism. Conditional Access is the Zero Trust policy enforcement point
 > — combine it with Identity Protection risk signals to auto-block risky sign-ins.
+
+---
 
 # HIGH AVAILABILITY & DISASTER RECOVERY
 
@@ -929,7 +855,6 @@ in an **InfiniBand-enabled** cluster via a Placement Group or proximity placemen
 ```mermaid
 --8<-- "diagrams/ha-dr/az305-key-concepts.mmd"
 ```
----
 
 ## Azure Site Recovery (ASR)
 
@@ -940,8 +865,6 @@ in an **InfiniBand-enabled** cluster via a Placement Group or proximity placemen
 | **RTO** | Minutes (orchestrated failover) |
 | **Test Failover** | Validate DR without impacting production |
 | **Supported sources** | Azure VMs, VMware, Hyper-V, Physical servers |
-
----
 
 ## Azure Backup
 
@@ -976,8 +899,6 @@ in an **InfiniBand-enabled** cluster via a Placement Group or proximity placemen
 | **Subscription** | Billing boundary, policy scope |
 | **Resource Group** | Lifecycle boundary — deploy/delete together |
 
----
-
 ## Azure Blueprints vs ARM Templates vs Terraform
 
 | Tool | Purpose | Drift Detection | State | Status |
@@ -998,8 +919,6 @@ in an **InfiniBand-enabled** cluster via a Placement Group or proximity placemen
 
 > **Exam tip:** Questions about Blueprints reference legacy or existing environments. For new governance designs always specify Template Specs + Policy + RBAC as the replacement pattern.
 
----
-
 ## Governance Enforcement Decision Flow
 
 ```mermaid
@@ -1009,8 +928,6 @@ in an **InfiniBand-enabled** cluster via a Placement Group or proximity placemen
 > non-compliant resources across subscriptions, the answer is Azure Policy — not Locks
 > (which only prevent delete/write) and not Management Groups (which are the scope, not the
 > enforcement tool).
-
----
 
 ## Cost Management
 
@@ -1023,16 +940,12 @@ in an **InfiniBand-enabled** cluster via a Placement Group or proximity placemen
 | **Spot VMs** | Evictable — up to 90% savings for fault-tolerant workloads |
 | **Azure Hybrid Benefit** | Use existing Windows Server / SQL licenses |
 
----
-
 ## Tags
 
 - Applied at: Resource, Resource Group, Subscription level
 - Inherited? **No** — tags don't inherit by default (use Azure Policy to enforce inheritance)
 - Max: 50 tags per resource
 - Use cases: cost center, environment, owner, project
-
----
 
 ## Locks
 
@@ -1044,8 +957,6 @@ in an **InfiniBand-enabled** cluster via a Placement Group or proximity placemen
 > Locks are inherited by child resources. Applied at resource, resource group, or subscription.
 >
 > Source: [Azure Lock Resources — Microsoft Learn](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/lock-resources)
-
----
 
 > **Exam tip (AZ-500):** Azure Policy is the primary compliance enforcement tool
 > in AZ-500 — know Deny (blocks creation), Audit (flags without blocking), and
@@ -1123,6 +1034,8 @@ directories or maintaining guest accounts.
 > the requirement mentions Event Hubs Capture, Schema Registry, or compact binary serialisation
 > for streaming pipelines.
 
+---
+
 # WELL-ARCHITECTED FRAMEWORK
 
 > **Exam Focus:** Use WAF pillars to *justify* design decisions in
@@ -1149,7 +1062,6 @@ directories or maintaining guest accounts.
 ```mermaid
 --8<-- "diagrams/waf/az305-decision-flow-pillar-trade-off-navigator.mmd"
 ```
----
 
 ## Reliability — SLA Target Mapping
 
@@ -1185,8 +1097,6 @@ Composite = 1 − (1 − SLA₁) × (1 − SLA₂) for parallel components.
 > controlled but recovery must complete within minutes. Use composite SLA
 > multiplication to verify the architecture meets the stated SLA target.
 
----
-
 ## Cost Optimization — Compute Pricing Model Selection
 
 | Option | Best For | Commitment | Interruption Risk |
@@ -1200,15 +1110,9 @@ Composite = 1 − (1 − SLA₁) × (1 − SLA₂) for parallel components.
 > recommendations. Azure Budgets + Cost Alerts prevent spend overruns.
 > See [Governance](#governance) for Policy and Budget configuration patterns.
 
----
-
 > **Exam tip:** In case-study questions, every design decision maps to at
 > least one WAF pillar. When asked *why* a solution is recommended, frame
 > your answer using the pillar: "This satisfies the **Reliability** pillar
 > because it adds zone redundancy, raising the composite SLA above 99.95 %."
 
----
-
 *Last updated for AZ-305 exam preparation — review official Microsoft Learn documentation for latest service updates.*
-
----

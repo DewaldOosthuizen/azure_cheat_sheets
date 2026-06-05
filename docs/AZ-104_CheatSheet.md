@@ -5,8 +5,6 @@
 > **Exam Focus:** Operational decision-making — *how* to configure, manage, and
 > troubleshoot Azure resources. Not architectural trade-offs.
 
----
-
 ## Table of Contents
 
 1. [Networking](#networking)
@@ -43,7 +41,6 @@
 ```mermaid
 --8<-- "diagrams/networking/az104-vnet-connectivity-decision-flow.mmd"
 ```
----
 
 ## NSG vs ASG
 
@@ -59,7 +56,6 @@
 ```mermaid
 --8<-- "diagrams/networking/az104-nsg-rule-evaluation.mmd"
 ```
----
 
 ## Load Balancer SKU Selection
 
@@ -80,6 +76,7 @@
 ```mermaid
 --8<-- "diagrams/networking/az104-load-balancer-sku-decision-flow.mmd"
 ```
+
 ---
 
 # SECURITY
@@ -106,7 +103,6 @@
 ```mermaid
 --8<-- "diagrams/security/az104-key-vault-access-decision-flow.mmd"
 ```
----
 
 ## Defender for Cloud
 
@@ -124,6 +120,7 @@
 ```mermaid
 --8<-- "diagrams/security/az104-defender-for-cloud-coverage.mmd"
 ```
+
 ---
 
 # STORAGE
@@ -148,7 +145,6 @@
 ```mermaid
 --8<-- "diagrams/storage/az104-managed-disk-selection.mmd"
 ```
----
 
 ## Storage Account Replication
 
@@ -168,6 +164,7 @@
 ```mermaid
 --8<-- "diagrams/storage/az104-storage-replication-decision-flow.mmd"
 ```
+
 ---
 
 # MONITORING & OBSERVABILITY
@@ -195,7 +192,6 @@
 ```mermaid
 --8<-- "diagrams/monitoring/az104-agent-selection-decision-flow.mmd"
 ```
----
 
 ## Diagnostic Settings
 
@@ -242,7 +238,6 @@
 ```mermaid
 --8<-- "diagrams/compute/az104-vm-family-decision-flow.mmd"
 ```
----
 
 ## Availability Sets vs Availability Zones
 
@@ -263,6 +258,7 @@
 ```mermaid
 --8<-- "diagrams/compute/az104-availability-decision-flow.mmd"
 ```
+
 ---
 
 # IDENTITY & ACCESS
@@ -286,7 +282,6 @@
 ```mermaid
 --8<-- "diagrams/identity/az104-rbac-role-assignment-decision-flow.mmd"
 ```
----
 
 ## Entra ID Join Types
 
@@ -303,6 +298,7 @@
 ```mermaid
 --8<-- "diagrams/identity/az104-entra-id-join-type-decision-flow.mmd"
 ```
+
 ---
 
 # HIGH AVAILABILITY & DISASTER RECOVERY
@@ -325,7 +321,6 @@
 ```mermaid
 --8<-- "diagrams/ha-dr/az104-ha-dr-decision-flow.mmd"
 ```
----
 
 ## Recovery Services Vault Structure
 
@@ -359,7 +354,6 @@
 ```mermaid
 --8<-- "diagrams/governance/az104-policy-assignment-scope-hierarchy.mmd"
 ```
----
 
 ## Management Groups & Subscriptions
 
@@ -376,6 +370,7 @@
 ```mermaid
 --8<-- "diagrams/governance/az104-management-hierarchy-decision-flow.mmd"
 ```
+
 ---
 
 # MESSAGING & INTEGRATION
@@ -416,6 +411,7 @@
 ```mermaid
 --8<-- "diagrams/messaging/az104-service-bus-sku-decision-flow.mmd"
 ```
+
 ---
 
 # WELL-ARCHITECTED FRAMEWORK
@@ -445,4 +441,3 @@
 ```mermaid
 --8<-- "diagrams/waf/az104-cost-management-decision-flow.mmd"
 ```
----
