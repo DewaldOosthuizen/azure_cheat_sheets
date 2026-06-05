@@ -67,7 +67,7 @@ help:
 	@echo "  make link-check        Dead-link check (requires lychee)"
 	@echo "  make docs-serve        Serve MkDocs site locally at http://127.0.0.1:8000"
 	@echo "  make docs-build        Build static MkDocs site into site/"
-	@echo "  make ci                Full pipeline except link-check"
+	@echo "  make ci                Full pipeline — markdownlint, mermaid-check, lint, audit, test, docs-build"
 	@echo "  make ci-full           Full pipeline including link-check"
 	@echo "  make clean             Remove .venv, node_modules, site/, build artefacts"
 	@echo ""
@@ -187,7 +187,7 @@ docs-build: venv
 	$(VENV_BIN)/mkdocs build --strict
 
 # ── Full CI pipeline ──────────────────────────────────────────────────────────
-ci: markdownlint mermaid-check python-lint python-audit python-test
+ci: markdownlint mermaid-check python-lint python-audit python-test docs-build
 	@echo ""
 	@echo "=== CI passed ==="
 

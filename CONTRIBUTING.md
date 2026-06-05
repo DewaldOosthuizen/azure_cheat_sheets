@@ -87,10 +87,10 @@ make install
 ```
 
 This creates a `.venv` virtual environment, installs all Python dev
-dependencies (pytest, pytest-cov, ruff) declared in `pyproject.toml` into it,
-and then runs `npm ci` to install the Node dev dependencies (`markdownlint-cli2`
-and `@mermaid-js/mermaid-cli`). The venv is rebuilt automatically whenever
-`pyproject.toml` changes.
+dependencies (pytest, pytest-cov, ruff, mkdocs-material) declared in
+`pyproject.toml` into it, and then runs `npm ci` to install the Node dev
+dependencies (`markdownlint-cli2` and `@mermaid-js/mermaid-cli`). The venv
+is rebuilt automatically whenever `pyproject.toml` changes.
 
 Install the pre-commit hooks (one-time setup per clone):
 
@@ -113,7 +113,8 @@ make ci
 ```
 
 This runs the full pipeline in order: markdownlint, Mermaid diagram validation,
-ruff lint + format check, and pytest with coverage. A failing `make ci` means
+ruff lint + format check, pytest with coverage, and a strict MkDocs build that
+verifies all snippet references resolve correctly. A failing `make ci` means
 the GitHub Actions pipeline will also fail — fix it before opening a PR.
 
 Individual targets are available when you want to run one gate in isolation:
@@ -124,11 +125,15 @@ Lint all Markdown files:
 make markdownlint
 ```
 
-Validate all Mermaid diagram blocks:
+Validate all Mermaid diagrams (snippet refs in cheat sheets + standalone `.mmd` files):
 
 ```bash
 make mermaid-check
 ```
+
+The validator expands `--8<-- "..."` snippet references before passing the
+diagram source to `mmdc`, so broken snippet paths are caught here as well as
+by `make docs-build`.
 
 `validate_mermaid.py` exit codes:
 

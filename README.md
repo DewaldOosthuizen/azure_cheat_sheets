@@ -35,10 +35,22 @@ of this material, but the repository is not yet organized around those tracks.
 
 ## Repository Structure
 
-- [`docs/AZ-305_CheatSheet.md`](docs/AZ-305_CheatSheet.md) — AZ-305 architect-focused cheat sheet
-- [`docs/AZ-104_CheatSheet.md`](docs/AZ-104_CheatSheet.md) — AZ-104 administrator-focused cheat sheet
+```
+docs/
+  AZ-305_CheatSheet.md          — AZ-305 architect-focused cheat sheet
+  AZ-104_CheatSheet.md          — AZ-104 administrator-focused cheat sheet
+  diagrams/<section>/           — standalone Mermaid diagram sources (one per file)
+    az305-<slug>.mmd
+    az104-<slug>.mmd
+  index.md                      — MkDocs site home page
+mkdocs.yml                      — MkDocs Material site configuration
+```
 
-The current cheat sheet is organized into these top-level sections:
+Section directories under `docs/diagrams/`:
+`networking`, `security`, `storage`, `monitoring`, `compute`, `identity`,
+`ha-dr`, `governance`, `messaging`, `waf`
+
+The cheat sheets are organized into these top-level sections:
 
 1. Networking
 2. Security
@@ -51,15 +63,26 @@ The current cheat sheet is organized into these top-level sections:
 9. Messaging & Integration
 10. Well-Architected Framework
 
-## Viewing Mermaid Diagrams
+## Viewing the Documentation Site
 
-The cheat sheet includes Mermaid flowcharts for service-selection patterns.
+The recommended way to read the cheat sheets is through the MkDocs Material
+site, which renders all Mermaid diagrams inline in the browser.
 
-- GitHub renders Mermaid diagrams natively in Markdown files.
-- VS Code users can install
-  `Markdown Preview Mermaid Support` to render diagrams in the editor preview.
-- Other local Markdown viewers may show the code block only unless Mermaid
-  rendering is enabled.
+Serve it locally (hot-reload on save):
+
+```bash
+make docs-serve   # opens http://127.0.0.1:8000
+```
+
+Build a static copy:
+
+```bash
+make docs-build   # output in site/
+```
+
+GitHub also renders Mermaid natively in Markdown files. VS Code users can
+install `Markdown Preview Mermaid Support` to render diagrams in the editor
+preview.
 
 When editing or adding material:
 
@@ -92,7 +115,19 @@ When editing or adding material:
   section in CONTRIBUTING.md for the required format.
 
 - Use Mermaid diagrams for branching decision flows where a visual aid is more
-  useful than prose alone. Choose the variant by purpose:
+  useful than prose alone. Each diagram lives in its own
+  `docs/diagrams/<section>/<exam>-<slug>.mmd` file and is referenced from the
+  cheat sheet via a PyMdown Snippets directive:
+
+  ```text
+  ```mermaid
+  --8<-- "diagrams/<section>/<exam>-<slug>.mmd"
+  ``` (closing backticks)
+  ```
+
+  The `.mmd` file is the single source of truth — the same file can be
+  referenced from multiple cheat sheets. Run `make mermaid-check` after adding
+  or editing any `.mmd` file. Choose the directive by purpose:
 
   | Purpose                        | Directive       |
   |--------------------------------|-----------------|
@@ -115,13 +150,13 @@ For pull requests:
 
 - Keep changes scoped to one improvement area where possible.
 - Explain what section changed and why it improves the cheat sheet for readers.
-- Run `make ci` locally before opening a PR — it replicates the full CI
-  pipeline (markdownlint, Mermaid validation, ruff lint + format check,
-  pytest with coverage). See the [Makefile](Makefile) for individual targets.
 - Run `make install` once after cloning to create the `.venv` and install
   all Python and Node dev dependencies.
-- Verify that Markdown formatting and Mermaid blocks still render cleanly on
-  GitHub.
+- Run `make ci` locally before opening a PR — it replicates the full CI
+  pipeline (markdownlint, Mermaid validation, ruff lint + format check,
+  pytest with coverage, MkDocs strict build).
+- Verify that Markdown formatting and Mermaid diagrams render correctly via
+  `make docs-serve` before submitting.
   
 ## Contributing
 
