@@ -94,6 +94,10 @@ Key sub-topics for AZ-500 Security Engineer candidates:
 | **Traffic Manager** | DNS-based | Global | Non-HTTP global routing, failover | DNS TTL-based, not a proxy |
 | **API Management** | L7 (HTTP/S) | Regional/Global | API gateway, rate limiting, auth | Policies, developer portal, caching |
 
+> **Exam tip:** SLA-focused wording is a strong discriminator in load-balancing questions.
+> Prefer options that are explicitly SLA-backed for production workloads and note that
+> SLA terms generally depend on correct multi-instance or multi-region design.
+
 ### Decision Flow
 
 ```mermaid
@@ -516,6 +520,7 @@ graph TD
 | Service | Type | Best For | Key Feature |
 | --- | --- | --- | --- |
 | **Azure Data Factory** | Cloud ETL / orchestration | Batch data pipelines between cloud and on-prem stores | 90+ connectors, pipeline scheduling, data flows |
+| **Azure Databricks** | Lakehouse analytics | Large-scale Spark engineering, Delta Lake, ML pipelines | Managed Apache Spark with collaborative notebooks and autoscaling clusters |
 | **Azure-SSIS Integration Runtime** | Lift-and-shift ETL | Running existing SSIS packages in ADF without rewrite | Managed SSIS runtime inside ADF; supports Azure SQL MI as SSISDB host |
 | **Azure Data Box** | Offline bulk transfer | Initial migration of large datasets (TB–PB) to Azure when bandwidth is constrained | Physical device shipped by Microsoft; encrypted, tamper-evident |
 | **Azure Data Box Gateway** | Edge ingestion | Continuous data upload from on-prem to Azure Blob/Files | Virtual appliance; no physical device needed |
@@ -525,6 +530,11 @@ graph TD
 > scheduled data movement, or running SSIS packages in the cloud (via Azure-SSIS IR). Choose
 > Data Box (physical) for offline migrations where internet transfer would take weeks. Choose
 > Data Box Gateway for ongoing edge-to-cloud ingestion without a physical device.
+
+> **Exam tip:** Choose Azure Databricks when the requirement emphasizes Spark-native
+> data engineering, Delta Lake, collaborative notebooks, or large-scale ML data
+> processing. Choose Synapse when a unified SQL + Spark analytics workspace is the
+> stronger requirement.
 
 ---
 
@@ -683,6 +693,10 @@ graph TD
 | **Azure Batch** | HPC jobs | Large parallel compute jobs |
 | **Azure Spring Apps** | PaaS Java | Spring Boot microservices |
 
+> **Exam tip:** SLA guarantee requirements usually eliminate dev/test tiers or
+> single-instance designs. When the scenario says "guaranteed uptime", choose
+> a production tier and design for redundancy (multiple instances/zones/regions).
+
 ## Compute Decision Flow
 
 ```mermaid
@@ -718,6 +732,10 @@ flowchart TD
 
 > Deployment slots only available on **Standard** tier and above.
 
+> **SLA note:** Free/Shared tiers are not SLA-backed production tiers. Questions
+> that require a formal uptime guarantee should point to paid production tiers
+> with redundant instances.
+
 ---
 
 ## Azure Functions Hosting Plans
@@ -727,6 +745,36 @@ flowchart TD
 | **Consumption** | Auto (0 to N) | Yes | Sporadic, unpredictable traffic |
 | **Premium** | Pre-warmed instances | No | No cold start, VNet, longer execution |
 | **Dedicated (App Service)** | Manual / autoscale | No | Predictable load, reuse existing plan |
+
+> **SLA note:** Consumption is optimized for elastic execution and can include
+> cold starts. For strict uptime or latency guarantees, exam scenarios typically
+> favour Premium or Dedicated hosting with warm capacity.
+
+---
+
+## Runtime & Language Fit (Functions vs Logic Apps vs App Service)
+
+| Service | Code Model | Common Languages / Runtime Options | Best Fit |
+| --- | --- | --- | --- |
+| **Azure Functions** | Code-first serverless functions with triggers/bindings | C#, JavaScript/TypeScript, Python, Java, PowerShell, custom handlers (for other runtimes) | Event-driven workloads and short units of compute |
+| **Logic Apps** | Low-code workflow orchestration with connectors | No primary app-language requirement; optional inline code for small transforms; can call Functions for full custom code | Integration workflows, B2B, SaaS orchestration |
+| **Azure App Service** | Always-on web/API hosting (code or container) | .NET, Node.js, Java, Python, PHP, Ruby, or custom container images | Web apps and APIs with full framework/runtime control |
+
+```mermaid
+flowchart TD
+    A[Workload needs HTTP/API or workflow?] --> B{Primarily integration workflow\nwith many connectors?}
+    B -- Yes --> C[Logic Apps]
+    B -- No --> D{Event-triggered\nsmall units of code?}
+    D -- Yes --> E[Azure Functions]
+    D -- No --> F{Long-running web/API\nwith framework runtime control?}
+    F -- Yes --> G[Azure App Service]
+    F -- No --> H[Re-evaluate with Container Apps/AKS]
+```
+
+> **Exam tip:** If the requirement starts with "which language can I run?",
+> Functions and App Service are runtime-first choices; Logic Apps is primarily
+> workflow-first and typically uses connectors plus optional inline code or
+> Function calls for custom logic.
 
 ---
 
@@ -913,6 +961,22 @@ flowchart TD
 | **Groups** | Security or M365, for role assignment |
 | **App Registration** | Define an application in Entra ID |
 
+### System Identity Type Decision Flow
+
+```mermaid
+flowchart TD
+    A[System needs to authenticate to Azure resources?] --> B{Runs on Azure resource?}
+    B -- Yes --> C{Identity used by one resource only?}
+    C -- Yes --> D[System-assigned Managed Identity]
+    C -- No --> E[User-assigned Managed Identity]
+    B -- No --> F{Can use workload federation or cert-based app auth?}
+    F -- Yes --> G["Service Principal (App Registration)"]
+    F -- No --> H[Re-evaluate architecture to avoid long-lived secrets]
+```
+
+> **Exam tip:** Prefer Managed Identity over Service Principal whenever the
+> workload runs in Azure and supports Entra-based managed identity auth.
+
 ---
 
 ## Entra Identity Scenarios
@@ -927,6 +991,19 @@ flowchart TD
 > (CIAM) projects. Existing B2C tenants continue to be supported, but new designs should target
 > Entra External ID (external tenant). Do not confuse B2B guest users (workforce tenant) with
 > External ID (separate external tenant).
+
+### Entra Identity Scenario Decision Flow
+
+```mermaid
+flowchart TD
+    A[Who needs to sign in?] --> B{Internal employees?}
+    B -- Yes --> C[Entra ID workforce tenant]
+    B -- No --> D{External partners in collaboration model?}
+    D -- Yes --> E[Entra B2B guest access in workforce tenant]
+    D -- No --> F{Customer-facing app users?}
+    F -- Yes --> G[Entra External ID external tenant]
+    F -- No --> H[Reassess identity boundary and tenant model]
+```
 
 ## Hybrid Identity
 
@@ -1169,6 +1246,11 @@ directories or maintaining guest accounts.
 | **Event Grid** | Event (reactive) | No | No | Resource change reactions |
 | **Event Hub** | Stream (telemetry) | Per-partition | Yes (retention) | IoT, log ingestion |
 | **Storage Queue** | Message (P2P) | Best-effort | No | Simple, cheap async |
+
+> **SLA note:** Service Bus SKUs are used when the requirement explicitly calls
+> for enterprise messaging guarantees and broker features. Storage Queue is cost-
+> efficient and simple, but exam scenarios that stress stronger delivery contracts
+> generally point to Service Bus.
 
 ## Decision Flowchart
 

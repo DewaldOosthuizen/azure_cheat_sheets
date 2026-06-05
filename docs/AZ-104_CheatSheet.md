@@ -86,6 +86,10 @@ flowchart TD
 
 > **Exam tip:** Standard Load Balancer requires explicit NSG rules to allow traffic — Basic SKU allows traffic by default. Always use Standard for production workloads.
 
+> **SLA note:** Basic Load Balancer is not designed for SLA-backed production.
+> When a requirement explicitly calls for a formal load-balancing SLA, choose
+> Standard Load Balancer and deploy with resilient backend instances.
+
 ### Load Balancer SKU Decision Flow
 
 ```mermaid
@@ -329,6 +333,10 @@ flowchart TD
 
 > **Exam tip:** Availability Sets protect against hardware failures within a single datacenter. Availability Zones protect against full datacenter outages. VMs in an Availability Set get a 99.95% SLA; VMs in different AZs get 99.99% SLA.
 
+> **SLA note:** Single-instance VM designs do not satisfy higher SLA targets.
+> For guaranteed uptime questions, expect at least Availability Set or
+> Availability Zone based designs.
+
 ### Availability Decision Flow
 
 ```mermaid
@@ -522,6 +530,9 @@ flowchart TD
 | **Premium SKU** | Namespace tier | Predictable performance | Dedicated capacity units; VNet integration; large messages up to 100 MB |
 
 > **Exam tip:** Premium SKU is required for VNet service endpoints, private endpoints, and geo-disaster recovery (Geo-DR paired namespaces).
+
+> **SLA note:** Messaging scenarios that emphasize strict reliability,
+> predictable throughput, and isolation generally indicate Service Bus Premium.
 
 ### Messaging Decision Flow
 

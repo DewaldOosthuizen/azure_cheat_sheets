@@ -92,6 +92,7 @@ When asked to add or update content:
   ```
 
 - Do not document features or claims not already reflected in the content.
+- Other types of Mermaid diagrams may be used where it makes sense
 
 For pull requests, scope changes to one improvement area, explain what section
 changed and why it improves the cheat sheet for readers, and verify that
