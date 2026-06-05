@@ -14,9 +14,11 @@
 #   make python-test       pytest with coverage (default venv Python)
 #   make python-test-all   pytest across Python 3.11, 3.12, 3.13
 #   make link-check        Dead-link check (requires lychee on PATH)
+#   make docs-serve        Serve the MkDocs site locally (hot-reload)
+#   make docs-build        Build the static MkDocs site into site/
 #   make ci                Full pipeline — no link-check (makes live HTTP calls)
 #   make ci-full           Full pipeline including link-check
-#   make clean             Remove .venv, node_modules, and build artefacts
+#   make clean             Remove .venv, node_modules, site/, and build artefacts
 
 # ── Configuration ──────────────────────────────────────────────────────────────
 # Override on the command line: make python-test PYTHON=python3.12
@@ -31,7 +33,10 @@ PUPPETEER_CONFIG_FILE ?= /tmp/puppeteer-config.json
 
 MD_GLOBS         = "docs/**/*.md" "README.md" "AGENTS.md"
 LINT_TARGETS     = scripts/ tests/
-MD_FILES_VALIDATE = docs/*.md
+# Validate the cheat-sheet .md files (snippets are expanded at validation time)
+MD_FILES_VALIDATE = docs/AZ-305_CheatSheet.md docs/AZ-104_CheatSheet.md docs/index.md
+# All standalone .mmd diagram files
+MMD_FILES_VALIDATE := $(shell find docs/diagrams -name '*.mmd' 2>/dev/null)
 
 # ── Phony declarations ─────────────────────────────────────────────────────────
 .PHONY: help venv install \
@@ -41,6 +46,7 @@ MD_FILES_VALIDATE = docs/*.md
         python-audit \
         python-test python-test-311 python-test-312 python-test-313 python-test-all \
         link-check \
+        docs-serve docs-build \
         ci ci-full \
         clean
 
@@ -52,16 +58,18 @@ help:
 	@echo "  make venv              Create .venv and install dev deps (idempotent)"
 	@echo "  make install           venv + npm ci"
 	@echo "  make markdownlint      Lint Markdown files"
-	@echo "  make mermaid-check     Validate Mermaid diagrams"
+	@echo "  make mermaid-check     Validate Mermaid diagrams (MD files + .mmd files)"
 	@echo "  make python-lint       ruff check + format check (inside .venv)"
 	@echo "  make python-lint-fix   Auto-fix safe ruff violations"
 	@echo "  make python-audit      pip-audit CVE scan (inside .venv)"
 	@echo "  make python-test       pytest with coverage (inside .venv)"
 	@echo "  make python-test-all   pytest on Python 3.11, 3.12, and 3.13"
 	@echo "  make link-check        Dead-link check (requires lychee)"
+	@echo "  make docs-serve        Serve MkDocs site locally at http://127.0.0.1:8000"
+	@echo "  make docs-build        Build static MkDocs site into site/"
 	@echo "  make ci                Full pipeline except link-check"
 	@echo "  make ci-full           Full pipeline including link-check"
-	@echo "  make clean             Remove .venv, node_modules, build artefacts"
+	@echo "  make clean             Remove .venv, node_modules, site/, build artefacts"
 	@echo ""
 
 # ── Venv bootstrap ────────────────────────────────────────────────────────────
@@ -165,6 +173,19 @@ link-check:
 	  --retry-wait-time 5 --max-retries 3 --timeout 30 \
 	  docs/**/*.md README.md CONTRIBUTING.md AGENTS.md
 
+# ── Docs — MkDocs Material ────────────────────────────────────────────────────
+# Diagrams are stored as standalone .mmd files in docs/diagrams/ and referenced
+# from the cheat-sheet Markdown files via PyMdown Snippets directives.
+# MkDocs+Material renders Mermaid in-browser; no pre-compilation is required.
+
+docs-serve: venv
+	@echo "--- docs-serve (http://127.0.0.1:8000) ---"
+	$(VENV_BIN)/mkdocs serve --dev-addr 127.0.0.1:8000
+
+docs-build: venv
+	@echo "--- docs-build ---"
+	$(VENV_BIN)/mkdocs build --strict
+
 # ── Full CI pipeline ──────────────────────────────────────────────────────────
 ci: markdownlint mermaid-check python-lint python-audit python-test
 	@echo ""
@@ -178,6 +199,7 @@ ci-full: markdownlint mermaid-check python-lint python-audit python-test link-ch
 clean:
 	rm -rf $(VENV) .venv-311 .venv-312 .venv-313
 	rm -rf node_modules
+	rm -rf site/
 	rm -rf .coverage .coverage.* htmlcov/ .pytest_cache/ .ruff_cache/
 	rm -rf *.egg-info dist build
 	@echo "--- clean done ---"

@@ -41,15 +41,8 @@
 ### VNet Connectivity Decision Flow
 
 ```mermaid
-flowchart TD
-    A[Connect two networks?] --> B{Same or different subscription/region?}
-    B -- Same region --> C[VNet Peering - Regional]
-    B -- Different region --> D[VNet Peering - Global]
-    A --> E{On-premises to Azure?}
-    E -- Low cost, variable --> F[VPN Gateway Site-to-Site]
-    E -- High bandwidth, private --> G[ExpressRoute]
+--8<-- "diagrams/networking/az104-vnet-connectivity-decision-flow.mmd"
 ```
-
 ---
 
 ## NSG vs ASG
@@ -64,16 +57,8 @@ flowchart TD
 ### NSG Rule Evaluation
 
 ```mermaid
-flowchart TD
-    A[Inbound packet arrives] --> B[Check subnet NSG]
-    B --> C{Rule match?}
-    C -- Allow --> D[Check NIC NSG]
-    C -- Deny --> E[Drop packet]
-    D --> F{Rule match?}
-    F -- Allow --> G[Packet reaches VM]
-    F -- Deny --> H[Drop packet]
+--8<-- "diagrams/networking/az104-nsg-rule-evaluation.mmd"
 ```
-
 ---
 
 ## Load Balancer SKU Selection
@@ -93,14 +78,8 @@ flowchart TD
 ### Load Balancer SKU Decision Flow
 
 ```mermaid
-flowchart TD
-    A[Need load balancing?] --> B{HTTP or HTTPS traffic?}
-    B -- No --> C{Production workload?}
-    B -- Yes --> D[Application Gateway]
-    C -- No --> E[Load Balancer Basic]
-    C -- Yes --> F[Load Balancer Standard]
+--8<-- "diagrams/networking/az104-load-balancer-sku-decision-flow.mmd"
 ```
-
 ---
 
 # SECURITY
@@ -125,14 +104,8 @@ flowchart TD
 ### Key Vault Access Decision Flow
 
 ```mermaid
-flowchart TD
-    A[App needs secret/key/cert?] --> B{Use managed identity?}
-    B -- Yes --> C[Assign Key Vault role via RBAC to managed identity]
-    B -- No --> D{RBAC or Access Policy?}
-    D -- RBAC --> E[Assign Key Vault Secrets Officer / Reader role]
-    D -- Access Policy --> F[Set Get/List/Set permissions per principal]
+--8<-- "diagrams/security/az104-key-vault-access-decision-flow.mmd"
 ```
-
 ---
 
 ## Defender for Cloud
@@ -149,16 +122,8 @@ flowchart TD
 ### Defender for Cloud Coverage
 
 ```mermaid
-graph TD
-    A[Defender for Cloud] --> B[CSPM - Posture Management]
-    A --> C[Workload Protection Plans]
-    B --> D[Secure Score]
-    B --> E[Regulatory Compliance]
-    C --> F[Defender for Servers]
-    C --> G[Defender for Storage]
-    C --> H[Defender for Databases]
+--8<-- "diagrams/security/az104-defender-for-cloud-coverage.mmd"
 ```
-
 ---
 
 # STORAGE
@@ -181,16 +146,8 @@ graph TD
 ### Managed Disk Selection
 
 ```mermaid
-flowchart TD
-    A[Choose managed disk] --> B{Production workload?}
-    B -- No --> C[Standard HDD or Standard SSD]
-    B -- Yes --> D{Latency-sensitive?}
-    D -- Extreme sub-ms --> E[Ultra Disk]
-    D -- High but not extreme --> F{Tunable IOPS needed?}
-    F -- Yes --> G[Premium SSD v2]
-    F -- No --> H[Premium SSD]
+--8<-- "diagrams/storage/az104-managed-disk-selection.mmd"
 ```
-
 ---
 
 ## Storage Account Replication
@@ -209,20 +166,8 @@ flowchart TD
 ### Storage Replication Decision Flow
 
 ```mermaid
-flowchart TD
-    A[Choose replication] --> B{Need geo-redundancy?}
-    B -- No --> C{Need zone redundancy?}
-    C -- No --> D[LRS]
-    C -- Yes --> E[ZRS]
-    B -- Yes --> F{Need read access to secondary?}
-    F -- No --> G{Need zone redundancy at primary?}
-    G -- No --> H[GRS]
-    G -- Yes --> I[GZRS]
-    F -- Yes --> J{Zone redundancy at primary?}
-    J -- No --> K[RA-GRS]
-    J -- Yes --> L[RA-GZRS]
+--8<-- "diagrams/storage/az104-storage-replication-decision-flow.mmd"
 ```
-
 ---
 
 # MONITORING & OBSERVABILITY
@@ -248,17 +193,8 @@ flowchart TD
 ### Agent Selection Decision Flow
 
 ```mermaid
-flowchart TD
-    A[Need VM monitoring?] --> B{New or existing deployment?}
-    B -- New --> C[Azure Monitor Agent + DCR]
-    B -- Existing with MMA --> D{Migrate before retirement?}
-    D -- Yes --> C
-    D -- No yet --> E[Keep MMA - plan migration]
-    C --> F{Need process/network map?}
-    F -- Yes --> G[Add Dependency Agent]
-    F -- No --> H[AMA only]
+--8<-- "diagrams/monitoring/az104-agent-selection-decision-flow.mmd"
 ```
-
 ---
 
 ## Diagnostic Settings
@@ -275,15 +211,8 @@ flowchart TD
 ### Diagnostic Settings Routing
 
 ```mermaid
-graph LR
-    A[Azure Resource] --> B[Diagnostic Settings]
-    B --> C[Log Analytics Workspace]
-    B --> D[Storage Account]
-    B --> E[Event Hub]
-    E --> F[Sentinel / SIEM]
-    C --> G[Alerts / Dashboards]
+--8<-- "diagrams/monitoring/az104-diagnostic-settings-routing.mmd"
 ```
-
 > **Exam tip:** Activity Log is a sub-component of Azure Monitor, not a standalone service.
 > Route it to Log Analytics Workspace via Diagnostic Settings to enable KQL querying and
 > long-term retention. For AZ-104, use Azure Policy (DeployIfNotExists) to enforce
@@ -311,16 +240,8 @@ graph LR
 ### VM Family Decision Flow
 
 ```mermaid
-flowchart TD
-    A[Choose VM size] --> B{GPU required?}
-    B -- Yes --> C[N-series]
-    B -- No --> D{Primary constraint?}
-    D -- Balanced --> E[D-series General Purpose]
-    D -- High CPU --> F[F-series Compute Optimized]
-    D -- High Memory --> G[E or M-series Memory Optimized]
-    D -- High Disk Throughput --> H[L-series Storage Optimized]
+--8<-- "diagrams/compute/az104-vm-family-decision-flow.mmd"
 ```
-
 ---
 
 ## Availability Sets vs Availability Zones
@@ -340,14 +261,8 @@ flowchart TD
 ### Availability Decision Flow
 
 ```mermaid
-flowchart TD
-    A[Need VM HA?] --> B{Multiple datacenters?}
-    B -- No --> C[Availability Set]
-    B -- Yes --> D{Auto-scale needed?}
-    D -- No --> E[Place VMs across Availability Zones manually]
-    D -- Yes --> F[VM Scale Set - Flexible orchestration across zones]
+--8<-- "diagrams/compute/az104-availability-decision-flow.mmd"
 ```
-
 ---
 
 # IDENTITY & ACCESS
@@ -369,16 +284,8 @@ flowchart TD
 ### RBAC Role Assignment Decision Flow
 
 ```mermaid
-flowchart TD
-    A[Assign role?] --> B{Need to manage resources?}
-    B -- No --> C{Need to manage access only?}
-    B -- Yes --> D{Need to assign roles too?}
-    C -- Yes --> E[User Access Administrator]
-    C -- No --> F[Reader]
-    D -- No --> G[Contributor]
-    D -- Yes --> H[Owner]
+--8<-- "diagrams/identity/az104-rbac-role-assignment-decision-flow.mmd"
 ```
-
 ---
 
 ## Entra ID Join Types
@@ -394,16 +301,8 @@ flowchart TD
 ### Entra ID Join Type Decision Flow
 
 ```mermaid
-flowchart TD
-    A[Device registration?] --> B{Corporate or personal device?}
-    B -- Personal/BYOD --> C[Entra ID Registered]
-    B -- Corporate --> D{Existing on-prem AD domain?}
-    D -- No --> E[Entra ID Join - cloud only]
-    D -- Yes --> F{Keep GPO/on-prem dependency?}
-    F -- Yes --> G[Hybrid Entra ID Join]
-    F -- No --> E
+--8<-- "diagrams/identity/az104-entra-id-join-type-decision-flow.mmd"
 ```
-
 ---
 
 # HIGH AVAILABILITY & DISASTER RECOVERY
@@ -424,29 +323,15 @@ flowchart TD
 ### HA & DR Decision Flow
 
 ```mermaid
-flowchart TD
-    A[Protect workload?] --> B{Protect against data loss?}
-    B -- Yes --> C[Azure Backup - configure policy + vault]
-    A --> D{Protect against region failure?}
-    D -- Yes --> E[Azure Site Recovery - replicate VM to secondary region]
-    C --> F[Set retention and backup frequency]
-    E --> G[Test failover regularly]
+--8<-- "diagrams/ha-dr/az104-ha-dr-decision-flow.mmd"
 ```
-
 ---
 
 ## Recovery Services Vault Structure
 
 ```mermaid
-graph TD
-    A[Recovery Services Vault] --> B[Backup Items]
-    A --> C[Replication Items - ASR]
-    B --> D[Azure VMs]
-    B --> E[SQL in VM]
-    B --> F[Azure Files]
-    C --> G[Replicated VMs - failover ready]
+--8<-- "diagrams/ha-dr/az104-recovery-services-vault-structure.mmd"
 ```
-
 > **⚠️ Deprecation warning:** Recovery Services Vault is the legacy backup store (VMs, SQL
 > in VM, Azure Files). For new PaaS-based backup targets (Blobs, managed databases), use
 > **Backup Vault** — Microsoft's current backup store model.
@@ -472,15 +357,8 @@ graph TD
 ### Policy Assignment Scope Hierarchy
 
 ```mermaid
-graph TD
-    A[Root Management Group] --> B[Child Management Group]
-    B --> C[Subscription A]
-    B --> D[Subscription B]
-    C --> E[Resource Group 1]
-    C --> F[Resource Group 2]
-    D --> G[Resource Group 3]
+--8<-- "diagrams/governance/az104-policy-assignment-scope-hierarchy.mmd"
 ```
-
 ---
 
 ## Management Groups & Subscriptions
@@ -496,14 +374,8 @@ graph TD
 ### Management Hierarchy Decision Flow
 
 ```mermaid
-flowchart TD
-    A[Organize Azure resources] --> B{Multiple subscriptions?}
-    B -- No --> C[Use Resource Groups within subscription]
-    B -- Yes --> D{Apply policies across subscriptions?}
-    D -- No --> E[Assign policy per subscription]
-    D -- Yes --> F[Create Management Group and assign policy there]
+--8<-- "diagrams/governance/az104-management-hierarchy-decision-flow.mmd"
 ```
-
 ---
 
 # MESSAGING & INTEGRATION
@@ -537,27 +409,13 @@ flowchart TD
 ### Messaging Decision Flow
 
 ```mermaid
-flowchart TD
-    A[Choose messaging service] --> B{Multiple consumers for same message?}
-    B -- Yes --> C[Service Bus Topic with subscriptions]
-    B -- No --> D{Need dead-letter or ordering?}
-    D -- Yes --> E[Service Bus Queue]
-    D -- No --> F{Large volume simple queue?}
-    F -- Yes --> G[Storage Queue]
-    F -- No --> E
+--8<-- "diagrams/messaging/az104-messaging-decision-flow.mmd"
 ```
-
 ### Service Bus SKU Decision Flow
 
 ```mermaid
-flowchart TD
-    A[Choose Service Bus SKU] --> B{Need topics?}
-    B -- No --> C[Basic SKU]
-    B -- Yes --> D{Need VNet / private endpoint?}
-    D -- No --> E[Standard SKU]
-    D -- Yes --> F[Premium SKU]
+--8<-- "diagrams/messaging/az104-service-bus-sku-decision-flow.mmd"
 ```
-
 ---
 
 # WELL-ARCHITECTED FRAMEWORK
@@ -580,25 +438,11 @@ flowchart TD
 ### Tag Inheritance Architecture
 
 ```mermaid
-graph TD
-    A[Management Group] --> B[Subscription]
-    B --> C[Resource Group]
-    C --> D[Resource]
-    A -. "No auto-inherit" .-> D
-    C -. "Policy: Inherit tag from RG" .-> D
+--8<-- "diagrams/waf/az104-tag-inheritance-architecture.mmd"
 ```
-
 ### Cost Management Decision Flow
 
 ```mermaid
-flowchart TD
-    A[Control Azure costs?] --> B{Track by team/project?}
-    B -- Yes --> C[Apply tags - Environment, CostCenter, Owner]
-    C --> D{Enforce tagging?}
-    D -- Yes --> E[Azure Policy - Require tag or Inherit from RG]
-    A --> F{Alert on overspend?}
-    F -- Yes --> G[Create Budget with alert thresholds]
-    G --> H[Attach Action Group for email/webhook notification]
+--8<-- "diagrams/waf/az104-cost-management-decision-flow.mmd"
 ```
-
 ---

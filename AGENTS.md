@@ -8,9 +8,22 @@ and decision reasoning — not step-by-step walkthroughs or portal labs.
 ## Repository Structure
 
 ```
-docs/AZ-305_CheatSheet.md   — AZ-305 architect-focused cheat sheet
-docs/AZ-104_CheatSheet.md   — AZ-104 administrator-focused cheat sheet
+docs/AZ-305_CheatSheet.md        — AZ-305 architect-focused cheat sheet
+docs/AZ-104_CheatSheet.md        — AZ-104 administrator-focused cheat sheet
+docs/diagrams/<section>/*.mmd    — standalone Mermaid diagram sources (one per file)
+mkdocs.yml                       — MkDocs Material site config
 ```
+
+The cheat sheets reference diagram files via PyMdown Snippets:
+
+```text
+```mermaid
+--8<-- "diagrams/<section>/<exam>-<slug>.mmd"
+```
+```
+
+MkDocs (Material theme) expands the snippets and renders Mermaid in the browser.
+Run `make docs-serve` to preview locally, `make docs-build` for a strict build.
 
 The cheat sheet is organized into ten top-level sections:
 

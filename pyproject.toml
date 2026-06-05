@@ -10,6 +10,7 @@ packages = []
 
 [project.optional-dependencies]
 dev = [
+    "mkdocs-material>=9.5,<10",
     "pip-audit>=2.7,<3",
     "pytest>=9.0.3,<10",
     "pytest-cov>=7.1.0,<8",

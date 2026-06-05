@@ -101,18 +101,8 @@ Key sub-topics for AZ-500 Security Engineer candidates:
 ### Decision Flow
 
 ```mermaid
-flowchart TD
-    A[Need load balancing?] --> B{HTTP/HTTPS?}
-    B -- No --> C{Global?}
-    B -- Yes --> D{Global?}
-    C -- No --> E[Azure Load Balancer]
-    C -- Yes --> F[Traffic Manager]
-    D -- No --> G{Need WAF?}
-    D -- Yes --> H[Azure Front Door]
-    G -- Yes --> I[Application Gateway + WAF]
-    G -- No --> J[Application Gateway]
+--8<-- "diagrams/networking/az305-decision-flow.mmd"
 ```
-
 ---
 
 ## API Management (APIM)
@@ -141,20 +131,8 @@ flowchart TD
 ### Decision Flow — API Gateway Selection
 
 ```mermaid
-flowchart TD
-    A[Need an API gateway?] --> B{Global multi-region\nor CDN required?}
-    B -- Yes --> C[Azure Front Door\n+ optional APIM backend]
-    B -- No --> D{WAF required\nfor web/app traffic?}
-    D -- Yes --> E[Application Gateway + WAF\nor Front Door with WAF]
-    D -- No --> F{Private VNet /\ninternal APIs?}
-    F -- Yes --> G{Full API portal,\npolicies, rate-limiting?}
-    G -- Yes --> H[APIM Premium\nInternal VNet mode]
-    G -- No --> I[Application Gateway\nInternal mode]
-    F -- No --> J{Serverless / no\ndeveloper portal needed?}
-    J -- Yes --> K[APIM Consumption tier\nor raw Functions URL]
-    J -- No --> L[APIM Standard or Premium\nExternal mode]
+--8<-- "diagrams/networking/az305-decision-flow-api-gateway-selection.mmd"
 ```
-
 > **Exam Tips**
 >
 > - Consumption tier is serverless — there is no VNet injection and there is a cold-start on the first call after idle. Choose it only when portal and VNet are not required.
@@ -186,14 +164,8 @@ flowchart TD
 > - Service Endpoint = traffic stays on Azure backbone but PaaS still has public IP
 
 ```mermaid
-flowchart TD
-    A[Secure PaaS service access?] --> B{Require private IP in VNet?}
-    B -- Yes --> PE[Private Endpoint]
-    B -- No --> C{Traffic must stay on Azure backbone?}
-    C -- Yes --> SE[Service Endpoint]
-    C -- No --> PUB[Public endpoint with firewall rules]
+--8<-- "diagrams/networking/az305-virtual-networks-vnet.mmd"
 ```
-
 ---
 
 ## DNS
@@ -247,17 +219,8 @@ flowchart TD
 ### Decision Flow — Network Security Selection
 
 ```mermaid
-flowchart TD
-    A[Protect a workload?] --> B{Volumetric DDoS\nrisk?}
-    B -- Yes, VNet-wide --> C[DDoS Network Protection]
-    B -- Yes, single IP --> D[DDoS IP Protection]
-    B -- No --> E{Inspect / filter\nnetwork traffic?}
-    E -- Subnet/NIC rules only --> F[NSG + ASG]
-    E -- Centralized FQDN\nor L7 filtering --> G{Compliance /\nTLS inspection?}
-    G -- Yes --> H[Azure Firewall Premium]
-    G -- No --> I[Azure Firewall Standard]
+--8<-- "diagrams/networking/az305-decision-flow-network-security-selection.mmd"
 ```
-
 ---
 
 > **Exam tip (AZ-500):** For AZ-500, know the layered network security model:
@@ -286,14 +249,8 @@ flowchart TD
 ## Connectivity Patterns
 
 ```mermaid
-graph LR
-    OnPrem -->|ExpressRoute / VPN Gateway| HubVNet
-    HubVNet -->|Peering| SpokeVNet1
-    HubVNet -->|Peering| SpokeVNet2
-    HubVNet --> AzureFirewall
-    HubVNet --> Bastion
+--8<-- "diagrams/networking/az305-connectivity-patterns.mmd"
 ```
-
 | Pattern | Description |
 | --- | --- |
 | **Hub-Spoke** | Central hub VNet with shared services (firewall, bastion, DNS), spokes per workload |
@@ -460,14 +417,8 @@ as the credential-free pattern — no secrets stored in application configuratio
 > plan for rehydration latency in recovery scenarios.
 
 ```mermaid
-flowchart TD
-    A[Access frequency?] -->|Frequent reads/writes| B[Hot tier]
-    A -->|Infrequent, cost-sensitive; 30-day min| C[Cool tier]
-    A -->|Rarely accessed; 90-day min| D[Cold tier]
-    A -->|Archival, rare access; 180-day min| E[Archive tier]
-    E --> F[Note: requires rehydration to Hot or Cool before read]
+--8<-- "diagrams/storage/az305-blob-storage-access-tiers.mmd"
 ```
-
 ---
 
 ## Storage Redundancy
@@ -482,18 +433,8 @@ flowchart TD
 | **RA-GZRS** | Storage redundancy | Maximum durability with continuous secondary read access | GZRS + secondary endpoint always readable; 99.99% read SLA |
 
 ```mermaid
-graph TD
-    A[Choose Replication] --> B{Need DR to another region?}
-    B -- No --> C{Need zone resilience?}
-    B -- Yes --> D{Need read from secondary anytime?}
-    C -- No --> E[LRS — cheapest]
-    C -- Yes --> F[ZRS]
-    D -- No --> G{Need zone resilience in primary?}
-    D -- Yes --> H[RA-GRS or RA-GZRS]
-    G -- No --> I[GRS]
-    G -- Yes --> J[GZRS]
+--8<-- "diagrams/storage/az305-storage-redundancy.mmd"
 ```
-
 > **Exam tip:** Choose RA-GRS when zone resilience in the primary region is
 > not required but continuous read access to the secondary is. Choose GZRS
 > (or RA-GZRS) when you need both zone-level resilience in the primary region
@@ -598,18 +539,8 @@ graph TD
 ## Azure Monitor Ecosystem
 
 ```mermaid
-graph TD
-    Sources["Data Sources\n(VMs, Apps, PaaS, Logs)"] --> Monitor[Azure Monitor]
-    ActivityLog["Activity Log\n(control-plane events)"] --> Monitor
-    Monitor --> Metrics[Metrics]
-    Monitor -->|"via Diagnostic Settings"| Logs[Log Analytics Workspace]
-    Monitor --> Alerts[Alerts & Action Groups]
-    Monitor --> Insights[Insights: VM, Container, App]
-    Logs --> Sentinel[Microsoft Sentinel]
-    Logs --> Workbooks[Workbooks / Dashboards]
-    Alerts --> AG[Action Group\nEmail / SMS / ITSM / Webhook / Runbook]
+--8<-- "diagrams/monitoring/az305-azure-monitor-ecosystem.mmd"
 ```
-
 ---
 
 ## Key Services
@@ -700,20 +631,8 @@ graph TD
 ## Compute Decision Flow
 
 ```mermaid
-flowchart TD
-    A[New workload?] --> B{Need full OS / legacy lift-and-shift?}
-    B -- Yes --> VM[Azure VM / VMSS]
-    B -- No --> C{Containerised?}
-    C -- No --> D{Event-driven / serverless?}
-    D -- Yes --> AF[Azure Functions]
-    D -- No --> AS[App Service]
-    C -- Yes --> E{Need K8s API or custom controllers?}
-    E -- Yes --> AKS[AKS]
-    E -- No --> F{Single burst / long-lived scale?}
-    F -- Yes --> ACI[ACI]
-    F -- No --> ACA[Azure Container Apps]
+--8<-- "diagrams/compute/az305-compute-decision-flow.mmd"
 ```
-
 > **Exam tip:** Start with OS control (VM), then container vs. code, then
 > serverless vs. always-on. ACA is the default for containerised
 > microservices when you do not need full Kubernetes API access.
@@ -761,16 +680,8 @@ flowchart TD
 | **Azure App Service** | Always-on web/API hosting (code or container) | .NET, Node.js, Java, Python, PHP, Ruby, or custom container images | Web apps and APIs with full framework/runtime control |
 
 ```mermaid
-flowchart TD
-    A[Workload needs HTTP/API or workflow?] --> B{Primarily integration workflow\nwith many connectors?}
-    B -- Yes --> C[Logic Apps]
-    B -- No --> D{Event-triggered\nsmall units of code?}
-    D -- Yes --> E[Azure Functions]
-    D -- No --> F{Long-running web/API\nwith framework runtime control?}
-    F -- Yes --> G[Azure App Service]
-    F -- No --> H[Re-evaluate with Container Apps/AKS]
+--8<-- "diagrams/compute/az305-runtime-language-fit-functions-vs-logic-apps-vs-app-service.mmd"
 ```
-
 > **Exam tip:** If the requirement starts with "which language can I run?",
 > Functions and App Service are runtime-first choices; Logic Apps is primarily
 > workflow-first and typically uses connectors plus optional inline code or
@@ -781,22 +692,8 @@ flowchart TD
 ## Serverless / Event-Driven Selection
 
 ```mermaid
-flowchart TD
-    A[Serverless / Event-Driven workload?] --> B{Execution duration\n< 10 minutes?}
-    B -- Yes --> C{Stateless with\nHTTP / queue / timer trigger?}
-    B -- No --> D{Need long-running\norchestration / stateful?}
-    C -- Yes --> E{Code-first preference?}
-    C -- No --> F{Enterprise workflow\nor B2B integration?}
-    D -- Yes --> DURABLE[Azure Functions Premium/Dedicated\nwith Durable Functions]
-    D -- No --> ACA_LONG[Azure Container Apps]
-    E -- Yes --> FUNC_CONS[Azure Functions Consumption]
-    E -- No --> LOGIC_CONS[Logic Apps Consumption]
-    F -- Yes --> G{Low-code / visual designer?}
-    F -- No --> FUNC_CONS
-    G -- Yes --> LOGIC_CONS
-    G -- No --> LOGIC_STD[Logic Apps Standard]
+--8<-- "diagrams/compute/az305-serverless-event-driven-selection.mmd"
 ```
-
 > **Exam tip:** Use Azure Functions (Consumption) for short-lived, stateless, code-first triggers.
 > Use Durable Functions (Premium/Dedicated) for stateful orchestration or fan-out patterns.
 > Use Logic Apps Consumption for simple enterprise/B2B workflows with low-code connectors.
@@ -818,20 +715,8 @@ flowchart TD
 | **Ops overhead** | Minimal | Low | High (cluster upgrades, node pools) |
 
 ```mermaid
-flowchart TD
-    A[Container workload?] --> B{Existing Kubernetes\nteam expertise or\ncustom K8s API access?}
-    B -- Yes --> AKS[Azure Kubernetes Service]
-    B -- No --> C{Scale-to-zero\nrequirement?}
-    C -- Yes --> D{Microservice complexity\nor Dapr integration?}
-    C -- No --> E{Simple web app\nor single container?}
-    D -- Yes --> ACA[Azure Container Apps]
-    D -- No --> F{Single burst / short-lived\ntask, no persistent scale?}
-    F -- Yes --> ACI[Azure Container Instances]
-    F -- No --> ACA
-    E -- Yes --> APPSVC[App Service Containers]
-    E -- No --> ACA
+--8<-- "diagrams/compute/az305-azure-container-apps-vs-aks-vs-aci.mmd"
 ```
-
 > **Exam tip:** ACA uses KEDA under the hood and supports **scale-to-zero** for HTTP and
 > queue-based triggers — similar to Consumption plan Functions but for containerised workloads.
 > Choose ACA over Functions when you need a custom runtime, Dapr service invocation, or
@@ -852,14 +737,8 @@ flowchart TD
 | **Virtual Nodes (Virtual Kubelet)** | Node (virtual) | Cluster | Burst overflow pods to Azure Container Instances instantly | No node provisioning delay; serverless burst; ACI pricing |
 
 ```mermaid
-flowchart TD
-    A[AKS workload needs to scale?] --> B{Too many pods for current nodes?}
-    B -- No --> C[HPA adds pod replicas within current node capacity]
-    B -- Yes --> D{Sustained load or burst?}
-    D -- Sustained --> E[Cluster Autoscaler provisions new VM nodes]
-    D -- Short burst --> F[Virtual Nodes burst overflow pods to ACI]
+--8<-- "diagrams/compute/az305-aks-scaling-mechanisms.mmd"
 ```
-
 > **Exam tip:** HPA scales pods; Cluster Autoscaler scales nodes. Virtual Nodes
 > (Virtual Kubelet) burst workloads to ACI with no node-provisioning delay — choose
 > this when the requirement mentions instant scale-out or cost-optimised spikes.
@@ -931,16 +810,8 @@ in an **InfiniBand-enabled** cluster via a Placement Group or proximity placemen
 #### Tier Selection Decision Flow
 
 ```mermaid
-flowchart TD
-    A[Need Redis caching?] --> B{Dev/test only?}
-    B -- Yes --> C[Basic]
-    B -- No --> D{Need VNet or geo-replication?}
-    D -- No --> E[Standard]
-    D -- Yes --> F{Active-active multi-region\\nor Redis modules?}
-    F -- No --> G[Premium]
-    F -- Yes --> H[Enterprise / Enterprise Flash]
+--8<-- "diagrams/compute/az305-azure-cache-for-redis.mmd"
 ```
-
 ---
 
 # IDENTITY & ACCESS
@@ -964,16 +835,8 @@ flowchart TD
 ### System Identity Type Decision Flow
 
 ```mermaid
-flowchart TD
-    A[System needs to authenticate to Azure resources?] --> B{Runs on Azure resource?}
-    B -- Yes --> C{Identity used by one resource only?}
-    C -- Yes --> D[System-assigned Managed Identity]
-    C -- No --> E[User-assigned Managed Identity]
-    B -- No --> F{Can use workload federation or cert-based app auth?}
-    F -- Yes --> G["Service Principal (App Registration)"]
-    F -- No --> H[Re-evaluate architecture to avoid long-lived secrets]
+--8<-- "diagrams/identity/az305-system-identity-type-decision-flow.mmd"
 ```
-
 > **Exam tip:** Prefer Managed Identity over Service Principal whenever the
 > workload runs in Azure and supports Entra-based managed identity auth.
 
@@ -995,16 +858,8 @@ flowchart TD
 ### Entra Identity Scenario Decision Flow
 
 ```mermaid
-flowchart TD
-    A[Who needs to sign in?] --> B{Internal employees?}
-    B -- Yes --> C[Entra ID workforce tenant]
-    B -- No --> D{External partners in collaboration model?}
-    D -- Yes --> E[Entra B2B guest access in workforce tenant]
-    D -- No --> F{Customer-facing app users?}
-    F -- Yes --> G[Entra External ID external tenant]
-    F -- No --> H[Reassess identity boundary and tenant model]
+--8<-- "diagrams/identity/az305-entra-identity-scenario-decision-flow.mmd"
 ```
-
 ## Hybrid Identity
 
 | Service | Purpose | Protocol | Use Case | Key Feature |
@@ -1072,12 +927,8 @@ flowchart TD
 | **Region Pair** | Microsoft-paired regions for geo-replication |
 
 ```mermaid
-graph TD
-    H[HA Strategy] --> AZ[Availability Zone\n99.99% SLA\nProtects: datacenter failure]
-    H --> AS[Availability Set\n99.95% SLA\nProtects: rack/host failure]
-    H --> AR[Multi-Region\nProtects: regional outage]
+--8<-- "diagrams/ha-dr/az305-key-concepts.mmd"
 ```
-
 ---
 
 ## Azure Site Recovery (ASR)
@@ -1116,15 +967,8 @@ graph TD
 ## Management Hierarchy
 
 ```mermaid
-graph TD
-    Root[Root Management Group]
-    Root --> MG1[Management Group\nDivision / BU]
-    MG1 --> Sub1[Subscription\nProd]
-    MG1 --> Sub2[Subscription\nDev]
-    Sub1 --> RG1[Resource Group]
-    RG1 --> R1[Resources]
+--8<-- "diagrams/governance/az305-management-hierarchy.mmd"
 ```
-
 | Scope | Purpose |
 | --- | --- |
 | **Root Management Group** | Apply policies across entire tenant |
@@ -1159,14 +1003,8 @@ graph TD
 ## Governance Enforcement Decision Flow
 
 ```mermaid
-flowchart TD
-    A[Governance requirement?] -->|Enforce compliance rules / auto-remediate| B[Azure Policy]
-    A -->|Organise subscriptions + inherit controls| C[Management Groups]
-    A -->|Provision repeatable governed environment| D[Template Specs + Policy + RBAC]
-    A -->|Cap or alert on spend| E[Budgets + Cost Management]
-    D -->|Legacy environment uses Blueprints?| F[Migrate: Template Specs + Policy + RBAC\nBlueprints retired July 2026]
+--8<-- "diagrams/governance/az305-governance-enforcement-decision-flow.mmd"
 ```
-
 > **Exam tip:** When a question mentions enforcing a rule that blocks or auto-remediates
 > non-compliant resources across subscriptions, the answer is Azure Policy — not Locks
 > (which only prevent delete/write) and not Management Groups (which are the scope, not the
@@ -1255,18 +1093,8 @@ directories or maintaining guest accounts.
 ## Decision Flowchart
 
 ```mermaid
-flowchart TD
-    A[Need async communication?] --> B{Events or Messages?}
-    B -- Events --> C{Fan-out to multiple subscribers?}
-    B -- Messages --> D{Ordering required?}
-    C -- Yes --> E[Event Grid]
-    C -- No / High-volume stream --> F[Event Hub]
-    D -- Yes --> G[Service Bus Queue - FIFO sessions]
-    D -- No --> H{Volume very high / simple?}
-    H -- Yes --> I[Storage Queue]
-    H -- No --> J[Service Bus Queue]
+--8<-- "diagrams/messaging/az305-decision-flowchart.mmd"
 ```
-
 ## Logic Apps vs Azure Functions vs Durable Functions
 
 | Service | Best For | Trigger Model | State | Pricing Model |
@@ -1276,14 +1104,8 @@ flowchart TD
 | **Durable Functions** | Long-running, stateful orchestrations in code | Orchestrator / Activity / Entity | Stateful (via storage) | Consumption (includes storage cost) |
 
 ```mermaid
-flowchart TD
-    A[Integration or automation need?] --> B{Low-code / SaaS connectors?}
-    B -- Yes --> LA[Logic Apps]
-    B -- No --> C{Long-running or stateful workflow?}
-    C -- Yes --> DF[Durable Functions]
-    C -- No --> AF[Azure Functions]
+--8<-- "diagrams/messaging/az305-logic-apps-vs-azure-functions-vs-durable-functions.mmd"
 ```
-
 > **Exam tip:** Choose Logic Apps when the requirement mentions low-code orchestration or pre-built SaaS connectors. Choose Durable Functions for long-running, stateful, or fan-out/fan-in patterns written in code. Choose Azure Functions for stateless, event-driven compute with no orchestration requirement.
 
 ## Exam Tips
@@ -1320,29 +1142,13 @@ flowchart TD
 > **Cross-reference:** See [High Availability & Disaster Recovery](#high-availability--disaster-recovery) for Reliability patterns, [Security](#security) for defence-in-depth, [Networking — CDN](#content-delivery-cdn) for CDN/Front Door, [Compute — Caching](#caching) for Redis tier selection, [Networking](#networking) for DDoS, and [Governance](#governance) for cost control tooling.
 
 ```mermaid
-flowchart TD
-    A[Requirement keyword?] -->|Scale / latency| B[Performance Efficiency\nCDN · Front Door · VMSS · Redis]
-    A -->|Uptime / SLA| C[Reliability\nAvailability Zones · Traffic Manager · ASR]
-    A -->|Cost / budget| D[Cost Optimization\nReserved Instances · Spot VMs · Advisor]
-    A -->|Breach / threat| E[Security\nDefender · Sentinel · Key Vault · RBAC]
-    A -->|Safe deploy / ops| F[Operational Excellence\nAzure Monitor · Deployment Slots · IaC]
+--8<-- "diagrams/waf/az305-five-pillar-summary.mmd"
 ```
-
 ### Decision Flow — Pillar Trade-off Navigator
 
 ```mermaid
-flowchart TD
-    C1[Pillar conflict?] -->|Reliability vs Cost| RC{SLA target >= 99.99%?}
-    RC -->|Yes| RC_Y[Reliability wins\nMulti-region active-active\nFront Door + geo-replicated DB]
-    RC -->|No| RC_N[Cost Optimization wins\nSingle-region + Availability Zones\nReserved Instances]
-    C1 -->|Security vs Performance| SP{Data classified or regulated?}
-    SP -->|Yes| SP_Y[Security wins\nEncryption-at-rest + in-transit\nPrivate Endpoints · CMK]
-    SP -->|No| SP_N[Performance Efficiency wins\nCDN · Redis Cache · Front Door\nAdd controls incrementally]
-    C1 -->|OpEx vs Cost| OC{Prod or deploy freq > daily?}
-    OC -->|Yes| OC_Y[Operational Excellence wins\nDeployment Slots · IaC pipeline\nAzure Monitor alerts]
-    OC -->|No| OC_N[Cost Optimization wins\nManual deploy acceptable\nDev/test environment]
+--8<-- "diagrams/waf/az305-decision-flow-pillar-trade-off-navigator.mmd"
 ```
-
 ---
 
 ## Reliability — SLA Target Mapping
