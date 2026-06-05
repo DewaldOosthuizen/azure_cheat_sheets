@@ -8,8 +8,9 @@ Microsoft Azure Infrastructure Solutions. The focus is service selection,
 architectural trade-offs, and decision reasoning — not step-by-step
 walkthroughs, portal screenshots, or hands-on labs.
 
-There is no application code, no build system, and no test suite. All
-meaningful content lives in the Markdown files under `docs/`.
+All primary content lives in the Markdown files under `docs/`. A Makefile with
+Python and Node dev tooling handles validation and CI (markdownlint, Mermaid
+validation, ruff lint + format check, pytest with coverage).
 
 ## Repository Structure
 
@@ -97,10 +98,11 @@ When adding or editing content, follow these rules precisely:
 
 - Do not document features or claims not already reflected in the content.
 - Scope pull requests to one improvement area where possible.
-- Run `npx markdownlint-cli2 "**/*.md"` locally before opening a PR.
-- Run `python3 scripts/validate_mermaid.py docs/AZ-305_CheatSheet.md` to
-  validate Mermaid diagrams locally. Requires `mmdc` — install once with
-  `npm install -g @mermaid-js/mermaid-cli`.
+- Run `make install` once after cloning to create `.venv` and install all
+  Python and Node dev dependencies.
+- Run `make ci` before opening a PR — it replicates the full CI pipeline
+  (markdownlint, Mermaid validation, ruff lint + format check, pytest with
+  coverage).
 - Verify that Markdown formatting and Mermaid blocks render cleanly on GitHub.
 
 ## Mermaid Diagrams
