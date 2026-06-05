@@ -35,8 +35,8 @@ of this material, but the repository is not yet organized around those tracks.
 
 ## Repository Structure
 
-- [`AZ-305.md`](docs/cheat_sheets/AZ-305.md) — AZ-305 architect-focused cheat sheet
-- [`AZ-104.md`](docs/cheat_sheets/AZ-104.md) — AZ-104 administrator-focused cheat sheet
+- [`AZ-305.md`](cheat_sheets/AZ-305.md) — AZ-305 architect-focused cheat sheet
+- [`AZ-104.md`](cheat_sheets/AZ-104.md) — AZ-104 administrator-focused cheat sheet
 
 The current cheat sheet is organized into these top-level sections:
 

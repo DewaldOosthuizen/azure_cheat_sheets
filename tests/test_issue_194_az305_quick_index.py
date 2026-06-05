@@ -81,7 +81,10 @@ class TestAZ305QuickIndexContent:
 
 
 class TestAZ305QuickIndexSeparator:
-    """Verify no --- separator precedes ## AZ-500 Quick Index (separators are for # headings only)."""
+    """Verify no --- separator precedes ## AZ-500 Quick Index.
+
+    Separators are reserved for top-level # headings only.
+    """
 
     def test_no_separator_before_az500_quick_index(self):
         content = _content()
