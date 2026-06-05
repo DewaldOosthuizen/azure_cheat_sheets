@@ -1,7 +1,7 @@
 """Tests for issue #196 - FEATURE: Add structured Governance section decision flowchart.
 
 Verifies that:
-  - A '## Governance Enforcement Decision Flow' subsection exists in AZ-305_CheatSheet.md
+  - A '## Governance Enforcement Decision Flow' subsection exists in cheat_sheets/AZ-305.md
   - The subsection contains a flowchart TD Mermaid diagram
   - All four primary decision branches are present in the diagram
   - The fifth legacy-Blueprints migration branch is present
@@ -14,21 +14,23 @@ import pathlib
 import re
 
 import pytest
+from conftest import expand_snippets
 
 REPO_ROOT = pathlib.Path(__file__).parent.parent
-AZ305 = REPO_ROOT / "docs" / "AZ-305_CheatSheet.md"
+AZ305 = REPO_ROOT / "docs" / "cheat_sheets/AZ-305.md"
 
 
 @pytest.fixture(scope="module")
 def az305_text():
-    return AZ305.read_text()
+    # Expand --8<-- snippet directives so diagram content is visible to assertions.
+    return expand_snippets(AZ305.read_text())
 
 
 @pytest.fixture(scope="module")
 def governance_section(az305_text):
     """Extract the GOVERNANCE section text for narrower assertions."""
     match = re.search(r"(# GOVERNANCE.*?)(?=\n# [A-Z])", az305_text, re.DOTALL)
-    assert match, "GOVERNANCE section not found in AZ-305_CheatSheet.md"
+    assert match, "GOVERNANCE section not found in cheat_sheets/AZ-305.md"
     return match.group(1)
 
 

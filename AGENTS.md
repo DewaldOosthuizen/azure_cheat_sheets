@@ -8,12 +8,26 @@ and decision reasoning — not step-by-step walkthroughs or portal labs.
 ## Repository Structure
 
 ```
-docs/AZ-305_CheatSheet.md   — AZ-305 architect-focused cheat sheet
-docs/AZ-104_CheatSheet.md   — AZ-104 administrator-focused cheat sheet
+docs/cheat_sheets/AZ-305.md        — AZ-305 architect-focused cheat sheet
+docs/cheat_sheets/AZ-104.md        — AZ-104 administrator-focused cheat sheet
+docs/diagrams/<section>/*.mmd       — standalone Mermaid diagram sources (one per file)
+mkdocs.yml                          — MkDocs Material site config
 ```
 
-The cheat sheet is organized into ten top-level sections:
+The cheat sheets reference diagram files via PyMdown Snippets:
 
+```text
+```mermaid
+--8<-- "diagrams/<section>/<exam>-<slug>.mmd"
+```
+
+```
+
+MkDocs (Material theme) expands the snippets and renders Mermaid in the browser.
+Run `make docs-serve` to preview locally, `make docs-build` for a strict build.
+
+The cheat sheet is organized into ten top-level sections:
+dsf
 1. Networking
 2. Security
 3. Storage
@@ -38,7 +52,7 @@ The cheat sheet is organized into ten top-level sections:
 ## Orientation for AI Agents
 
 This is a documentation-focused repository. All primary content lives in
-docs/AZ-305_CheatSheet.md and docs/AZ-104_CheatSheet.md.
+docs/cheat_sheets/AZ-305.md and docs/cheat_sheets/AZ-104.md.
 
 The repository includes a Makefile and Python/Node dev tooling for validation
 and CI. Run `make install` once after cloning to create the `.venv` and install
@@ -108,58 +122,6 @@ checks, content conventions, and the PR checklist.
 
 GitHub renders Mermaid natively. For local preview, install the
 "Markdown Preview Mermaid Support" extension in VS Code.
-
-<!-- graph-tools-start -->
-
-## Code Exploration
-
-### understand-anything
-
-.understand-anything/knowledge-graph.json is present.
-Use it for layered architecture questions (layers, communities, entry points).
-
-> **Regeneration note:** After any `understand-anything` run that creates or
-> regenerates `.understand-anything/knowledge-graph.json`, perform a global
-> find-and-replace of `AZ-204` → `AZ-305` across the entire file before
-> committing it. The generator may propagate an incorrect exam code to
-> `project.description`, the cheat-sheet node summary, the guided-tour
-> description, and tour-step fields. A single-field patch is insufficient.
-
-```bash
-# Launch the interactive dashboard
-cd ~/.understand-anything-plugin/packages/dashboard
-GRAPH_DIR=$(pwd) npx vite --host 127.0.0.1
-```
-
-For prose questions load the skill:
-
-```text
-skill: understand-chat
-```
-
-### codegraph
-
-.codegraph/ is present. Use it FIRST for any symbol lookup,
-call tracing, or targeted context gathering before opening source files.
-
-```bash
-codegraph context "<task description>" -p .   # focused file+symbol context
-codegraph query "<ClassName or function>" -p . # where is X defined / used
-codegraph affected <changed-files> -p .        # which tests are affected
-codegraph sync .                               # after any code change
-```
-
-Decision order for code tasks:
-
-1. codegraph context       — which symbols matter?
-2. understand-anything     — where in the architecture does this live?
-3. Read raw source         — only the 1-2 files that actually matter.
-
-### graphify
-
-graphify-out/ not yet generated for this repo.
-
-<!-- graph-tools-end -->
 
 ## License
 

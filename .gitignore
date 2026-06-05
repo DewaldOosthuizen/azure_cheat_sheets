@@ -9,6 +9,7 @@ __pycache__/
 venv/
 env/
 ENV/
+.envrc
 
 # Packaging/build artifacts
 build/
@@ -62,4 +63,5 @@ node_modules/
 
 # Workspace-orchestrator temp file
 .hermes_tmp_prompt.txt
+.codegraph/codegraph.db
 openspec/

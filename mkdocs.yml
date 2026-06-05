@@ -1,0 +1,61 @@
+site_name: Azure Cheat Sheets
+site_description: >-
+  Quick-reference study notes for Azure architecture decisions.
+  Covers AZ-305, AZ-104, AZ-900, AZ-500, and AZ-700.
+site_url: https://azure-cheat-sheets.vercel.app/
+
+repo_name: DewaldOosthuizen/azure-cheat-sheets
+repo_url: https://github.com/DewaldOosthuizen/azure-cheat-sheets
+
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  palette:
+    - scheme: slate
+      primary: blue
+      accent: cyan
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+    - scheme: default
+      primary: blue
+      accent: cyan
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.top
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+
+markdown_extensions:
+  # pymdownx.snippets: expands --8<-- "path/to/file" directives.
+  # base_path is relative to docs_dir so paths in cheat sheets start
+  # with diagrams/ and resolve to docs/diagrams/.
+  - pymdownx.snippets:
+      base_path:
+        - docs
+      check_paths: true
+  # pymdownx.superfences: enables custom fences.  The mermaid fence
+  # emits a <code class="mermaid"> block that Material picks up and
+  # renders via the bundled Mermaid JS loader.
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          # yamllint disable-line rule:truthy
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - tables
+  - toc:
+      permalink: true
+  - admonition
+
+nav:
+  - Home: index.md
+  - AZ-305 Architect: cheat_sheets/AZ-305.md
+  - AZ-104 Administrator: cheat_sheets/AZ-104.md

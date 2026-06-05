@@ -35,23 +35,10 @@ of this material, but the repository is not yet organized around those tracks.
 
 ## Repository Structure
 
-```
-docs/
-  cheat_sheets/
-    AZ-305.md                   — AZ-305 architect-focused cheat sheet
-    AZ-104.md                   — AZ-104 administrator-focused cheat sheet
-  diagrams/<section>/           — standalone Mermaid diagram sources (one per file)
-    az305-<slug>.mmd
-    az104-<slug>.mmd
-  index.md                      — MkDocs site home page
-mkdocs.yml                      — MkDocs Material site configuration
-```
+- [`AZ-305.md`](cheat_sheets/AZ-305.md) — AZ-305 architect-focused cheat sheet
+- [`AZ-104.md`](cheat_sheets/AZ-104.md) — AZ-104 administrator-focused cheat sheet
 
-Section directories under `docs/diagrams/`:
-`networking`, `security`, `storage`, `monitoring`, `compute`, `identity`,
-`ha-dr`, `governance`, `messaging`, `waf`
-
-The cheat sheets are organized into these top-level sections:
+The current cheat sheet is organized into these top-level sections:
 
 1. Networking
 2. Security
@@ -64,26 +51,15 @@ The cheat sheets are organized into these top-level sections:
 9. Messaging & Integration
 10. Well-Architected Framework
 
-## Viewing the Documentation Site
+## Viewing Mermaid Diagrams
 
-The recommended way to read the cheat sheets is through the MkDocs Material
-site, which renders all Mermaid diagrams inline in the browser.
+The cheat sheet includes Mermaid flowcharts for service-selection patterns.
 
-Serve it locally (hot-reload on save):
-
-```bash
-make docs-serve   # opens http://127.0.0.1:8000
-```
-
-Build a static copy:
-
-```bash
-make docs-build   # output in site/
-```
-
-GitHub also renders Mermaid natively in Markdown files. VS Code users can
-install `Markdown Preview Mermaid Support` to render diagrams in the editor
-preview.
+- GitHub renders Mermaid diagrams natively in Markdown files.
+- VS Code users can install
+  `Markdown Preview Mermaid Support` to render diagrams in the editor preview.
+- Other local Markdown viewers may show the code block only unless Mermaid
+  rendering is enabled.
 
 When editing or adding material:
 
@@ -100,10 +76,7 @@ When editing or adding material:
   | Service | Type | Best For | Key Feature |
 
   Consistency columns (always present): Service, Key Feature.
-  Do not add free-form columns not in the template above. If an other type of
-  comparison is needed, consider whether a Mermaid diagram would be more effective.
-  Otherwise document the table structure below the table section above, and apply
-  it consistently across the cheat sheet where a similar comparison is needed.
+  Do not add free-form columns not in the template above.
 
 - Use short exam-tip callouts only when they clarify a likely decision point.
   Format: place the callout immediately after the relevant table, using:
@@ -115,23 +88,11 @@ When editing or adding material:
   for exam tips.
 
 - For retired, retiring, or superseded services, use a deprecation callout
-  instead of an exam-tip. See the [Deprecation warnings](CONTRIBUTING.md#10-deprecation-warnings)
+  instead of an exam-tip. See the [Deprecation warnings](https://github.com/DewaldOosthuizen/azure_cheat_sheets/blob/main/CONTRIBUTING.md#10-deprecation-warnings)
   section in CONTRIBUTING.md for the required format.
 
 - Use Mermaid diagrams for branching decision flows where a visual aid is more
-  useful than prose alone. Each diagram lives in its own
-  `docs/diagrams/<section>/<exam>-<slug>.mmd` file and is referenced from the
-  cheat sheet via a PyMdown Snippets directive:
-
-  ```text
-  ```mermaid
-  --8<-- "diagrams/<section>/<exam>-<slug>.mmd"
-  ``` (closing backticks)
-  ```
-
-  The `.mmd` file is the single source of truth — the same file can be
-  referenced from multiple cheat sheets. Run `make mermaid-check` after adding
-  or editing any `.mmd` file. Choose the directive by purpose:
+  useful than prose alone. Choose the variant by purpose:
 
   | Purpose                        | Directive       |
   |--------------------------------|-----------------|
@@ -154,29 +115,19 @@ For pull requests:
 
 - Keep changes scoped to one improvement area where possible.
 - Explain what section changed and why it improves the cheat sheet for readers.
-- Run `make install` once after cloning to create the `.venv` and install
-  all Python and Node dev dependencies.
 - Run `make ci` locally before opening a PR — it replicates the full CI
   pipeline (markdownlint, Mermaid validation, ruff lint + format check,
-  pytest with coverage, MkDocs strict build).
-- Verify that Markdown formatting and Mermaid diagrams render correctly via
-  `make docs-serve` before submitting.
+  pytest with coverage). See the [Makefile](Makefile) for individual targets.
+- Run `make install` once after cloning to create the `.venv` and install
+  all Python and Node dev dependencies.
+- Verify that Markdown formatting and Mermaid blocks still render cleanly on
+  GitHub.
   
 ## Contributing
 
-Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) for
+Contributions are welcome. Please read [CONTRIBUTING.md](https://github.com/DewaldOosthuizen/azure_cheat_sheets/blob/main/CONTRIBUTING.md) for
 the full workflow, including how to pick up an issue, branch naming conventions,
 local validation steps, and the pull request process.
-
-## Hosting
-
-The documentation site is hosted on Vercel. Every push to `main` triggers a
-production deploy. Every pull request gets an automatic preview deployment URL
-from Vercel, visible in the PR checks section on GitHub.
-
-To deploy your own fork: import the repository on [vercel.com](https://vercel.com),
-leave the Framework Preset as **Other**, and Vercel will pick up `vercel.json`
-automatically.
 
 ## License
 

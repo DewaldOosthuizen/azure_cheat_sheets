@@ -87,10 +87,10 @@ make install
 ```
 
 This creates a `.venv` virtual environment, installs all Python dev
-dependencies (pytest, pytest-cov, ruff) declared in `pyproject.toml` into it,
-and then runs `npm ci` to install the Node dev dependencies (`markdownlint-cli2`
-and `@mermaid-js/mermaid-cli`). The venv is rebuilt automatically whenever
-`pyproject.toml` changes.
+dependencies (pytest, pytest-cov, ruff, mkdocs-material) declared in
+`pyproject.toml` into it, and then runs `npm ci` to install the Node dev
+dependencies (`markdownlint-cli2` and `@mermaid-js/mermaid-cli`). The venv
+is rebuilt automatically whenever `pyproject.toml` changes.
 
 Install the pre-commit hooks (one-time setup per clone):
 
@@ -113,7 +113,8 @@ make ci
 ```
 
 This runs the full pipeline in order: markdownlint, Mermaid diagram validation,
-ruff lint + format check, and pytest with coverage. A failing `make ci` means
+ruff lint + format check, pytest with coverage, and a strict MkDocs build that
+verifies all snippet references resolve correctly. A failing `make ci` means
 the GitHub Actions pipeline will also fail — fix it before opening a PR.
 
 Individual targets are available when you want to run one gate in isolation:
@@ -124,11 +125,15 @@ Lint all Markdown files:
 make markdownlint
 ```
 
-Validate all Mermaid diagram blocks:
+Validate all Mermaid diagrams (snippet refs in cheat sheets + standalone `.mmd` files):
 
 ```bash
 make mermaid-check
 ```
+
+The validator expands `--8<-- "..."` snippet references before passing the
+diagram source to `mmdc`, so broken snippet paths are caught here as well as
+by `make docs-build`.
 
 `validate_mermaid.py` exit codes:
 
@@ -140,6 +145,13 @@ make mermaid-check
 
 > **Note:** When no Mermaid blocks are found the script emits a WARNING to
 > stderr and exits `0` — it does not treat missing diagrams as an error.
+
+Serve the documentation site locally (requires `mkdocs-material`, installed via `make venv`):
+
+```bash
+make docs-serve   # hot-reload at http://127.0.0.1:8000
+make docs-build   # build static site into site/ (strict mode)
+```
 
 Lint Python scripts:
 
@@ -224,6 +236,29 @@ Closes #42
 - Follow PEP 8. Use `ruff` for linting and formatting.
 - Keep scripts small and single-purpose.
 - Add or update tests in `tests/` whenever script behaviour changes.
+
+### Diagram Files
+
+Mermaid diagrams live in `docs/diagrams/<section>/<exam>-<slug>.mmd`.
+They are referenced from the cheat-sheet Markdown files using a PyMdown Snippets
+directive inside a fenced code block:
+
+```text
+```mermaid
+--8<-- "diagrams/<section>/<exam>-<slug>.mmd"
+``` (closing backticks)
+```
+
+Rules:
+
+- One diagram per `.mmd` file — do not combine multiple `flowchart`/`graph` blocks.
+- File names: `<exam>-<descriptive-slug>.mmd` (`az305-`, `az104-`). Use lowercase hyphens.
+- Section sub-directories match the top-level cheat-sheet section slugs:
+  `networking`, `security`, `storage`, `monitoring`, `compute`, `identity`,
+  `ha-dr`, `governance`, `messaging`, `waf`.
+- To reuse a diagram in a second cheat sheet, add the same `--8<-- "..."` reference
+  in that file. The `.mmd` source is the single source of truth.
+- Run `make mermaid-check` after adding or editing any `.mmd` file.
 
 ---
 

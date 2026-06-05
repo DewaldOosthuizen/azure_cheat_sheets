@@ -1,11 +1,11 @@
-"""Tests for issue #194 - FEATURE: Add AZ-305 Quick Index section to AZ-305_CheatSheet.md."""
+"""Tests for issue #194 - FEATURE: Add AZ-305 Quick Index section to cheat_sheets/AZ-305.md."""
 
 from __future__ import annotations
 
 from pathlib import Path
 from typing import ClassVar
 
-CHEAT_SHEET = Path("docs/AZ-305_CheatSheet.md")
+CHEAT_SHEET = Path("docs/cheat_sheets/AZ-305.md")
 
 
 def _content():
@@ -17,7 +17,7 @@ class TestAZ305QuickIndexExists:
 
     def test_az305_quick_index_heading_exists(self):
         assert "## AZ-305 Quick Index" in _content(), (
-            "Expected '## AZ-305 Quick Index' section in docs/AZ-305_CheatSheet.md"
+            "Expected '## AZ-305 Quick Index' section in docs/cheat_sheets/AZ-305.md"
         )
 
 
@@ -81,13 +81,16 @@ class TestAZ305QuickIndexContent:
 
 
 class TestAZ305QuickIndexSeparator:
-    """Verify --- separator exists between AZ-305 Quick Index and AZ-500 Quick Index."""
+    """Verify no --- separator precedes ## AZ-500 Quick Index.
 
-    def test_separator_between_az305_and_az500_quick_index(self):
+    Separators are reserved for top-level # headings only.
+    """
+
+    def test_no_separator_before_az500_quick_index(self):
         content = _content()
         start = content.index("## AZ-305 Quick Index")
         end = content.index("## AZ-500 Quick Index")
         section = content[start:end]
-        assert "\n---\n" in section, (
-            "Expected '---' separator between ## AZ-305 Quick Index and ## AZ-500 Quick Index"
+        assert "\n---\n" not in section, (
+            "--- separators must only appear before top-level # headings, not ## headings"
         )
