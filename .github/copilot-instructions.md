@@ -15,8 +15,8 @@ validation, ruff lint + format check, pytest with coverage).
 ## Repository Structure
 
 ```
-docs/AZ-305_CheatSheet.md   — AZ-305 architect-focused cheat sheet
-docs/AZ-104_CheatSheet.md   — AZ-104 administrator-focused cheat sheet
+docs/cheat_sheets/AZ-305.md   — AZ-305 architect-focused cheat sheet
+docs/cheat_sheets/AZ-104.md   — AZ-104 administrator-focused cheat sheet
 scripts/validate_mermaid.py — CI script that validates Mermaid code blocks
 config/orchestrator.yml     — workspace-orchestrator pipeline config
 openspec/                   — openspec change workflow artefacts (proposals,

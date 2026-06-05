@@ -57,5 +57,5 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - AZ-305 Architect: AZ-305_CheatSheet.md
-  - AZ-104 Administrator: AZ-104_CheatSheet.md
+  - AZ-305 Architect: cheat_sheets/AZ-305.md
+  - AZ-104 Administrator: cheat_sheets/AZ-104.md

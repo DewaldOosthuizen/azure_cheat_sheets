@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-CHEAT_SHEET = Path("docs/AZ-305_CheatSheet.md")
+CHEAT_SHEET = Path("docs/cheat_sheets/AZ-305.md")
 
 
 def _content():
@@ -14,7 +14,7 @@ class TestAZ500QuickIndex:
 
     def test_az500_quick_index_section_exists(self):
         assert "## AZ-500 Quick Index" in _content(), (
-            "Expected '## AZ-500 Quick Index' section in docs/AZ-305_CheatSheet.md"
+            "Expected '## AZ-500 Quick Index' section in docs/cheat_sheets/AZ-305.md"
         )
 
 

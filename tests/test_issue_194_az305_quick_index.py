@@ -1,11 +1,11 @@
-"""Tests for issue #194 - FEATURE: Add AZ-305 Quick Index section to AZ-305_CheatSheet.md."""
+"""Tests for issue #194 - FEATURE: Add AZ-305 Quick Index section to cheat_sheets/AZ-305.md."""
 
 from __future__ import annotations
 
 from pathlib import Path
 from typing import ClassVar
 
-CHEAT_SHEET = Path("docs/AZ-305_CheatSheet.md")
+CHEAT_SHEET = Path("docs/cheat_sheets/AZ-305.md")
 
 
 def _content():
@@ -17,7 +17,7 @@ class TestAZ305QuickIndexExists:
 
     def test_az305_quick_index_heading_exists(self):
         assert "## AZ-305 Quick Index" in _content(), (
-            "Expected '## AZ-305 Quick Index' section in docs/AZ-305_CheatSheet.md"
+            "Expected '## AZ-305 Quick Index' section in docs/cheat_sheets/AZ-305.md"
         )
 
 

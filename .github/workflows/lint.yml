@@ -43,8 +43,8 @@ jobs:
       - name: Validate Mermaid diagrams
         run: |
           python3 scripts/validate_mermaid.py \
-            docs/AZ-305_CheatSheet.md \
-            docs/AZ-104_CheatSheet.md \
+            docs/cheat_sheets/AZ-305.md \
+            docs/cheat_sheets/AZ-104.md \
             $(find docs/diagrams -name '*.mmd' | sort)
 
   docs-build:

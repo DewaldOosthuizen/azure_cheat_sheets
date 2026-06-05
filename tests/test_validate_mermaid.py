@@ -286,10 +286,10 @@ class TestParseArgs:
     """Tests for parse_args() in isolation — covers CLI argument parsing."""
 
     def test_parse_args_returns_namespace_with_md_files(self):
-        argv = ["validate_mermaid.py", "docs/AZ-305_CheatSheet.md"]
+        argv = ["validate_mermaid.py", "docs/cheat_sheets/AZ-305.md"]
         with patch("validate_mermaid.sys.argv", argv):
             args = validate_mermaid.parse_args()
-        assert args.md_files == ["docs/AZ-305_CheatSheet.md"]
+        assert args.md_files == ["docs/cheat_sheets/AZ-305.md"]
 
     def test_parse_args_exits_2_when_no_positional_argument(self):
         with (
@@ -309,7 +309,7 @@ class TestMainHappyPath:
             patch("validate_mermaid.validate_block", return_value=(True, "")),
             patch("validate_mermaid.Path.is_file", return_value=True),
         ):
-            result = validate_mermaid.run(["docs/AZ-305_CheatSheet.md"])
+            result = validate_mermaid.run(["docs/cheat_sheets/AZ-305.md"])
         assert result == 0
         captured = capsys.readouterr()
         assert "All 1 diagram(s) passed" in captured.out
@@ -324,7 +324,7 @@ class TestMainAggregateFail:
             patch("validate_mermaid.validate_block", return_value=(False, "syntax error")),
             patch("validate_mermaid.Path.is_file", return_value=True),
         ):
-            result = validate_mermaid.run(["docs/AZ-305_CheatSheet.md"])
+            result = validate_mermaid.run(["docs/cheat_sheets/AZ-305.md"])
         assert result == 1
 
     def test_run_prints_failure_summary(self, capsys):
@@ -333,7 +333,7 @@ class TestMainAggregateFail:
             patch("validate_mermaid.validate_block", return_value=(False, "syntax error")),
             patch("validate_mermaid.Path.is_file", return_value=True),
         ):
-            validate_mermaid.run(["docs/AZ-305_CheatSheet.md"])
+            validate_mermaid.run(["docs/cheat_sheets/AZ-305.md"])
         captured = capsys.readouterr()
         assert "1 diagram(s) failed" in captured.out
 
@@ -346,7 +346,7 @@ class TestMainZeroBlocks:
             patch("validate_mermaid.extract_mermaid_blocks", return_value=[]),
             patch("validate_mermaid.Path.is_file", return_value=True),
         ):
-            result = validate_mermaid.run(["docs/AZ-305_CheatSheet.md"])
+            result = validate_mermaid.run(["docs/cheat_sheets/AZ-305.md"])
         assert result == 0
 
     def test_run_prints_warning_to_stderr_when_no_blocks_found(self, capsys):
@@ -354,7 +354,7 @@ class TestMainZeroBlocks:
             patch("validate_mermaid.extract_mermaid_blocks", return_value=[]),
             patch("validate_mermaid.Path.is_file", return_value=True),
         ):
-            validate_mermaid.run(["docs/AZ-305_CheatSheet.md"])
+            validate_mermaid.run(["docs/cheat_sheets/AZ-305.md"])
         captured = capsys.readouterr()
         assert "no mermaid blocks found" in captured.err
 
@@ -390,7 +390,7 @@ class TestTraversalGuard:
         import scripts.validate_mermaid as vm_mod
 
         repo_root = Path(vm_mod.__file__).parent.parent.resolve()
-        valid_path = str(repo_root / "docs" / "AZ-305_CheatSheet.md")
+        valid_path = str(repo_root / "docs" / "cheat_sheets/AZ-305.md")
 
         with (
             patch.object(Path, "is_file", return_value=True),
@@ -433,14 +433,14 @@ class TestValidateBlockDegenerateSvg:
 
 
 class TestRealCheatSheet:
-    """Integration tests that read docs/AZ-305_CheatSheet.md from disk."""
+    """Integration tests that read docs/cheat_sheets/AZ-305.md from disk."""
 
     def test_extracts_nonzero_blocks_from_real_cheat_sheet(self):
-        blocks = validate_mermaid.extract_mermaid_blocks("docs/AZ-305_CheatSheet.md")
+        blocks = validate_mermaid.extract_mermaid_blocks("docs/cheat_sheets/AZ-305.md")
         assert len(blocks) > 0, "Expected at least one Mermaid block in the cheat sheet"
 
     def test_all_blocks_are_non_empty_strings(self):
-        blocks = validate_mermaid.extract_mermaid_blocks("docs/AZ-305_CheatSheet.md")
+        blocks = validate_mermaid.extract_mermaid_blocks("docs/cheat_sheets/AZ-305.md")
         for i, b in enumerate(blocks):
             assert isinstance(b, str) and b.strip(), f"Block {i + 1} is empty or not a string"
 
@@ -450,7 +450,7 @@ class TestRealCheatSheetIntegration:
     """Integration tests that invoke validate_block against the real cheat sheet."""
 
     def test_all_diagrams_pass(self):
-        blocks = validate_mermaid.extract_mermaid_blocks("docs/AZ-305_CheatSheet.md")
+        blocks = validate_mermaid.extract_mermaid_blocks("docs/cheat_sheets/AZ-305.md")
         assert len(blocks) > 0, "Expected at least one Mermaid block in the cheat sheet"
         for i, block in enumerate(blocks):
             ok, err = validate_mermaid.validate_block(i, block)
@@ -469,7 +469,7 @@ class TestMainMultiFile:
             patch("validate_mermaid.validate_block", return_value=(True, "")),
             patch("validate_mermaid.Path.is_file", return_value=True),
         ):
-            result = validate_mermaid.run(["empty.md", "docs/AZ-305_CheatSheet.md"])
+            result = validate_mermaid.run(["empty.md", "docs/cheat_sheets/AZ-305.md"])
         assert result == 0
 
     def test_run_returns_1_when_second_file_has_failing_diagram(self):

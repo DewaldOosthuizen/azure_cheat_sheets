@@ -37,8 +37,9 @@ of this material, but the repository is not yet organized around those tracks.
 
 ```
 docs/
-  AZ-305_CheatSheet.md          — AZ-305 architect-focused cheat sheet
-  AZ-104_CheatSheet.md          — AZ-104 administrator-focused cheat sheet
+  cheat_sheets/
+    AZ-305.md                   — AZ-305 architect-focused cheat sheet
+    AZ-104.md                   — AZ-104 administrator-focused cheat sheet
   diagrams/<section>/           — standalone Mermaid diagram sources (one per file)
     az305-<slug>.mmd
     az104-<slug>.mmd

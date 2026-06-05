@@ -5,8 +5,8 @@ import pathlib
 import pytest
 
 REPO_ROOT = pathlib.Path(__file__).parent.parent
-AZ305 = REPO_ROOT / "docs" / "AZ-305_CheatSheet.md"
-AZ104 = REPO_ROOT / "docs" / "AZ-104_CheatSheet.md"
+AZ305 = REPO_ROOT / "docs" / "cheat_sheets/AZ-305.md"
+AZ104 = REPO_ROOT / "docs" / "cheat_sheets/AZ-104.md"
 
 
 @pytest.fixture(scope="module")
