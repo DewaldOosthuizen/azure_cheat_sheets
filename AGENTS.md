@@ -37,9 +37,12 @@ The cheat sheet is organized into ten top-level sections:
 
 ## Orientation for AI Agents
 
-This is a documentation-only repository. There is no application code, no
-build system, and no test suite. All meaningful content lives in
-docs/AZ-305_CheatSheet.md.
+This is a documentation-focused repository. All primary content lives in
+docs/AZ-305_CheatSheet.md and docs/AZ-104_CheatSheet.md.
+
+The repository includes a Makefile and Python/Node dev tooling for validation
+and CI. Run `make install` once after cloning to create the `.venv` and install
+all dependencies.
 
 When asked to add or update content:
 
@@ -93,11 +96,9 @@ When asked to add or update content:
 For pull requests, scope changes to one improvement area, explain what section
 changed and why it improves the cheat sheet for readers, and verify that
 Markdown and Mermaid blocks render cleanly on GitHub.
-Run `npx markdownlint-cli2 "**/*.md"` locally before opening a PR to catch
-formatting violations before CI runs them.
-Run `python3 scripts/validate_mermaid.py docs/AZ-305_CheatSheet.md` to
-validate Mermaid diagrams locally. Requires `mmdc` — install once with
-`npm install -g @mermaid-js/mermaid-cli`.
+Run `make install` once after cloning, then `make ci` before opening a PR — it
+replicates the full CI pipeline (markdownlint, Mermaid validation, ruff lint +
+format check, pytest with coverage).
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for branch naming, commit style, local
 checks, content conventions, and the PR checklist.
