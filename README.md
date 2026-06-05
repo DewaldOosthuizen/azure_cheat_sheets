@@ -3,6 +3,10 @@
 [![Lint](https://github.com/DewaldOosthuizen/azure_cheat_sheets/actions/workflows/lint.yml/badge.svg)](https://github.com/DewaldOosthuizen/azure_cheat_sheets/actions/workflows/lint.yml)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/paypalme/DewaldOosthuizen1)
 
+[![Live Site](https://img.shields.io/badge/Live%20Site-azure--cheat--sheets.vercel.app-black?logo=vercel&logoColor=white)](https://azure-cheat-sheets.vercel.app)
+
+You can view the live site at [https://azure-cheat-sheets.vercel.app](https://azure-cheat-sheets.vercel.app).
+
 Quick-reference study notes for Azure architecture decisions, with tables and
 Mermaid diagrams that compare services by tradeoff, scope, and common exam
 scenarios.
@@ -167,16 +171,6 @@ For pull requests:
 Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) for
 the full workflow, including how to pick up an issue, branch naming conventions,
 local validation steps, and the pull request process.
-
-## Hosting
-
-The documentation site is hosted on Vercel. Every push to `main` triggers a
-production deploy. Every pull request gets an automatic preview deployment URL
-from Vercel, visible in the PR checks section on GitHub.
-
-To deploy your own fork: import the repository on [vercel.com](https://vercel.com),
-leave the Framework Preset as **Other**, and Vercel will pick up `vercel.json`
-automatically.
 
 ## License
 
