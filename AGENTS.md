@@ -23,9 +23,10 @@ docs/
   cheat_sheets/
     AZ-305.md               — AZ-305 architect cheat sheet
     AZ-104.md               — AZ-104 administrator cheat sheet
+  <section>/                — shared section snippet files, one per domain
+    <section>.md            — e.g. networking/networking.md, security/security.md
   diagrams/<section>/       — standalone Mermaid sources (.mmd), one per file
-    az305-<slug>.mmd
-    az104-<slug>.mmd
+    <slug>.mmd              — exam-agnostic slug, e.g. decision-flow.mmd
   index.md                  — MkDocs home page
 scripts/
   validate_mermaid.py       — Mermaid diagram validation helper
@@ -142,11 +143,11 @@ See CONTRIBUTING.md §10 for the required callout format.
 
 ### Mermaid diagrams
 
-Each diagram lives in its own `docs/diagrams/<section>/<exam>-<slug>.mmd` file.
-Reference it from a cheat sheet via a PyMdown Snippets directive:
+Each diagram lives in its own `docs/diagrams/<section>/<slug>.mmd` file (exam-agnostic slug).
+Reference it from a section snippet file via a PyMdown Snippets directive:
 
     ```mermaid
-    --8<-- "diagrams/<section>/<exam>-<slug>.mmd"
+    --8<-- "diagrams/<section>/<slug>.mmd"
     ```
 
 The `.mmd` file is the single source of truth and may be shared across cheat

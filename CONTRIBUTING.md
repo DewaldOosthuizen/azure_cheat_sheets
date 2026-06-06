@@ -237,27 +237,53 @@ Closes #42
 - Keep scripts small and single-purpose.
 - Add or update tests in `tests/` whenever script behaviour changes.
 
+### Section Snippet Files
+
+Each top-level domain section lives in its own standalone snippet file:
+
+```
+docs/<section>/<section>.md
+```
+
+Examples: `docs/networking/networking.md`, `docs/security/security.md`.
+
+Both cheat sheets (`AZ-305.md` and `AZ-104.md`) include the shared snippet via:
+
+```text
+--8<-- "<section>/<section>.md"
+```
+
+Rules:
+
+- Add content to the shared snippet file, not directly to the cheat sheet.
+- If AZ-305 and AZ-104 require materially different content for a section, create
+  exam-specific variants (`<section>-az305.md`, `<section>-az104.md`) and include
+  both from the main `<section>.md` via nested `--8<--` directives.
+- Do NOT include `> Also relevant for:` callout blocks in snippet files.
+- Snippet files are excluded from the MkDocs navigation via the `not_in_nav:` block
+  in `mkdocs.yml` — they are not stand-alone pages.
+
 ### Diagram Files
 
-Mermaid diagrams live in `docs/diagrams/<section>/<exam>-<slug>.mmd`.
-They are referenced from the cheat-sheet Markdown files using a PyMdown Snippets
+Mermaid diagrams live in `docs/diagrams/<section>/<slug>.mmd`.
+They are referenced from section snippet files using a PyMdown Snippets
 directive inside a fenced code block:
 
 ```text
 ```mermaid
---8<-- "diagrams/<section>/<exam>-<slug>.mmd"
+--8<-- "diagrams/<section>/<slug>.mmd"
 ``` (closing backticks)
 ```
 
 Rules:
 
 - One diagram per `.mmd` file — do not combine multiple `flowchart`/`graph` blocks.
-- File names: `<exam>-<descriptive-slug>.mmd` (`az305-`, `az104-`). Use lowercase hyphens.
+- File names: `<descriptive-slug>.mmd`. Use lowercase hyphens. No exam prefix.
 - Section sub-directories match the top-level cheat-sheet section slugs:
   `networking`, `security`, `storage`, `monitoring`, `compute`, `identity`,
   `ha-dr`, `governance`, `messaging`, `waf`.
-- To reuse a diagram in a second cheat sheet, add the same `--8<-- "..."` reference
-  in that file. The `.mmd` source is the single source of truth.
+- To reuse a diagram in a second cheat sheet, reference the same `.mmd` file from
+  the shared section snippet. The `.mmd` source is the single source of truth.
 - Run `make mermaid-check` after adding or editing any `.mmd` file.
 
 ---

@@ -38,6 +38,11 @@ of this material, but the repository is not yet organized around those tracks.
 - [`AZ-305.md`](cheat_sheets/AZ-305.md) — AZ-305 architect-focused cheat sheet
 - [`AZ-104.md`](cheat_sheets/AZ-104.md) — AZ-104 administrator-focused cheat sheet
 
+Each top-level domain section is stored as a shared **section snippet file** under
+`docs/<section>/<section>.md` (e.g. `docs/networking/networking.md`). Both cheat
+sheets include the same snippet via `--8<-- "<section>/<section>.md"` directives,
+keeping domain content in a single place.
+
 The current cheat sheet is organized into these top-level sections:
 
 1. Networking
