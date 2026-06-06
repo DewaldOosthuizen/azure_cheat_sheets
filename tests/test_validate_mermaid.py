@@ -383,6 +383,33 @@ class TestTraversalGuard:
         captured = capsys.readouterr()
         assert "outside repository root" in captured.err
 
+    def test_run_rejects_path_with_matching_prefix_but_outside_root(self, capsys):
+        """A path whose string representation shares a prefix with repo_root but
+        resolves to a *different* directory must be rejected.
+
+        Example: root=/tmp/fake-repo-root, path=/tmp/fake-repo-root-extra/file.md
+        A naive startswith check would pass because the path string starts with
+        the root string.  Path.is_relative_to() correctly rejects it.
+        """
+        from pathlib import Path
+        import tempfile, os
+
+        with tempfile.TemporaryDirectory() as tmp:
+            # Create two sibling directories whose names share a prefix.
+            repo_root = Path(tmp) / "fake-repo-root"
+            sibling   = Path(tmp) / "fake-repo-root-extra"
+            repo_root.mkdir()
+            sibling.mkdir()
+            outside_file = sibling / "file.md"
+            outside_file.write_text("# test", encoding="utf-8")
+
+            with patch("validate_mermaid._repo_root", return_value=repo_root):
+                result = validate_mermaid.run([str(outside_file)])
+
+        assert result == 1
+        captured = capsys.readouterr()
+        assert "outside repository root" in captured.err
+
     def test_run_returns_0_for_valid_path(self, capsys):
         """A path within the repo root must pass the traversal guard."""
         from pathlib import Path

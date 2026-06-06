@@ -168,7 +168,7 @@ def _validate_mmd_file(mmd_path: str, repo_root: Path) -> int:
         print(f"Error: file not found: {mmd_path}", file=sys.stderr)
         return 1
     resolved = path.resolve()
-    if not str(resolved).startswith(str(repo_root) + "/") and resolved != repo_root:
+    if not (resolved == repo_root or resolved.is_relative_to(repo_root)):
         print(f"Error: path outside repository root: {mmd_path}", file=sys.stderr)
         return 1
     try:
@@ -218,7 +218,7 @@ def run(md_paths: list[str]) -> int:
             print(f"Error: file not found: {md_path}", file=sys.stderr)
             return 1
         resolved = Path(md_path).resolve()
-        if not str(resolved).startswith(str(repo_root) + "/") and resolved != repo_root:
+        if not (resolved == repo_root or resolved.is_relative_to(repo_root)):
             print(f"Error: path outside repository root: {md_path}", file=sys.stderr)
             return 1
         try:
