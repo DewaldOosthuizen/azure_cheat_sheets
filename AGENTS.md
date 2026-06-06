@@ -1,6 +1,0 @@
-- Removed the stray "dsf" artifact from the sections list
-- Expanded the Repository Structure block to include `docs/index.md` and the section subdirectory listing (matching README exactly)
-- Restored the full table-column guidance including the "if another type of comparison is needed" paragraph that was truncated
-- Added `make mermaid-check` instruction and the `.mmd` single-source-of-truth note to the Mermaid guidance
-- Added "MkDocs strict build" to the `make ci` description
-- No Code Exploration section — no codegraph, graphify, or understand artifacts are present in the repo
