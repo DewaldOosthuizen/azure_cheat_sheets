@@ -3,7 +3,7 @@
 [![Lint](https://github.com/DewaldOosthuizen/azure_cheat_sheets/actions/workflows/lint.yml/badge.svg)](https://github.com/DewaldOosthuizen/azure_cheat_sheets/actions/workflows/lint.yml)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/paypalme/DewaldOosthuizen1)
 
-You can view the live site at [![Live Site](https://img.shields.io/badge/Live%20Site-tech--cheat--sheets.vercel.app-black?logo=vercel&logoColor=white)](https://tech-cheat-sheets-and-notes.vercel.app)
+You can view the live site at [![Live Site](https://img.shields.io/badge/Live%20Site-tech--cheat--sheets--and--notes.vercel.app-black?logo=vercel&logoColor=white)](https://tech-cheat-sheets-and-notes.vercel.app)
 
 A growing collection of technology cheat sheets — quick-reference study notes organised by topic
 and certification track. Comparisons between services, decision flows, and Mermaid diagrams that
