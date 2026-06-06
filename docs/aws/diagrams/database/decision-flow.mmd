@@ -1,0 +1,11 @@
+flowchart TD
+    A{Relational database?} -->|Yes| B{Need MySQL/PostgreSQL compat?}
+    B -->|Standard| C[RDS]
+    B -->|High performance / cloud-native| D[Aurora]
+    A -->|No| E{Key-value or document NoSQL?}
+    E -->|Yes| F[DynamoDB]
+    E -->|No| G{In-memory caching?}
+    G -->|Yes| H[ElastiCache Redis or Memcached]
+    G -->|No| I{Analytics / OLAP data warehouse?}
+    I -->|Yes| J[Redshift]
+    I -->|No| K[Revisit requirements]

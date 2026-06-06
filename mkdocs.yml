@@ -69,3 +69,15 @@ nav:
       - Governance: azure/files/governance/governance.md
       - Messaging & Integration: azure/files/messaging/messaging.md
       - Well-Architected Framework: azure/files/waf/waf.md
+  - AWS:
+      - Compute: aws/files/compute/compute.md
+      - Networking: aws/files/networking/networking.md
+      - Storage: aws/files/storage/storage.md
+      - Identity & Access: aws/files/identity/identity.md
+      - Security: aws/files/security/security.md
+      - Database: aws/files/database/database.md
+      - Monitoring & Observability: aws/files/monitoring/monitoring.md
+      - Messaging & Integration: aws/files/messaging/messaging.md
+      - Governance: aws/files/governance/governance.md
+      - High Availability & DR: aws/files/ha-dr/ha-dr.md
+      - Well-Architected Framework: aws/files/waf/waf.md
