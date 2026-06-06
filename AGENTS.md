@@ -2,7 +2,7 @@
 
 Quick-reference study notes for Azure architecture decisions. Exam-prep content
 for AZ-305 (primary), with material that overlaps AZ-900, AZ-104, AZ-500, and
-AZ-700. Live site: https://azure-cheat-sheets.vercel.app
+AZ-700. Live site: <https://azure-cheat-sheets.vercel.app>
 
 ---
 
