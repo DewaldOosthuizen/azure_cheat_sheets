@@ -14,7 +14,7 @@
 ### System Identity Type Decision Flow
 
 ```mermaid
---8<-- "diagrams/identity/system-identity-type-decision-flow.mmd"
+--8<-- "azure/diagrams/identity/system-identity-type-decision-flow.mmd"
 ```
 
 > **Exam tip:** Prefer Managed Identity over Service Principal whenever the
@@ -36,7 +36,7 @@
 ### Entra Identity Scenario Decision Flow
 
 ```mermaid
---8<-- "diagrams/identity/entra-identity-scenario-decision-flow.mmd"
+--8<-- "azure/diagrams/identity/entra-identity-scenario-decision-flow.mmd"
 ```
 
 ## Hybrid Identity
@@ -96,7 +96,7 @@
 ### Entra ID Join Type Decision Flow
 
 ```mermaid
---8<-- "diagrams/identity/entra-id-join-type-decision-flow.mmd"
+--8<-- "azure/diagrams/identity/entra-id-join-type-decision-flow.mmd"
 ```
 
 ## RBAC Built-in Roles
@@ -113,5 +113,5 @@
 ### RBAC Role Assignment Decision Flow
 
 ```mermaid
---8<-- "diagrams/identity/rbac-role-assignment-decision-flow.mmd"
+--8<-- "azure/diagrams/identity/rbac-role-assignment-decision-flow.mmd"
 ```

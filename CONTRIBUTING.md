@@ -265,13 +265,13 @@ Rules:
 
 ### Diagram Files
 
-Mermaid diagrams live in `docs/diagrams/<section>/<slug>.mmd`.
+Mermaid diagrams live in `docs/azure/diagrams/<section>/<slug>.mmd`.
 They are referenced from section snippet files using a PyMdown Snippets
 directive inside a fenced code block:
 
 ```text
 ```mermaid
---8<-- "diagrams/<section>/<slug>.mmd"
+--8<-- "azure/diagrams/<section>/<slug>.mmd"
 ``` (closing backticks)
 ```
 

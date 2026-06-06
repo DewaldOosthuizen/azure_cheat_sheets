@@ -3,6 +3,8 @@
 
 Run once from repo root:
     python scripts/extract_sections.py
+
+Note: outputs to docs/azure/files/<domain>/<domain>.md
 """
 
 from __future__ import annotations
@@ -75,7 +77,7 @@ DIAGRAM_RENAMES: dict[str, str] = {
 def fix_diagram_refs(text: str) -> str:
     """Replace old exam-prefixed diagram paths with new agnostic paths."""
     for old, new in DIAGRAM_RENAMES.items():
-        text = text.replace(f"diagrams/{old}", f"diagrams/{new}")
+        text = text.replace(f"diagrams/{old}", f"azure/diagrams/{new}")
     return text
 
 
@@ -131,10 +133,10 @@ def extract_section(file_lines: list[str], heading_line: int, sep_line: int | No
 
 def main() -> None:
     az305_lines = (
-        (DOCS / "cheat_sheets/AZ-305.md").read_text(encoding="utf-8").splitlines(keepends=True)
+        (DOCS / "azure/cheat_sheets/AZ-305.md").read_text(encoding="utf-8").splitlines(keepends=True)
     )
     az104_lines = (
-        (DOCS / "cheat_sheets/AZ-104.md").read_text(encoding="utf-8").splitlines(keepends=True)
+        (DOCS / "azure/cheat_sheets/AZ-104.md").read_text(encoding="utf-8").splitlines(keepends=True)
     )
 
     # AZ-305 section boundaries (1-indexed line numbers)
@@ -176,7 +178,7 @@ def main() -> None:
         merged = merge_content(domain, az305_content, az104_content)
 
         # Write snippet file
-        snippet_dir = DOCS / domain
+        snippet_dir = DOCS / "azure" / "files" / domain
         snippet_dir.mkdir(exist_ok=True)
         snippet_file = snippet_dir / f"{domain}.md"
         snippet_file.write_text(merged, encoding="utf-8")

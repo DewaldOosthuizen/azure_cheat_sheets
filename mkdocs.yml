@@ -37,7 +37,7 @@ theme:
 markdown_extensions:
   # pymdownx.snippets: expands --8<-- "path/to/file" directives.
   # base_path is relative to docs_dir so paths in cheat sheets start
-  # with diagrams/ and resolve to docs/diagrams/.
+  # with azure/diagrams/ and resolve to docs/azure/diagrams/.
   - pymdownx.snippets:
       base_path:
         - docs
@@ -57,18 +57,19 @@ markdown_extensions:
   - admonition
 
 not_in_nav: |
-  networking/*.md
-  security/*.md
-  storage/*.md
-  monitoring/*.md
-  compute/*.md
-  identity/*.md
-  ha-dr/*.md
-  governance/*.md
-  messaging/*.md
-  waf/*.md
+  azure/files/networking/*.md
+  azure/files/security/*.md
+  azure/files/storage/*.md
+  azure/files/monitoring/*.md
+  azure/files/compute/*.md
+  azure/files/identity/*.md
+  azure/files/ha-dr/*.md
+  azure/files/governance/*.md
+  azure/files/messaging/*.md
+  azure/files/waf/*.md
 
 nav:
   - Home: index.md
-  - AZ-305 Architect: cheat_sheets/AZ-305.md
-  - AZ-104 Administrator: cheat_sheets/AZ-104.md
+  - Azure:
+      - AZ-305 Architect: azure/cheat_sheets/AZ-305.md
+      - AZ-104 Administrator: azure/cheat_sheets/AZ-104.md

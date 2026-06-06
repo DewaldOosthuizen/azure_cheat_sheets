@@ -1,7 +1,7 @@
 ## Management Hierarchy
 
 ```mermaid
---8<-- "diagrams/governance/management-hierarchy.mmd"
+--8<-- "azure/diagrams/governance/management-hierarchy.mmd"
 ```
 
 | Scope | Purpose |
@@ -34,7 +34,7 @@
 ## Governance Enforcement Decision Flow
 
 ```mermaid
---8<-- "diagrams/governance/governance-enforcement-decision-flow.mmd"
+--8<-- "azure/diagrams/governance/governance-enforcement-decision-flow.mmd"
 ```
 
 > **Exam tip:** When a question mentions enforcing a rule that blocks or auto-remediates
@@ -106,7 +106,7 @@ directories or maintaining guest accounts.
 ### Policy Assignment Scope Hierarchy
 
 ```mermaid
---8<-- "diagrams/governance/policy-assignment-scope-hierarchy.mmd"
+--8<-- "azure/diagrams/governance/policy-assignment-scope-hierarchy.mmd"
 ```
 
 ## Management Groups & Subscriptions
@@ -122,5 +122,5 @@ directories or maintaining guest accounts.
 ### Management Hierarchy Decision Flow
 
 ```mermaid
---8<-- "diagrams/governance/management-hierarchy-decision-flow.mmd"
+--8<-- "azure/diagrams/governance/management-hierarchy-decision-flow.mmd"
 ```

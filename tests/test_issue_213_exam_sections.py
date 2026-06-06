@@ -33,8 +33,8 @@ DOMAINS = [
     "waf",
 ]
 
-AZ305_PATH = DOCS / "cheat_sheets" / "AZ-305.md"
-AZ104_PATH = DOCS / "cheat_sheets" / "AZ-104.md"
+AZ305_PATH = DOCS / "azure" / "cheat_sheets" / "AZ-305.md"
+AZ104_PATH = DOCS / "azure" / "cheat_sheets" / "AZ-104.md"
 
 
 # ── Issue 1: Snippet files exist and cheat sheets reference them ──────────────
@@ -43,12 +43,12 @@ AZ104_PATH = DOCS / "cheat_sheets" / "AZ-104.md"
 class TestSnippetFilesExist:
     @pytest.mark.parametrize("domain", DOMAINS)
     def test_snippet_file_exists(self, domain: str) -> None:
-        snippet = DOCS / domain / f"{domain}.md"
+        snippet = DOCS / "azure" / "files" / domain / f"{domain}.md"
         assert snippet.exists(), f"Missing snippet file: {snippet}"
 
     @pytest.mark.parametrize("domain", DOMAINS)
     def test_snippet_file_non_empty(self, domain: str) -> None:
-        snippet = DOCS / domain / f"{domain}.md"
+        snippet = DOCS / "azure" / "files" / domain / f"{domain}.md"
         if snippet.exists():
             assert snippet.stat().st_size > 0, f"Snippet file is empty: {snippet}"
 
@@ -62,7 +62,7 @@ class TestAZ305SnippetDirectives:
     @pytest.mark.parametrize("domain", DOMAINS)
     def test_snippet_directive_in_az305(self, domain: str) -> None:
         text = self._az305_text()
-        directive = f'--8<-- "{domain}/{domain}.md"'
+        directive = f'--8<-- "azure/files/{domain}/{domain}.md"'
         assert directive in text, f"AZ-305.md missing snippet directive: {directive}"
 
     def test_exam_track_index_retained(self) -> None:
@@ -85,7 +85,7 @@ class TestAZ104SnippetDirectives:
     @pytest.mark.parametrize("domain", DOMAINS)
     def test_snippet_directive_in_az104(self, domain: str) -> None:
         text = self._az104_text()
-        directive = f'--8<-- "{domain}/{domain}.md"'
+        directive = f'--8<-- "azure/files/{domain}/{domain}.md"'
         assert directive in text, f"AZ-104.md missing snippet directive: {directive}"
 
 
@@ -94,7 +94,7 @@ class TestSnippetFileContent:
 
     @pytest.mark.parametrize("domain", DOMAINS)
     def test_no_also_relevant_for_in_snippet(self, domain: str) -> None:
-        snippet = DOCS / domain / f"{domain}.md"
+        snippet = DOCS / "azure" / "files" / domain / f"{domain}.md"
         if snippet.exists():
             text = snippet.read_text(encoding="utf-8")
             assert "> Also relevant for:" not in text, (
@@ -102,43 +102,43 @@ class TestSnippetFileContent:
             )
 
     def test_networking_snippet_has_load_balancers(self) -> None:
-        snippet = DOCS / "networking" / "networking.md"
+        snippet = DOCS / "azure" / "files" / "networking" / "networking.md"
         if snippet.exists():
             text = snippet.read_text(encoding="utf-8")
             assert "## Load Balancers" in text or "Load Balancer" in text
 
     def test_security_snippet_has_defender(self) -> None:
-        snippet = DOCS / "security" / "security.md"
+        snippet = DOCS / "azure" / "files" / "security" / "security.md"
         if snippet.exists():
             text = snippet.read_text(encoding="utf-8")
             assert "Defender" in text
 
     def test_storage_snippet_has_redundancy(self) -> None:
-        snippet = DOCS / "storage" / "storage.md"
+        snippet = DOCS / "azure" / "files" / "storage" / "storage.md"
         if snippet.exists():
             text = snippet.read_text(encoding="utf-8")
             assert "LRS" in text or "redundancy" in text.lower()
 
     def test_compute_snippet_has_functions(self) -> None:
-        snippet = DOCS / "compute" / "compute.md"
+        snippet = DOCS / "azure" / "files" / "compute" / "compute.md"
         if snippet.exists():
             text = snippet.read_text(encoding="utf-8")
             assert "Azure Functions" in text or "Functions" in text
 
     def test_identity_snippet_has_rbac(self) -> None:
-        snippet = DOCS / "identity" / "identity.md"
+        snippet = DOCS / "azure" / "files" / "identity" / "identity.md"
         if snippet.exists():
             text = snippet.read_text(encoding="utf-8")
             assert "RBAC" in text or "Entra" in text
 
     def test_governance_snippet_has_policy(self) -> None:
-        snippet = DOCS / "governance" / "governance.md"
+        snippet = DOCS / "azure" / "files" / "governance" / "governance.md"
         if snippet.exists():
             text = snippet.read_text(encoding="utf-8")
             assert "Policy" in text
 
     def test_waf_snippet_has_pillars(self) -> None:
-        snippet = DOCS / "waf" / "waf.md"
+        snippet = DOCS / "azure" / "files" / "waf" / "waf.md"
         if snippet.exists():
             text = snippet.read_text(encoding="utf-8")
             assert "Reliability" in text or "pillar" in text.lower()
@@ -149,7 +149,7 @@ class TestSnippetDiagramPaths:
 
     @pytest.mark.parametrize("domain", DOMAINS)
     def test_no_az305_prefix_in_snippet(self, domain: str) -> None:
-        snippet = DOCS / domain / f"{domain}.md"
+        snippet = DOCS / "azure" / "files" / domain / f"{domain}.md"
         if snippet.exists():
             text = snippet.read_text(encoding="utf-8")
             assert "diagrams/" + domain + "/az305-" not in text, (
@@ -158,7 +158,7 @@ class TestSnippetDiagramPaths:
 
     @pytest.mark.parametrize("domain", DOMAINS)
     def test_no_az104_prefix_in_snippet(self, domain: str) -> None:
-        snippet = DOCS / domain / f"{domain}.md"
+        snippet = DOCS / "azure" / "files" / domain / f"{domain}.md"
         if snippet.exists():
             text = snippet.read_text(encoding="utf-8")
             assert "diagrams/" + domain + "/az104-" not in text, (
@@ -262,7 +262,7 @@ NEW_MMD = [
     "waf/five-pillar-summary.mmd",
 ]
 
-DIAGRAMS = DOCS / "diagrams"
+DIAGRAMS = DOCS / "azure" / "diagrams"
 
 
 class TestMmdFilesRenamed:
@@ -291,7 +291,7 @@ class TestMkdocsNotInNav:
     @pytest.mark.parametrize("domain", DOMAINS)
     def test_domain_listed_in_not_in_nav(self, domain: str) -> None:
         text = self._mkdocs_text()
-        assert f"{domain}/*.md" in text, f"mkdocs.yml not_in_nav missing entry: {domain}/*.md"
+        assert f"azure/files/{domain}/*.md" in text, f"mkdocs.yml not_in_nav missing entry: {domain}/*.md"
 
     def test_not_in_nav_before_nav_key(self) -> None:
         text = self._mkdocs_text()
@@ -364,7 +364,7 @@ class TestMakefileMdFilesValidate:
     def test_static_list_removed(self) -> None:
         text = self._makefile_text()
         assert (
-            "docs/cheat_sheets/AZ-305.md docs/cheat_sheets/AZ-104.md docs/index.md" not in text
+            "docs/azure/cheat_sheets/AZ-305.md docs/azure/cheat_sheets/AZ-104.md docs/index.md" not in text
         ), "Makefile still has old static MD_FILES_VALIDATE list"
 
 

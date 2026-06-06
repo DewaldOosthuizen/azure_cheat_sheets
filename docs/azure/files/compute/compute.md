@@ -19,7 +19,7 @@
 ## Compute Decision Flow
 
 ```mermaid
---8<-- "diagrams/compute/compute-decision-flow.mmd"
+--8<-- "azure/diagrams/compute/compute-decision-flow.mmd"
 ```
 
 > **Exam tip:** Start with OS control (VM), then container vs. code, then
@@ -63,7 +63,7 @@
 | **Azure App Service** | Always-on web/API hosting (code or container) | .NET, Node.js, Java, Python, PHP, Ruby, or custom container images | Web apps and APIs with full framework/runtime control |
 
 ```mermaid
---8<-- "diagrams/compute/runtime-language-fit-functions-vs-logic-apps-vs-app-service.mmd"
+--8<-- "azure/diagrams/compute/runtime-language-fit-functions-vs-logic-apps-vs-app-service.mmd"
 ```
 
 > **Exam tip:** If the requirement starts with "which language can I run?",
@@ -74,7 +74,7 @@
 ## Serverless / Event-Driven Selection
 
 ```mermaid
---8<-- "diagrams/compute/serverless-event-driven-selection.mmd"
+--8<-- "azure/diagrams/compute/serverless-event-driven-selection.mmd"
 ```
 
 > **Exam tip:** Use Azure Functions (Consumption) for short-lived, stateless, code-first triggers.
@@ -96,7 +96,7 @@
 | **Ops overhead** | Minimal | Low | High (cluster upgrades, node pools) |
 
 ```mermaid
---8<-- "diagrams/compute/azure-container-apps-vs-aks-vs-aci.mmd"
+--8<-- "azure/diagrams/compute/azure-container-apps-vs-aks-vs-aci.mmd"
 ```
 
 > **Exam tip:** ACA uses KEDA under the hood and supports **scale-to-zero** for HTTP and
@@ -117,7 +117,7 @@
 | **Virtual Nodes (Virtual Kubelet)** | Node (virtual) | Cluster | Burst overflow pods to Azure Container Instances instantly | No node provisioning delay; serverless burst; ACI pricing |
 
 ```mermaid
---8<-- "diagrams/compute/aks-scaling-mechanisms.mmd"
+--8<-- "azure/diagrams/compute/aks-scaling-mechanisms.mmd"
 ```
 
 > **Exam tip:** HPA scales pods; Cluster Autoscaler scales nodes. Virtual Nodes
@@ -183,7 +183,7 @@ in an **InfiniBand-enabled** cluster via a Placement Group or proximity placemen
 #### Tier Selection Decision Flow
 
 ```mermaid
---8<-- "diagrams/compute/azure-cache-for-redis.mmd"
+--8<-- "azure/diagrams/compute/azure-cache-for-redis.mmd"
 ```
 
 ## Availability Sets vs Availability Zones
@@ -203,7 +203,7 @@ in an **InfiniBand-enabled** cluster via a Placement Group or proximity placemen
 ### Availability Decision Flow
 
 ```mermaid
---8<-- "diagrams/compute/availability-decision-flow.mmd"
+--8<-- "azure/diagrams/compute/availability-decision-flow.mmd"
 ```
 
 ## VM Sizing Families
@@ -221,5 +221,5 @@ in an **InfiniBand-enabled** cluster via a Placement Group or proximity placemen
 ### VM Family Decision Flow
 
 ```mermaid
---8<-- "diagrams/compute/vm-family-decision-flow.mmd"
+--8<-- "azure/diagrams/compute/vm-family-decision-flow.mmd"
 ```

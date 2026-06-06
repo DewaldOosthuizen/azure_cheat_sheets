@@ -1,11 +1,9 @@
-# Azure Cheat Sheets
+# Tech Cheat Sheets
 
 [![Lint](https://github.com/DewaldOosthuizen/azure_cheat_sheets/actions/workflows/lint.yml/badge.svg)](https://github.com/DewaldOosthuizen/azure_cheat_sheets/actions/workflows/lint.yml)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/paypalme/DewaldOosthuizen1)
 
-[![Live Site](https://img.shields.io/badge/Live%20Site-azure--cheat--sheets.vercel.app-black?logo=vercel&logoColor=white)](https://azure-cheat-sheets.vercel.app)
-
-You can view the live site at [https://azure-cheat-sheets.vercel.app](https://azure-cheat-sheets.vercel.app).
+You can view the live site at [![Live Site](https://img.shields.io/badge/Live%20Site-tech--cheat--sheets.vercel.app-black?logo=vercel&logoColor=white)](https://tech-cheat-sheets.vercel.app)
 
 Quick-reference study notes for Azure architecture decisions, with tables and
 Mermaid diagrams that compare services by tradeoff, scope, and common exam
@@ -17,56 +15,25 @@ This repository is an exam-prep reference, not a step-by-step tutorial. The
 documents focus on choosing the right Azure service for a requirement and
 understanding why that choice fits.
 
-## Target Audience and Scope
-
-The current content is aimed primarily at candidates preparing for
-`AZ-305: Designing Microsoft Azure Infrastructure Solutions`.
-
-Coverage is strongest where the exam expects architectural comparison and
-decision-making. Configuration walkthroughs, portal screenshots, and hands-on
-labs are intentionally out of scope. Other Azure exams may overlap with parts
-of this material, but the repository is not yet organized around those tracks.
-
-### Exam Overlap
-
-| Exam | Focus | Relevant Sections |
-|------|-------|-------------------|
-| AZ-900 | Fundamentals | Networking (overview), Storage, Compute, Identity & Access (Entra basics) |
-| AZ-104 | Administrator | All sections — administrator-level depth on RBAC, Networking, HA & DR; Messaging & Integration (partial — Service Bus, Event Hub namespace admin) |
-| AZ-305 | Architect | All sections including Messaging & Integration and Well-Architected Framework |
-| AZ-500 | Security Engineer | Security (full), Identity & Access (full), Networking (partial), Monitoring & Observability (partial), Governance (partial) |
-| AZ-700 | Network Engineer | Networking (full), High Availability & Disaster Recovery (partial) |
-
 ## Repository Structure
 
 ```
 docs/
-  cheat_sheets/
-    AZ-305.md                   — AZ-305 architect-focused cheat sheet
-    AZ-104.md                   — AZ-104 administrator-focused cheat sheet
-  diagrams/<section>/           — standalone Mermaid diagram sources (one per file)
-    az305-<slug>.mmd
-    az104-<slug>.mmd
+  azure/
+    cheat_sheets/
+      AZ-305.md                 — AZ-305 architect-focused cheat sheet
+      AZ-104.md                 — AZ-104 administrator-focused cheat sheet
+    diagrams/<section>/         — standalone Mermaid diagram sources (one per file)
+      <slug>.mmd                — exam-agnostic slug
+    files/<section>/            — shared section snippet files
+      <section>.md              — e.g. networking/networking.md
   index.md                      — MkDocs site home page
 mkdocs.yml                      — MkDocs Material site configuration
 ```
 
-Section directories under `docs/diagrams/`:
+Section directories under `docs/azure/diagrams/` and `docs/azure/files/`:
 `networking`, `security`, `storage`, `monitoring`, `compute`, `identity`,
 `ha-dr`, `governance`, `messaging`, `waf`
-
-The cheat sheets are organized into these top-level sections:
-
-1. Networking
-2. Security
-3. Storage
-4. Monitoring & Observability
-5. Compute
-6. Identity & Access
-7. High Availability & Disaster Recovery
-8. Governance
-9. Messaging & Integration
-10. Well-Architected Framework
 
 ## Viewing the Documentation Site
 
@@ -124,12 +91,12 @@ When editing or adding material:
 
 - Use Mermaid diagrams for branching decision flows where a visual aid is more
   useful than prose alone. Each diagram lives in its own
-  `docs/diagrams/<section>/<exam>-<slug>.mmd` file and is referenced from the
+  `docs/azure/diagrams/<section>/<slug>.mmd` file and is referenced from the
   cheat sheet via a PyMdown Snippets directive:
 
   ```text
   ```mermaid
-  --8<-- "diagrams/<section>/<exam>-<slug>.mmd"
+  --8<-- "azure/diagrams/<section>/<slug>.mmd"
   ``` (closing backticks)
   ```
 

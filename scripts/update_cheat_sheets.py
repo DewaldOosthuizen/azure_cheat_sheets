@@ -35,7 +35,7 @@ def remove_also_relevant_for_lines(lines: list[str]) -> list[str]:
 
 def update_az305() -> None:
     """Rewrite AZ-305.md so each section body is replaced with a snippet directive."""
-    src = DOCS / "cheat_sheets/AZ-305.md"
+    src = DOCS / "azure/cheat_sheets/AZ-305.md"
     lines = src.read_text(encoding="utf-8").splitlines(keepends=True)
 
     # First, handle the "Also relevant for:" callouts - remove them from AZ-305
@@ -120,7 +120,7 @@ def update_az305() -> None:
 
 def update_az104() -> None:
     """Rewrite AZ-104.md so each section body is replaced with a snippet directive."""
-    src = DOCS / "cheat_sheets/AZ-104.md"
+    src = DOCS / "azure/cheat_sheets/AZ-104.md"
     lines = src.read_text(encoding="utf-8").splitlines(keepends=True)
 
     section_headings = {

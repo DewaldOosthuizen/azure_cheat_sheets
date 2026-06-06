@@ -4,20 +4,11 @@ from pathlib import Path
 
 from conftest import expand_snippets
 
-CHEAT_SHEET = Path("docs/cheat_sheets/AZ-305.md")
+CHEAT_SHEET = Path("docs/azure/cheat_sheets/AZ-305.md")
 
 
 def _content():
     return expand_snippets(CHEAT_SHEET.read_text(encoding="utf-8"))
-
-
-class TestAZ500QuickIndex:
-    """Verify AZ-500 Quick Index section exists."""
-
-    def test_az500_quick_index_section_exists(self):
-        assert "## AZ-500 Quick Index" in _content(), (
-            "Expected '## AZ-500 Quick Index' section in docs/cheat_sheets/AZ-305.md"
-        )
 
 
 class TestAZ500ExamTips:

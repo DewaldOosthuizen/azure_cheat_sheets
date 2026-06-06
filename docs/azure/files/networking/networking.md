@@ -15,7 +15,7 @@
 ### Decision Flow
 
 ```mermaid
---8<-- "diagrams/networking/decision-flow.mmd"
+--8<-- "azure/diagrams/networking/decision-flow.mmd"
 ```
 
 ## API Management (APIM)
@@ -44,7 +44,7 @@
 ### Decision Flow — API Gateway Selection
 
 ```mermaid
---8<-- "diagrams/networking/decision-flow-api-gateway-selection.mmd"
+--8<-- "azure/diagrams/networking/decision-flow-api-gateway-selection.mmd"
 ```
 
 > **Exam Tips**
@@ -76,7 +76,7 @@
 > - Service Endpoint = traffic stays on Azure backbone but PaaS still has public IP
 
 ```mermaid
---8<-- "diagrams/networking/virtual-networks-vnet.mmd"
+--8<-- "azure/diagrams/networking/virtual-networks-vnet.mmd"
 ```
 
 > **Exam tip (AZ-700):** Prefer ExpressRoute over VPN Gateway when the requirement
@@ -138,7 +138,7 @@
 ### Decision Flow — Network Security Selection
 
 ```mermaid
---8<-- "diagrams/networking/decision-flow-network-security-selection.mmd"
+--8<-- "azure/diagrams/networking/decision-flow-network-security-selection.mmd"
 ```
 
 > **Exam tip (AZ-500):** For AZ-500, know the layered network security model:
@@ -171,7 +171,7 @@
 ## Connectivity Patterns
 
 ```mermaid
---8<-- "diagrams/networking/connectivity-patterns.mmd"
+--8<-- "azure/diagrams/networking/connectivity-patterns.mmd"
 ```
 
 | Pattern | Description |
@@ -196,7 +196,7 @@
 ### Load Balancer SKU Decision Flow
 
 ```mermaid
---8<-- "diagrams/networking/load-balancer-sku-decision-flow.mmd"
+--8<-- "azure/diagrams/networking/load-balancer-sku-decision-flow.mmd"
 ```
 
 ## NSG vs ASG
@@ -211,7 +211,7 @@
 ### NSG Rule Evaluation
 
 ```mermaid
---8<-- "diagrams/networking/nsg-rule-evaluation.mmd"
+--8<-- "azure/diagrams/networking/nsg-rule-evaluation.mmd"
 ```
 
 ## VNet Connectivity
@@ -228,5 +228,5 @@
 ### VNet Connectivity Decision Flow
 
 ```mermaid
---8<-- "diagrams/networking/vnet-connectivity-decision-flow.mmd"
+--8<-- "azure/diagrams/networking/vnet-connectivity-decision-flow.mmd"
 ```

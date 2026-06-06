@@ -6,7 +6,7 @@ Snippet expansion
 Fenced blocks may contain a PyMdown Snippets directive instead of inline source::
 
     ```mermaid
-    --8<-- "diagrams/networking/az305-load-balancer.mmd"
+    --8<-- "azure/diagrams/networking/load-balancer-sku-decision-flow.mmd"
     ```
 
 When such a directive is found the content is read from the referenced file
@@ -92,7 +92,7 @@ def _expand_top_level_snippets(content: str, base: Path) -> str:
 
     This handles cheat-sheet files that include section snippet files via
     ``--8<-- "networking/networking.md"`` directives.  Those section snippets
-    in turn contain ``mermaid`` fences with ``--8<-- "diagrams/..."`` directives.
+    in turn contain ``mermaid`` fences with ``--8<-- "azure/diagrams/..."`` directives.
     We expand the file-level includes up to _MAX_EXPAND_DEPTH passes so that
     ``extract_mermaid_blocks`` can find the inline mermaid fences.
 
@@ -137,8 +137,8 @@ def extract_mermaid_blocks(
     configuration in mkdocs.yml.  When ``None`` it defaults to ``repo_root/docs``
     (i.e. ``<repo>/docs/``), which is the value configured in this project.
     Using the Markdown file's parent directory would be wrong: the cheat-sheet
-    files live in ``docs/cheat_sheets/`` but snippets are authored relative to
-    ``docs/`` so that ``diagrams/…`` resolves to ``docs/diagrams/…``.
+    files live in ``docs/azure/cheat_sheets/`` but snippets are authored relative to
+    ``docs/`` so that ``azure/diagrams/…`` resolves to ``docs/azure/diagrams/…``.
     """
     try:
         with open(md_path, encoding="utf-8") as f:

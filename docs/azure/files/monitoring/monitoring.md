@@ -1,7 +1,7 @@
 ## Azure Monitor Ecosystem
 
 ```mermaid
---8<-- "diagrams/monitoring/azure-monitor-ecosystem.mmd"
+--8<-- "azure/diagrams/monitoring/azure-monitor-ecosystem.mmd"
 ```
 
 ## Key Services
@@ -58,7 +58,7 @@
 ### Diagnostic Settings Routing
 
 ```mermaid
---8<-- "diagrams/monitoring/diagnostic-settings-routing.mmd"
+--8<-- "azure/diagrams/monitoring/diagnostic-settings-routing.mmd"
 ```
 
 > **Exam tip:** Activity Log is a sub-component of Azure Monitor, not a standalone service.
@@ -96,5 +96,5 @@
 ### Agent Selection Decision Flow
 
 ```mermaid
---8<-- "diagrams/monitoring/agent-selection-decision-flow.mmd"
+--8<-- "azure/diagrams/monitoring/agent-selection-decision-flow.mmd"
 ```

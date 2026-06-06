@@ -6,8 +6,8 @@ import pytest
 from conftest import expand_snippets
 
 REPO_ROOT = pathlib.Path(__file__).parent.parent
-AZ305 = REPO_ROOT / "docs" / "cheat_sheets/AZ-305.md"
-AZ104 = REPO_ROOT / "docs" / "cheat_sheets/AZ-104.md"
+AZ305 = REPO_ROOT / "docs" / "azure/cheat_sheets/AZ-305.md"
+AZ104 = REPO_ROOT / "docs" / "azure/cheat_sheets/AZ-104.md"
 
 
 @pytest.fixture(scope="module")

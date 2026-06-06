@@ -21,7 +21,7 @@
 > plan for rehydration latency in recovery scenarios.
 
 ```mermaid
---8<-- "diagrams/storage/blob-storage-access-tiers.mmd"
+--8<-- "azure/diagrams/storage/blob-storage-access-tiers.mmd"
 ```
 
 ## Storage Redundancy
@@ -36,7 +36,7 @@
 | **RA-GZRS** | Storage redundancy | Maximum durability with continuous secondary read access | GZRS + secondary endpoint always readable; 99.99% read SLA |
 
 ```mermaid
---8<-- "diagrams/storage/storage-redundancy.mmd"
+--8<-- "azure/diagrams/storage/storage-redundancy.mmd"
 ```
 
 > **Exam tip:** Choose RA-GRS when zone resilience in the primary region is
@@ -136,7 +136,7 @@
 ### Managed Disk Selection
 
 ```mermaid
---8<-- "diagrams/storage/managed-disk-selection.mmd"
+--8<-- "azure/diagrams/storage/managed-disk-selection.mmd"
 ```
 
 ## Storage Account Replication
@@ -155,5 +155,5 @@
 ### Storage Replication Decision Flow
 
 ```mermaid
---8<-- "diagrams/storage/storage-replication-decision-flow.mmd"
+--8<-- "azure/diagrams/storage/storage-replication-decision-flow.mmd"
 ```

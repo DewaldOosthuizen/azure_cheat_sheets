@@ -17,12 +17,14 @@ Live site: https://azure-cheat-sheets.vercel.app
 
 ```
 docs/
-  cheat_sheets/
-    AZ-305.md               — AZ-305 architect cheat sheet
-    AZ-104.md               — AZ-104 administrator cheat sheet
-  diagrams/<section>/       — standalone Mermaid sources (.mmd), one per file
-    az305-<slug>.mmd
-    az104-<slug>.mmd
+  azure/
+    cheat_sheets/
+      AZ-305.md             — AZ-305 architect cheat sheet
+      AZ-104.md             — AZ-104 administrator cheat sheet
+    diagrams/<section>/     — standalone Mermaid sources (.mmd), one per file
+      <slug>.mmd            — exam-agnostic slug
+    files/<section>/        — shared section snippet files
+      <section>.md          — e.g. networking/networking.md
   index.md                  — MkDocs home page
 scripts/
   validate_mermaid.py       — Mermaid diagram validation helper
@@ -36,7 +38,7 @@ Makefile                    — all local CI targets
 openspec/archive/           — closed spec/impl records (read-only reference)
 ```
 
-Section directories under `docs/diagrams/`:
+Section directories under `docs/azure/diagrams/` and `docs/azure/files/`:
 `networking`, `security`, `storage`, `monitoring`, `compute`, `identity`,
 `ha-dr`, `governance`, `messaging`, `waf`
 
@@ -132,12 +134,12 @@ When adding or editing content, follow these rules precisely:
 
 ## Mermaid Diagrams
 
-Each diagram lives in its own `docs/diagrams/<section>/<exam>-<slug>.mmd` file.
+Each diagram lives in its own `docs/azure/diagrams/<section>/<slug>.mmd` file.
 Reference it from a cheat sheet via a PyMdown Snippets directive:
 
 ```text
 ```mermaid
---8<-- "diagrams/<section>/<exam>-<slug>.mmd"
+--8<-- "azure/diagrams/<section>/<slug>.mmd"
 ```
 ```
 

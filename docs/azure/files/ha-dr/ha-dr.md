@@ -10,7 +10,7 @@
 | **Region Pair** | Microsoft-paired regions for geo-replication |
 
 ```mermaid
---8<-- "diagrams/ha-dr/key-concepts.mmd"
+--8<-- "azure/diagrams/ha-dr/key-concepts.mmd"
 ```
 
 ## Azure Site Recovery (ASR)
@@ -50,13 +50,13 @@
 ### HA & DR Decision Flow
 
 ```mermaid
---8<-- "diagrams/ha-dr/ha-dr-decision-flow.mmd"
+--8<-- "azure/diagrams/ha-dr/ha-dr-decision-flow.mmd"
 ```
 
 ## Recovery Services Vault Structure
 
 ```mermaid
---8<-- "diagrams/ha-dr/recovery-services-vault-structure.mmd"
+--8<-- "azure/diagrams/ha-dr/recovery-services-vault-structure.mmd"
 ```
 
 > **⚠️ Deprecation warning:** Recovery Services Vault is the legacy backup store (VMs, SQL

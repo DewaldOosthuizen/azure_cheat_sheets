@@ -36,10 +36,10 @@ LINT_TARGETS     = scripts/ tests/
 # Validate all Markdown files that contain Mermaid fences or snippet references to .mmd files.
 # This includes both cheat sheets and the section snippet files under docs/<section>/.
 MD_FILES_VALIDATE := $(shell find docs -name '*.md' \
-  ! -path 'docs/diagrams/*' \
+  ! -path 'docs/azure/diagrams/*' \
   ! -path 'docs/overrides/*')
 # All standalone .mmd diagram files
-MMD_FILES_VALIDATE := $(shell find docs/diagrams -name '*.mmd' 2>/dev/null)
+MMD_FILES_VALIDATE := $(shell find docs/azure/diagrams -name '*.mmd' 2>/dev/null)
 
 # ── Phony declarations ─────────────────────────────────────────────────────────
 .PHONY: help venv install \

@@ -20,13 +20,14 @@ AZ-700. Live site: <https://azure-cheat-sheets.vercel.app>
 
 ```
 docs/
-  cheat_sheets/
-    AZ-305.md               — AZ-305 architect cheat sheet
-    AZ-104.md               — AZ-104 administrator cheat sheet
-  <section>/                — shared section snippet files, one per domain
-    <section>.md            — e.g. networking/networking.md, security/security.md
-  diagrams/<section>/       — standalone Mermaid sources (.mmd), one per file
-    <slug>.mmd              — exam-agnostic slug, e.g. decision-flow.mmd
+  azure/
+    cheat_sheets/
+      AZ-305.md             — AZ-305 architect cheat sheet
+      AZ-104.md             — AZ-104 administrator cheat sheet
+    diagrams/<section>/     — standalone Mermaid sources (.mmd), one per file
+      <slug>.mmd            — exam-agnostic slug, e.g. decision-flow.mmd
+    files/<section>/        — shared section snippet files, one per domain
+      <section>.md          — e.g. networking/networking.md, security/security.md
   index.md                  — MkDocs home page
 scripts/
   validate_mermaid.py       — Mermaid diagram validation helper
@@ -40,7 +41,7 @@ Makefile                    — all local CI targets
 openspec/archive/           — closed spec/impl records (read-only reference)
 ```
 
-Section directories under `docs/diagrams/`:
+Section directories under `docs/azure/diagrams/` and `docs/azure/files/`:
 `networking`, `security`, `storage`, `monitoring`, `compute`, `identity`,
 `ha-dr`, `governance`, `messaging`, `waf`
 
@@ -143,11 +144,11 @@ See CONTRIBUTING.md §10 for the required callout format.
 
 ### Mermaid diagrams
 
-Each diagram lives in its own `docs/diagrams/<section>/<slug>.mmd` file (exam-agnostic slug).
+Each diagram lives in its own `docs/azure/diagrams/<section>/<slug>.mmd` file (exam-agnostic slug).
 Reference it from a section snippet file via a PyMdown Snippets directive:
 
     ```mermaid
-    --8<-- "diagrams/<section>/<slug>.mmd"
+    --8<-- "azure/diagrams/<section>/<slug>.mmd"
     ```
 
 The `.mmd` file is the single source of truth and may be shared across cheat

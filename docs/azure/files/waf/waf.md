@@ -15,13 +15,13 @@
 > **Cross-reference:** See [High Availability & Disaster Recovery](#high-availability--disaster-recovery) for Reliability patterns, [Security](#security) for defence-in-depth, [Networking — CDN](#content-delivery-cdn) for CDN/Front Door, [Compute — Caching](#caching) for Redis tier selection, [Networking](#networking) for DDoS, and [Governance](#governance) for cost control tooling.
 
 ```mermaid
---8<-- "diagrams/waf/five-pillar-summary.mmd"
+--8<-- "azure/diagrams/waf/five-pillar-summary.mmd"
 ```
 
 ### Decision Flow — Pillar Trade-off Navigator
 
 ```mermaid
---8<-- "diagrams/waf/decision-flow-pillar-trade-off-navigator.mmd"
+--8<-- "azure/diagrams/waf/decision-flow-pillar-trade-off-navigator.mmd"
 ```
 
 ## Reliability — SLA Target Mapping
@@ -93,11 +93,11 @@ Composite = 1 − (1 − SLA₁) × (1 − SLA₂) for parallel components.
 ### Tag Inheritance Architecture
 
 ```mermaid
---8<-- "diagrams/waf/tag-inheritance-architecture.mmd"
+--8<-- "azure/diagrams/waf/tag-inheritance-architecture.mmd"
 ```
 
 ### Cost Management Decision Flow
 
 ```mermaid
---8<-- "diagrams/waf/cost-management-decision-flow.mmd"
+--8<-- "azure/diagrams/waf/cost-management-decision-flow.mmd"
 ```

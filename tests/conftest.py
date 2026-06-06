@@ -7,8 +7,8 @@ from pathlib import Path
 
 # The PyMdown Snippets base_path as configured in mkdocs.yml.
 # Snippet paths inside cheat-sheet files are relative to docs/, e.g.
-#   --8<-- "diagrams/networking/decision-flow.mmd"
-# resolves to  <repo>/docs/diagrams/networking/decision-flow.mmd
+#   --8<-- "azure/diagrams/networking/decision-flow.mmd"
+# resolves to  <repo>/docs/azure/diagrams/networking/decision-flow.mmd
 REPO_ROOT = Path(__file__).parent.parent
 SNIPPET_BASE = REPO_ROOT / "docs"
 

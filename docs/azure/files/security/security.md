@@ -49,7 +49,7 @@
 > granularity, or migration away from legacy Access Policies.
 
 ```mermaid
---8<-- "diagrams/security/key-vault-access-decision-flow.mmd"
+--8<-- "azure/diagrams/security/key-vault-access-decision-flow.mmd"
 ```
 
 Use **Managed Identity** bound to an Azure RBAC role (e.g. Key Vault Secrets User)
@@ -127,5 +127,5 @@ as the credential-free pattern — no secrets stored in application configuratio
 ### Defender for Cloud Coverage
 
 ```mermaid
---8<-- "diagrams/security/defender-for-cloud-coverage.mmd"
+--8<-- "azure/diagrams/security/defender-for-cloud-coverage.mmd"
 ```

@@ -16,7 +16,7 @@
 ## Decision Flowchart
 
 ```mermaid
---8<-- "diagrams/messaging/decision-flowchart.mmd"
+--8<-- "azure/diagrams/messaging/decision-flowchart.mmd"
 ```
 
 ## Logic Apps vs Azure Functions vs Durable Functions
@@ -28,7 +28,7 @@
 | **Durable Functions** | Long-running, stateful orchestrations in code | Orchestrator / Activity / Entity | Stateful (via storage) | Consumption (includes storage cost) |
 
 ```mermaid
---8<-- "diagrams/messaging/logic-apps-vs-azure-functions-vs-durable-functions.mmd"
+--8<-- "azure/diagrams/messaging/logic-apps-vs-azure-functions-vs-durable-functions.mmd"
 ```
 
 > **Exam tip:** Choose Logic Apps when the requirement mentions low-code orchestration or pre-built SaaS connectors. Choose Durable Functions for long-running, stateful, or fan-out/fan-in patterns written in code. Choose Azure Functions for stateless, event-driven compute with no orchestration requirement.
@@ -74,11 +74,11 @@
 ### Messaging Decision Flow
 
 ```mermaid
---8<-- "diagrams/messaging/messaging-decision-flow.mmd"
+--8<-- "azure/diagrams/messaging/messaging-decision-flow.mmd"
 ```
 
 ### Service Bus SKU Decision Flow
 
 ```mermaid
---8<-- "diagrams/messaging/service-bus-sku-decision-flow.mmd"
+--8<-- "azure/diagrams/messaging/service-bus-sku-decision-flow.mmd"
 ```
