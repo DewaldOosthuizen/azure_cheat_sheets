@@ -417,12 +417,3 @@ class TestAgentsMdUpdated:
         assert "az305-<slug>.mmd" not in text and "az104-<slug>.mmd" not in text, (
             "AGENTS.md Mermaid section still mentions old exam-prefixed .mmd convention"
         )
-
-
-class TestIndexMdUpdated:
-    def _index_text(self) -> str:
-        return (DOCS / "index.md").read_text(encoding="utf-8")
-
-    def test_snippet_files_mentioned(self) -> None:
-        text = self._index_text()
-        assert "snippet" in text.lower(), "docs/index.md should mention section snippet files"

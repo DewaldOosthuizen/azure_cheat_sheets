@@ -1,9 +1,10 @@
-# GitHub Copilot Instructions — azure-cheat-sheets
+# GitHub Copilot Instructions — tech-cheat-sheets
 
 ## Project Overview
 
-Quick-reference study notes for Azure architecture decisions. Aimed primarily at
-candidates preparing for AZ-305: Designing Microsoft Azure Infrastructure Solutions.
+Quick-reference study notes for technology certifications and architecture decisions.
+Currently focused on Microsoft Azure (AZ-305 primary, with AZ-104, AZ-900, AZ-500, and AZ-700
+overlap). More topics will be added under their own subdirectory inside `docs/` over time.
 The focus is service selection, architectural trade-offs, and decision reasoning —
 not step-by-step walkthroughs, portal screenshots, or hands-on labs.
 
@@ -11,7 +12,7 @@ All primary content lives in the Markdown files under `docs/`. A Makefile with
 Python and Node dev tooling handles validation and CI (markdownlint, Mermaid
 validation, ruff lint + format check, pytest with coverage, MkDocs strict build).
 
-Live site: https://azure-cheat-sheets.vercel.app
+Live site: https://tech-cheat-sheets.vercel.app
 
 ## Repository Structure
 

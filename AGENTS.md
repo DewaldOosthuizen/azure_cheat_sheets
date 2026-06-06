@@ -1,8 +1,9 @@
-# AGENTS.md — Azure Cheat Sheets
+# AGENTS.md — Tech Cheat Sheets
 
-Quick-reference study notes for Azure architecture decisions. Exam-prep content
-for AZ-305 (primary), with material that overlaps AZ-900, AZ-104, AZ-500, and
-AZ-700. Live site: <https://azure-cheat-sheets.vercel.app>
+Quick-reference study notes for technology certifications and architecture decisions.
+Currently focused on Microsoft Azure (AZ-305, AZ-104, with overlap for AZ-900, AZ-500, AZ-700).
+More topics will be added under their own subdirectory inside `docs/`.
+Live site: <https://tech-cheat-sheets.vercel.app>
 
 ---
 

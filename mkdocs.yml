@@ -1,11 +1,10 @@
-site_name: Azure Cheat Sheets
+site_name: Tech Cheat Sheets
 site_description: >-
-  Quick-reference study notes for Azure architecture decisions.
-  Covers AZ-305, AZ-104, AZ-900, AZ-500, and AZ-700.
-site_url: https://azure-cheat-sheets.vercel.app/
-
-repo_name: DewaldOosthuizen/azure-cheat-sheets
-repo_url: https://github.com/DewaldOosthuizen/azure-cheat-sheets
+  Quick-reference study notes for tech certifications.  Currently focused on Microsoft Azure exams, with
+  content organized by domain (e.g. "networking") and exam track (e.g. "AZ-305 architect").
+site_url: https://tech-cheat-sheets.vercel.app/
+repo_name: DewaldOosthuizen/tech-cheat-sheets
+repo_url: https://github.com/DewaldOosthuizen/tech-cheat-sheets
 
 docs_dir: docs
 site_dir: site

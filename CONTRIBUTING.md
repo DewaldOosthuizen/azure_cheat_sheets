@@ -1,4 +1,4 @@
-# Contributing to Azure Cheat Sheets
+# Contributing to Tech Cheat Sheets
 
 Thank you for contributing. This guide covers the full workflow for making
 clean, reviewable contributions to this repository.
@@ -242,15 +242,15 @@ Closes #42
 Each top-level domain section lives in its own standalone snippet file:
 
 ```
-docs/<section>/<section>.md
+docs/azure/files/<section>/<section>.md
 ```
 
-Examples: `docs/networking/networking.md`, `docs/security/security.md`.
+Examples: `docs/azure/files/networking/networking.md`, `docs/azure/files/security/security.md`.
 
 Both cheat sheets (`AZ-305.md` and `AZ-104.md`) include the shared snippet via:
 
 ```text
---8<-- "<section>/<section>.md"
+--8<-- "azure/files/<section>/<section>.md"
 ```
 
 Rules:
