@@ -64,4 +64,4 @@ for the full contributor workflow.
 
 ## License
 
-This project is licensed under the [`GPL-3.0`](LICENSE).
+This project is licensed under the [`GPL-3.0`](https://github.com/DewaldOosthuizen/tech-cheat-sheets/blob/main/LICENSE).

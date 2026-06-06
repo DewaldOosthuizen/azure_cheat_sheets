@@ -459,15 +459,18 @@ class TestValidateBlockDegenerateSvg:
         assert msg == "mmdc produced an empty/degenerate SVG (possible silent render failure)"
 
 
+_REAL_MD = "docs/azure/files/networking/networking.md"
+
+
 class TestRealCheatSheet:
-    """Integration tests that read docs/azure/files/networking/networking.md from disk."""
+    """Integration tests that read a real domain page from disk."""
 
     def test_extracts_nonzero_blocks_from_real_cheat_sheet(self):
-        blocks = validate_mermaid.extract_mermaid_blocks("docs/azure/files/networking/networking.md")
+        blocks = validate_mermaid.extract_mermaid_blocks(_REAL_MD)
         assert len(blocks) > 0, "Expected at least one Mermaid block in the cheat sheet"
 
     def test_all_blocks_are_non_empty_strings(self):
-        blocks = validate_mermaid.extract_mermaid_blocks("docs/azure/files/networking/networking.md")
+        blocks = validate_mermaid.extract_mermaid_blocks(_REAL_MD)
         for i, b in enumerate(blocks):
             assert isinstance(b, str) and b.strip(), f"Block {i + 1} is empty or not a string"
 
@@ -477,7 +480,7 @@ class TestRealCheatSheetIntegration:
     """Integration tests that invoke validate_block against the real cheat sheet."""
 
     def test_all_diagrams_pass(self):
-        blocks = validate_mermaid.extract_mermaid_blocks("docs/azure/files/networking/networking.md")
+        blocks = validate_mermaid.extract_mermaid_blocks(_REAL_MD)
         assert len(blocks) > 0, "Expected at least one Mermaid block in the cheat sheet"
         for i, block in enumerate(blocks):
             ok, err = validate_mermaid.validate_block(i, block)
