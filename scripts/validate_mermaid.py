@@ -128,16 +128,15 @@ def extract_mermaid_blocks(
     referenced ``.mmd`` file so the actual diagram source is validated.
 
     The function also performs a pre-pass to expand top-level snippet directives
-    (e.g. ``--8<-- "networking/networking.md"`` in a cheat-sheet file) before
-    extracting mermaid blocks.  This handles the two-level indirection introduced
-    by the section-snippet refactor: cheat sheet → section snippet → .mmd file.
+    (e.g. ``--8<-- "azure/diagrams/networking/decision-flow.mmd"`` inside a section
+    snippet file) before extracting mermaid blocks.
 
     *snippet_base* controls the root directory used to resolve snippet paths.
     It must match the ``base_path`` entry in the ``pymdownx.snippets``
     configuration in mkdocs.yml.  When ``None`` it defaults to ``repo_root/docs``
     (i.e. ``<repo>/docs/``), which is the value configured in this project.
-    Using the Markdown file's parent directory would be wrong: the cheat-sheet
-    files live in ``docs/azure/cheat_sheets/`` but snippets are authored relative to
+    Using the Markdown file's parent directory would be wrong: snippet files
+    live in ``docs/azure/files/<domain>/`` but diagram paths are authored relative to
     ``docs/`` so that ``azure/diagrams/…`` resolves to ``docs/azure/diagrams/…``.
     """
     try:

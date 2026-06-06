@@ -1,3 +1,5 @@
+# Well-Architected Framework
+
 > **Exam Focus:** Use WAF pillars to *justify* design decisions in
 > case-study questions — not just to name the correct service.
 > Relevant for **AZ-305** only; not assessed in AZ-900 or AZ-104.
@@ -12,7 +14,7 @@
 | Operational Excellence | Safe deployments; observable operations | Azure Monitor, Log Analytics, Deployment Slots, IaC | Blue/green deploys; alerting strategy |
 | Performance Efficiency | Scale to meet demand; minimise latency | Azure CDN, Front Door, VMSS, Cosmos DB, Redis Cache | Horizontal vs vertical scale; caching layers |
 
-> **Cross-reference:** See [High Availability & Disaster Recovery](#high-availability--disaster-recovery) for Reliability patterns, [Security](#security) for defence-in-depth, [Networking — CDN](#content-delivery-cdn) for CDN/Front Door, [Compute — Caching](#caching) for Redis tier selection, [Networking](#networking) for DDoS, and [Governance](#governance) for cost control tooling.
+> **Cross-reference:** See [High Availability & Disaster Recovery](../ha-dr/ha-dr.md) for Reliability patterns, [Security](../security/security.md) for defence-in-depth, [Networking — CDN](../networking/networking.md#content-delivery-cdn) for CDN/Front Door, [Compute — Caching](../compute/compute.md#caching) for Redis tier selection, [Networking](../networking/networking.md) for DDoS, and [Governance](../governance/governance.md) for cost control tooling.
 
 ```mermaid
 --8<-- "azure/diagrams/waf/five-pillar-summary.mmd"
@@ -69,7 +71,7 @@ Composite = 1 − (1 − SLA₁) × (1 − SLA₂) for parallel components.
 
 > **Tools:** Azure Advisor surfaces rightsizing and idle resource
 > recommendations. Azure Budgets + Cost Alerts prevent spend overruns.
-> See [Governance](#governance) for Policy and Budget configuration patterns.
+> See [Governance](../governance/governance.md) for Policy and Budget configuration patterns.
 
 > **Exam tip:** In case-study questions, every design decision maps to at
 > least one WAF pillar. When asked *why* a solution is recommended, frame

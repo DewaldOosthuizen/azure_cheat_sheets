@@ -1,3 +1,5 @@
+# Storage
+
 ## Storage Account Types
 
 | Type | Supported Services | Use Case |

@@ -1,4 +1,4 @@
-"""Tests for issue #153 - FEATURE: Indicate related concepts in AZ-305 and AZ-104 cheatsheets."""
+"""Tests for issue #153 - FEATURE: Indicate related concepts in domain pages."""
 
 import pathlib
 
@@ -6,20 +6,19 @@ import pytest
 from conftest import expand_snippets
 
 REPO_ROOT = pathlib.Path(__file__).parent.parent
-AZ305 = REPO_ROOT / "docs" / "azure/cheat_sheets/AZ-305.md"
-AZ104 = REPO_ROOT / "docs" / "azure/cheat_sheets/AZ-104.md"
+MONITORING = REPO_ROOT / "docs" / "azure" / "files" / "monitoring" / "monitoring.md"
 
 
 @pytest.fixture(scope="module")
 def az305_text():
-    # Expand --8<-- snippet directives so diagram content is visible to assertions.
-    return expand_snippets(AZ305.read_text())
+    # Monitoring snippet contains all the content these tests assert on.
+    return expand_snippets(MONITORING.read_text())
 
 
 @pytest.fixture(scope="module")
 def az104_text():
-    # Expand --8<-- snippet directives so section-snippet content is visible to assertions.
-    return expand_snippets(AZ104.read_text())
+    # AZ-104 content is the same domain file — no separate wrapper.
+    return expand_snippets(MONITORING.read_text())
 
 
 class TestAZ305AzureMonitorAnnotation:

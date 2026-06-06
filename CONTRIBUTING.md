@@ -241,27 +241,23 @@ Closes #42
 
 Each top-level domain section lives in its own standalone snippet file:
 
+Each domain page lives at:
+
 ```
 docs/azure/files/<section>/<section>.md
 ```
 
 Examples: `docs/azure/files/networking/networking.md`, `docs/azure/files/security/security.md`.
 
-Both cheat sheets (`AZ-305.md` and `AZ-104.md`) include the shared snippet via:
-
-```text
---8<-- "azure/files/<section>/<section>.md"
-```
+Domain pages are first-class MkDocs pages listed directly in the nav. All content goes into the
+domain page for that section — there are no cheat-sheet wrapper files.
 
 Rules:
 
-- Add content to the shared snippet file, not directly to the cheat sheet.
-- If AZ-305 and AZ-104 require materially different content for a section, create
-  exam-specific variants (`<section>-az305.md`, `<section>-az104.md`) and include
-  both from the main `<section>.md` via nested `--8<--` directives.
-- Do NOT include `> Also relevant for:` callout blocks in snippet files.
-- Snippet files are excluded from the MkDocs navigation via the `not_in_nav:` block
-  in `mkdocs.yml` — they are not stand-alone pages.
+- Add content to the domain page file for that section.
+- Mermaid diagrams are stored as standalone `.mmd` files and included via `--8<--` directives
+  inside fenced blocks in the domain page.
+- Do NOT include `> Also relevant for:` callout blocks.
 
 ### Diagram Files
 

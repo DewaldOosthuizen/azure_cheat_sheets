@@ -1,7 +1,7 @@
 site_name: Tech Cheat Sheets
 site_description: >-
-  Quick-reference study notes for tech certifications.  Currently focused on Microsoft Azure exams, with
-  content organized by domain (e.g. "networking") and exam track (e.g. "AZ-305 architect").
+  Quick-reference study notes for tech certifications and architecture decisions.
+  Currently focused on Microsoft Azure, organised by domain.
 site_url: https://tech-cheat-sheets.vercel.app/
 repo_name: DewaldOosthuizen/tech-cheat-sheets
 repo_url: https://github.com/DewaldOosthuizen/tech-cheat-sheets
@@ -55,20 +55,17 @@ markdown_extensions:
       permalink: true
   - admonition
 
-not_in_nav: |
-  azure/files/networking/*.md
-  azure/files/security/*.md
-  azure/files/storage/*.md
-  azure/files/monitoring/*.md
-  azure/files/compute/*.md
-  azure/files/identity/*.md
-  azure/files/ha-dr/*.md
-  azure/files/governance/*.md
-  azure/files/messaging/*.md
-  azure/files/waf/*.md
-
 nav:
   - Home: index.md
   - Azure:
-      - AZ-305 Architect: azure/cheat_sheets/AZ-305.md
-      - AZ-104 Administrator: azure/cheat_sheets/AZ-104.md
+      - Exam Coverage: azure/files/exams/exams.md
+      - Networking: azure/files/networking/networking.md
+      - Security: azure/files/security/security.md
+      - Storage: azure/files/storage/storage.md
+      - Monitoring & Observability: azure/files/monitoring/monitoring.md
+      - Compute: azure/files/compute/compute.md
+      - Identity & Access: azure/files/identity/identity.md
+      - High Availability & DR: azure/files/ha-dr/ha-dr.md
+      - Governance: azure/files/governance/governance.md
+      - Messaging & Integration: azure/files/messaging/messaging.md
+      - Well-Architected Framework: azure/files/waf/waf.md

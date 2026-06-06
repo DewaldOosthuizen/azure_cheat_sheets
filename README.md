@@ -23,9 +23,8 @@ Each new topic lives under its own subdirectory inside `docs/`.
 ```
 docs/
   azure/
-    cheat_sheets/
-      AZ-305.md                 — AZ-305 architect-focused cheat sheet
-      AZ-104.md                 — AZ-104 administrator-focused cheat sheet
+    files/
+      <domain>/<domain>.md       — One page per domain (networking, security, …)
     diagrams/<section>/         — standalone Mermaid diagram sources (one per file)
       <slug>.mmd                — exam-agnostic slug
     files/<section>/            — shared section snippet files

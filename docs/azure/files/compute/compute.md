@@ -1,3 +1,5 @@
+# Compute
+
 ## Compute Options
 
 | Service | Type | Use Case |

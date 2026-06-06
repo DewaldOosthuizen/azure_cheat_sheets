@@ -1,3 +1,5 @@
+# Identity & Access
+
 ## Entra ID (Azure AD) Concepts
 
 | Concept | Description |

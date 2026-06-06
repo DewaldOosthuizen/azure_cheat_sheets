@@ -1,3 +1,5 @@
+# High Availability & Disaster Recovery
+
 ## Key Concepts
 
 | Term | Definition |

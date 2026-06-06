@@ -11,28 +11,22 @@ Content is comparison-oriented: tables, decision flowcharts, and Mermaid diagram
 
 ## Microsoft Azure
 
-Organised by domain. Each section covers service selection and architectural trade-offs across
-multiple Azure exams.
+Organised by domain. Each section covers service selection and architectural trade-offs.
 
-| Exam | Focus | Cheat Sheet |
-|------|-------|-------------|
-| AZ-305 | Architect — infrastructure design decisions | [AZ-305](azure/cheat_sheets/AZ-305.md) |
-| AZ-104 | Administrator — operational depth | [AZ-104](azure/cheat_sheets/AZ-104.md) |
+| Domain | Content |
+|--------|---------|
+| [Networking](azure/files/networking/networking.md) | Load balancers, APIM, VNet, DNS, NSG, DDoS, CDN |
+| [Security](azure/files/security/security.md) | Defender for Cloud, Key Vault, Sentinel, Encryption |
+| [Storage](azure/files/storage/storage.md) | Blob, Files, Disk, SQL, Cosmos DB, redundancy |
+| [Monitoring & Observability](azure/files/monitoring/monitoring.md) | Azure Monitor, Log Analytics, Alerts, Agents |
+| [Compute](azure/files/compute/compute.md) | VMs, App Service, Functions, AKS, ACI, Batch |
+| [Identity & Access](azure/files/identity/identity.md) | Entra ID, RBAC, PIM, Hybrid Identity |
+| [High Availability & DR](azure/files/ha-dr/ha-dr.md) | ASR, Azure Backup, Availability Zones |
+| [Governance](azure/files/governance/governance.md) | Policy, Blueprints, Management Groups, Cost |
+| [Messaging & Integration](azure/files/messaging/messaging.md) | Service Bus, Event Grid, Logic Apps, Functions |
+| [Well-Architected Framework](azure/files/waf/waf.md) | Five pillars, trade-off navigator |
 
-Both cheat sheets share the same domain sections, each with relevant overlap noted inline:
-
-- Networking
-- Security
-- Storage
-- Monitoring & Observability
-- Compute
-- Identity & Access
-- High Availability & Disaster Recovery
-- Governance
-- Messaging & Integration
-- Well-Architected Framework
-
-Exam coverage per section:
+Exam coverage by domain:
 
 | Section | AZ-900 | AZ-104 | AZ-305 | AZ-500 | AZ-700 |
 |---------|--------|--------|--------|--------|--------|

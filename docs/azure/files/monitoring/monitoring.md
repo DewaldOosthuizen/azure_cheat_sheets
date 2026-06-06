@@ -1,3 +1,5 @@
+# Monitoring & Observability
+
 ## Azure Monitor Ecosystem
 
 ```mermaid

@@ -33,12 +33,8 @@ DOMAINS = [
     "waf",
 ]
 
-AZ305_PATH = DOCS / "azure" / "cheat_sheets" / "AZ-305.md"
-AZ104_PATH = DOCS / "azure" / "cheat_sheets" / "AZ-104.md"
 
-
-# ── Issue 1: Snippet files exist and cheat sheets reference them ──────────────
-
+# ── Issue 1: Snippet files exist ──────────────────────────────────────────────
 
 class TestSnippetFilesExist:
     @pytest.mark.parametrize("domain", DOMAINS)
@@ -51,42 +47,6 @@ class TestSnippetFilesExist:
         snippet = DOCS / "azure" / "files" / domain / f"{domain}.md"
         if snippet.exists():
             assert snippet.stat().st_size > 0, f"Snippet file is empty: {snippet}"
-
-
-class TestAZ305SnippetDirectives:
-    """AZ-305 should reference snippet files via --8<-- directives."""
-
-    def _az305_text(self) -> str:
-        return AZ305_PATH.read_text(encoding="utf-8")
-
-    @pytest.mark.parametrize("domain", DOMAINS)
-    def test_snippet_directive_in_az305(self, domain: str) -> None:
-        text = self._az305_text()
-        directive = f'--8<-- "azure/files/{domain}/{domain}.md"'
-        assert directive in text, f"AZ-305.md missing snippet directive: {directive}"
-
-    def test_exam_track_index_retained(self) -> None:
-        text = self._az305_text()
-        assert "## Exam Track Index" in text, (
-            "AZ-305.md Exam Track Index table was removed — it must be retained"
-        )
-
-    def test_exam_track_index_table_row(self) -> None:
-        text = self._az305_text()
-        assert "| AZ-900 | AZ-104 | AZ-305 | AZ-500 | AZ-700 |" in text
-
-
-class TestAZ104SnippetDirectives:
-    """AZ-104 should reference snippet files via --8<-- directives."""
-
-    def _az104_text(self) -> str:
-        return AZ104_PATH.read_text(encoding="utf-8")
-
-    @pytest.mark.parametrize("domain", DOMAINS)
-    def test_snippet_directive_in_az104(self, domain: str) -> None:
-        text = self._az104_text()
-        directive = f'--8<-- "azure/files/{domain}/{domain}.md"'
-        assert directive in text, f"AZ-104.md missing snippet directive: {directive}"
 
 
 class TestSnippetFileContent:
@@ -277,27 +237,29 @@ class TestMmdFilesRenamed:
         assert new_path.exists(), f"New exam-agnostic .mmd file missing: {new_path}"
 
 
-# ── Issue 3: mkdocs.yml not_in_nav block ──────────────────────────────────────
+# ── Issue 3: mkdocs.yml nav uses domain pages ─────────────────────────────────
 
 
-class TestMkdocsNotInNav:
+class TestMkdocsNavDomainPages:
     def _mkdocs_text(self) -> str:
         return (REPO_ROOT / "mkdocs.yml").read_text(encoding="utf-8")
 
-    def test_not_in_nav_key_present(self) -> None:
-        text = self._mkdocs_text()
-        assert "not_in_nav:" in text, "mkdocs.yml missing not_in_nav: key"
-
     @pytest.mark.parametrize("domain", DOMAINS)
-    def test_domain_listed_in_not_in_nav(self, domain: str) -> None:
+    def test_domain_in_nav(self, domain: str) -> None:
         text = self._mkdocs_text()
-        assert f"azure/files/{domain}/*.md" in text, f"mkdocs.yml not_in_nav missing entry: {domain}/*.md"
+        assert f"azure/files/{domain}/{domain}.md" in text, (
+            f"mkdocs.yml nav missing direct entry for: {domain}"
+        )
 
-    def test_not_in_nav_before_nav_key(self) -> None:
+    def test_exam_coverage_page_in_nav(self) -> None:
         text = self._mkdocs_text()
-        nav_pos = text.find("\nnav:")
-        not_in_nav_pos = text.find("not_in_nav:")
-        assert not_in_nav_pos < nav_pos, "not_in_nav: block should appear before nav: in mkdocs.yml"
+        assert "azure/files/exams/exams.md" in text, (
+            "mkdocs.yml nav missing Exam Coverage index page"
+        )
+
+    def test_not_in_nav_removed(self) -> None:
+        text = self._mkdocs_text()
+        assert "not_in_nav:" not in text, "not_in_nav: key should be removed now files are in nav"
 
 
 # ── Issue 4: conftest.py recursive expand_snippets ────────────────────────────
@@ -363,9 +325,9 @@ class TestMakefileMdFilesValidate:
 
     def test_static_list_removed(self) -> None:
         text = self._makefile_text()
-        assert (
-            "docs/azure/cheat_sheets/AZ-305.md docs/azure/cheat_sheets/AZ-104.md docs/index.md" not in text
-        ), "Makefile still has old static MD_FILES_VALIDATE list"
+        assert "cheat_sheets/AZ-305.md" not in text, (
+            "Makefile still references old cheat_sheets wrapper files"
+        )
 
 
 # ── Issue 6: Documentation updates ───────────────────────────────────────────

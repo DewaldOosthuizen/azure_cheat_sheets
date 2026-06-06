@@ -19,9 +19,8 @@ Live site: https://tech-cheat-sheets.vercel.app
 ```
 docs/
   azure/
-    cheat_sheets/
-      AZ-305.md             — AZ-305 architect cheat sheet
-      AZ-104.md             — AZ-104 administrator cheat sheet
+    files/
+      <domain>/<domain>.md   — One page per domain (networking, security, …)
     diagrams/<section>/     — standalone Mermaid sources (.mmd), one per file
       <slug>.mmd            — exam-agnostic slug
     files/<section>/        — shared section snippet files

@@ -22,9 +22,17 @@ Live site: <https://tech-cheat-sheets.vercel.app>
 ```
 docs/
   azure/
-    cheat_sheets/
-      AZ-305.md             — AZ-305 architect cheat sheet
-      AZ-104.md             — AZ-104 administrator cheat sheet
+    files/
+      networking/networking.md   — Networking domain page
+      security/security.md       — Security domain page
+      storage/storage.md         — Storage domain page
+      monitoring/monitoring.md   — Monitoring & Observability domain page
+      compute/compute.md         — Compute domain page
+      identity/identity.md       — Identity & Access domain page
+      ha-dr/ha-dr.md             — High Availability & DR domain page
+      governance/governance.md   — Governance domain page
+      messaging/messaging.md     — Messaging & Integration domain page
+      waf/waf.md                 — Well-Architected Framework domain page
     diagrams/<section>/     — standalone Mermaid sources (.mmd), one per file
       <slug>.mmd            — exam-agnostic slug, e.g. decision-flow.mmd
     files/<section>/        — shared section snippet files, one per domain

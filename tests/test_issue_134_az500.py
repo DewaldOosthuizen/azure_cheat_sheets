@@ -4,15 +4,19 @@ from pathlib import Path
 
 from conftest import expand_snippets
 
-CHEAT_SHEET = Path("docs/azure/cheat_sheets/AZ-305.md")
+SNIPPETS_DIR = Path("docs/azure/files")
 
 
 def _content():
-    return expand_snippets(CHEAT_SHEET.read_text(encoding="utf-8"))
+    """Concatenate all expanded snippet files into a single string for assertion."""
+    parts = []
+    for snippet in sorted(SNIPPETS_DIR.glob("*/*.md")):
+        parts.append(expand_snippets(snippet.read_text(encoding="utf-8")))
+    return "\n".join(parts)
 
 
 class TestAZ500ExamTips:
-    """Verify at least 5 AZ-500 exam tip callouts exist."""
+    """Verify at least 5 AZ-500 exam tip callouts exist across all domain pages."""
 
     def test_at_least_five_az500_exam_tips(self):
         count = _content().count("> **Exam tip (AZ-500):**")

@@ -45,8 +45,7 @@ jobs:
       - name: Validate Mermaid diagrams
         run: |
           python3 scripts/validate_mermaid.py \
-            docs/azure/cheat_sheets/AZ-305.md \
-            docs/azure/cheat_sheets/AZ-104.md \
+            $(find docs/azure/files -name '*.md' | sort) \
             $(find docs/azure/diagrams -name '*.mmd' | sort)
 
   docs-build:
