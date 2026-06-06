@@ -499,9 +499,7 @@ class TestMainMultiFile:
             patch("validate_mermaid.validate_block", return_value=(True, "")),
             patch("validate_mermaid.Path.is_file", return_value=True),
         ):
-            result = validate_mermaid.run(
-                ["empty.md", "docs/azure/files/networking/networking.md"]
-            )
+            result = validate_mermaid.run(["empty.md", "docs/azure/files/networking/networking.md"])
         assert result == 0
 
 
@@ -584,9 +582,7 @@ class TestValidateMmdFile:
 
     def test_returns_1_when_file_not_found(self, tmp_path):
         repo_root = tmp_path
-        result = validate_mermaid._validate_mmd_file(
-            str(tmp_path / "nonexistent.mmd"), repo_root
-        )
+        result = validate_mermaid._validate_mmd_file(str(tmp_path / "nonexistent.mmd"), repo_root)
         assert result == 1
 
     def test_returns_1_when_path_outside_repo_root(self, tmp_path):

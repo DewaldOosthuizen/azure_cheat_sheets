@@ -36,6 +36,7 @@ DOMAINS = [
 
 # ── Issue 1: Snippet files exist ──────────────────────────────────────────────
 
+
 class TestSnippetFilesExist:
     @pytest.mark.parametrize("domain", DOMAINS)
     def test_snippet_file_exists(self, domain: str) -> None:

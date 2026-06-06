@@ -133,10 +133,14 @@ def extract_section(file_lines: list[str], heading_line: int, sep_line: int | No
 
 def main() -> None:
     az305_lines = (
-        (DOCS / "azure/cheat_sheets/AZ-305.md").read_text(encoding="utf-8").splitlines(keepends=True)
+        (DOCS / "azure/cheat_sheets/AZ-305.md")
+        .read_text(encoding="utf-8")
+        .splitlines(keepends=True)
     )
     az104_lines = (
-        (DOCS / "azure/cheat_sheets/AZ-104.md").read_text(encoding="utf-8").splitlines(keepends=True)
+        (DOCS / "azure/cheat_sheets/AZ-104.md")
+        .read_text(encoding="utf-8")
+        .splitlines(keepends=True)
     )
 
     # AZ-305 section boundaries (1-indexed line numbers)
