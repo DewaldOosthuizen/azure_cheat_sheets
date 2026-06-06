@@ -18,7 +18,8 @@ def az305_text():
 
 @pytest.fixture(scope="module")
 def az104_text():
-    return AZ104.read_text()
+    # Expand --8<-- snippet directives so section-snippet content is visible to assertions.
+    return expand_snippets(AZ104.read_text())
 
 
 class TestAZ305AzureMonitorAnnotation:

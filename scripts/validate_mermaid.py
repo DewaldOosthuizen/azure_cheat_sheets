@@ -83,6 +83,38 @@ def _expand_snippet(block_src: str, base_dir: Path) -> str | None:
         raise RuntimeError(f"Cannot read snippet file {abs_path}: {exc}") from exc
 
 
+_TOP_LEVEL_SNIPPET_RE = re.compile(r"""--8<--\s+["']([^"']+)["']""")
+_MAX_EXPAND_DEPTH = 10
+
+
+def _expand_top_level_snippets(content: str, base: Path) -> str:
+    """Recursively expand all top-level --8<-- directives in *content*.
+
+    This handles cheat-sheet files that include section snippet files via
+    ``--8<-- "networking/networking.md"`` directives.  Those section snippets
+    in turn contain ``mermaid`` fences with ``--8<-- "diagrams/..."`` directives.
+    We expand the file-level includes up to _MAX_EXPAND_DEPTH passes so that
+    ``extract_mermaid_blocks`` can find the inline mermaid fences.
+
+    Directives referencing missing files are left unexpanded.
+    """
+
+    def _replace(m: re.Match) -> str:
+        rel = m.group(1)
+        abs_path = (base / rel).resolve()
+        try:
+            return abs_path.read_text(encoding="utf-8")
+        except OSError:
+            return m.group(0)
+
+    for _ in range(_MAX_EXPAND_DEPTH):
+        expanded = _TOP_LEVEL_SNIPPET_RE.sub(_replace, content)
+        if expanded == content:
+            break
+        content = expanded
+    return content
+
+
 def extract_mermaid_blocks(
     md_path,
     *,
@@ -94,6 +126,11 @@ def extract_mermaid_blocks(
     When *expand_snippets* is True (the default), each block that contains
     a ``--8<-- "..."`` directive is replaced with the content of the
     referenced ``.mmd`` file so the actual diagram source is validated.
+
+    The function also performs a pre-pass to expand top-level snippet directives
+    (e.g. ``--8<-- "networking/networking.md"`` in a cheat-sheet file) before
+    extracting mermaid blocks.  This handles the two-level indirection introduced
+    by the section-snippet refactor: cheat sheet → section snippet → .mmd file.
 
     *snippet_base* controls the root directory used to resolve snippet paths.
     It must match the ``base_path`` entry in the ``pymdownx.snippets``
@@ -109,12 +146,17 @@ def extract_mermaid_blocks(
     except (OSError, UnicodeDecodeError) as exc:
         raise RuntimeError(f"Cannot read {md_path}: {exc}") from exc
 
+    if snippet_base is None:
+        snippet_base = _repo_root() / "docs"
+
+    if expand_snippets:
+        # Pre-pass: expand file-level snippet includes (section snippets, etc.)
+        # so that mermaid fences inside those included files are visible.
+        content = _expand_top_level_snippets(content, snippet_base)
+
     raw_blocks = _extract_from_text(content)
     if not expand_snippets:
         return raw_blocks
-
-    if snippet_base is None:
-        snippet_base = _repo_root() / "docs"
 
     expanded: list[str] = []
     for block in raw_blocks:

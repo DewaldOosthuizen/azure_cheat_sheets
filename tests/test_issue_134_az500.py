@@ -2,11 +2,13 @@
 
 from pathlib import Path
 
+from conftest import expand_snippets
+
 CHEAT_SHEET = Path("docs/cheat_sheets/AZ-305.md")
 
 
 def _content():
-    return CHEAT_SHEET.read_text(encoding="utf-8")
+    return expand_snippets(CHEAT_SHEET.read_text(encoding="utf-8"))
 
 
 class TestAZ500QuickIndex:

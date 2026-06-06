@@ -41,10 +41,30 @@
 - Categories: AllMetrics, Audit, Operational, **Activity Log** (control-plane events), etc.
 - Activity Log is a sub-component of Azure Monitor routed to Log Analytics Workspace via Diagnostic Settings — not a standalone service.
 
+| Service | Type | Best For | Key Feature |
+| --- | --- | --- | --- |
+| **Log Analytics Workspace** (fed via Diagnostic Settings; contains Activity Log data, KQL engine) | Destination | Query, alerting, dashboards | Kusto (KQL) queries; retention config |
+| **Azure Storage Account** | Destination | Long-term archive, compliance | Low cost; no real-time query |
+| **Event Hub** | Destination | SIEM integration, streaming | Real-time export to Splunk, Sentinel |
+| **Partner Solutions** | Destination | Third-party observability | Datadog, Elastic natively integrated |
+
+> **Exam tip:** Diagnostic Settings must be configured per resource. Use Azure Policy with DeployIfNotExists effect to automatically configure diagnostic settings at scale across subscriptions.
+
 > **Exam tip (AZ-500):** Diagnostic Settings are the bridge between Azure
 > resources and Microsoft Sentinel. Route Activity Logs, Entra audit logs, and
 > resource diagnostic logs to a Log Analytics Workspace that Sentinel reads from.
 > Without Diagnostic Settings configured, Sentinel data connectors receive no data.
+
+### Diagnostic Settings Routing
+
+```mermaid
+--8<-- "diagrams/monitoring/diagnostic-settings-routing.mmd"
+```
+
+> **Exam tip:** Activity Log is a sub-component of Azure Monitor, not a standalone service.
+> Route it to Log Analytics Workspace via Diagnostic Settings to enable KQL querying and
+> long-term retention. For AZ-104, use Azure Policy (DeployIfNotExists) to enforce
+> Diagnostic Settings at scale.
 
 ## Log Analytics Retention & Cost Tiers
 
