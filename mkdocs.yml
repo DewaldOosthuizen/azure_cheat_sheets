@@ -56,6 +56,18 @@ markdown_extensions:
       permalink: true
   - admonition
 
+not_in_nav: |
+  networking/*.md
+  security/*.md
+  storage/*.md
+  monitoring/*.md
+  compute/*.md
+  identity/*.md
+  ha-dr/*.md
+  governance/*.md
+  messaging/*.md
+  waf/*.md
+
 nav:
   - Home: index.md
   - AZ-305 Architect: cheat_sheets/AZ-305.md
