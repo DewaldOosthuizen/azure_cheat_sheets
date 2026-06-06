@@ -11,9 +11,9 @@ answer "which one and why?" — not step-by-step tutorials or portal walkthrough
 
 ## Current Content
 
-| Topic | Cheat Sheets |
-|-------|--------------|
-| Microsoft Azure | AZ-305 Architect, AZ-104 Administrator |
+| Topic |
+|-------|
+| Microsoft Azure |
 
 More topics (other cloud providers, DevOps tooling, architecture patterns) will be added over time.
 Each new topic lives under its own subdirectory inside `docs/`.
