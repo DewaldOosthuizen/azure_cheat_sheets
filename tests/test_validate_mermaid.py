@@ -499,5 +499,161 @@ class TestMainMultiFile:
             patch("validate_mermaid.validate_block", return_value=(True, "")),
             patch("validate_mermaid.Path.is_file", return_value=True),
         ):
-            result = validate_mermaid.run(["empty.md", "docs/azure/files/networking/networking.md"])
+            result = validate_mermaid.run(
+                ["empty.md", "docs/azure/files/networking/networking.md"]
+            )
         assert result == 0
+
+
+# ---------------------------------------------------------------------------
+# Coverage gap tests — added to push validate_mermaid.py from 75% to ≥90%.
+# Each class targets a specific uncovered line range.
+# ---------------------------------------------------------------------------
+
+
+class TestExpandSnippetFileRead:
+    """Covers lines 78-83: _expand_snippet reads the referenced file."""
+
+    def test_returns_file_content_when_snippet_directive_present(self, tmp_path):
+        snippet_content = "flowchart LR\n  A --> B\n"
+        snippet_file = tmp_path / "azure" / "diagrams" / "networking" / "flow.mmd"
+        snippet_file.parent.mkdir(parents=True)
+        snippet_file.write_text(snippet_content, encoding="utf-8")
+
+        block = '--8<-- "azure/diagrams/networking/flow.mmd"'
+        result = validate_mermaid._expand_snippet(block, tmp_path)
+        assert result == snippet_content
+
+    def test_raises_runtime_error_when_file_unreadable(self, tmp_path):
+        block = '--8<-- "azure/diagrams/missing.mmd"'
+        with pytest.raises(RuntimeError, match="Cannot read snippet file"):
+            validate_mermaid._expand_snippet(block, tmp_path)
+
+
+class TestExpandTopLevelSnippetsOSError:
+    """Covers lines 107-108: OSError in _expand_top_level_snippets leaves directive unexpanded."""
+
+    def test_missing_file_directive_left_unexpanded(self, tmp_path):
+        directive = '--8<-- "missing/file.md"'
+        result = validate_mermaid._expand_top_level_snippets(directive, tmp_path)
+        assert result == directive
+
+
+class TestExtractMermaidBlocksNoExpand:
+    """Covers line 158: early return when expand_snippets=False."""
+
+    def test_returns_raw_blocks_without_expansion(self, tmp_path):
+        md = tmp_path / "page.md"
+        md.write_text("```mermaid\ngraph TD\n  A-->B\n```\n", encoding="utf-8")
+        blocks = validate_mermaid.extract_mermaid_blocks(str(md), expand_snippets=False)
+        assert len(blocks) == 1
+        assert "A-->B" in blocks[0]
+
+
+class TestExtractMermaidBlocksRuntimeErrorPropagation:
+    """Covers lines 164-165: RuntimeError from _expand_snippet is re-raised."""
+
+    def test_runtime_error_propagates_from_expand_snippet(self, tmp_path):
+        md = tmp_path / "page.md"
+        md.write_text('```mermaid\n--8<-- "missing.mmd"\n```\n', encoding="utf-8")
+        with pytest.raises(RuntimeError):
+            validate_mermaid.extract_mermaid_blocks(str(md), snippet_base=tmp_path)
+
+
+class TestValidateBlockNonZeroReturnCode:
+    """Covers line 194: validate_block returns False when mmdc exits non-zero."""
+
+    def test_returns_false_when_mmdc_exits_nonzero(self):
+        import subprocess
+
+        mock_result = subprocess.CompletedProcess(
+            args=[], returncode=1, stdout="", stderr="syntax error"
+        )
+        with (
+            patch("validate_mermaid.PUPPETEER_CONFIG") as mock_cfg,
+            patch("validate_mermaid.subprocess.run", return_value=mock_result),
+        ):
+            mock_cfg.exists.return_value = False
+            ok, err = validate_mermaid.validate_block(1, "graph TD\n  A --> B\n")
+        assert ok is False
+        assert "syntax error" in err
+
+
+class TestValidateMmdFile:
+    """Covers lines 207-228: _validate_mmd_file."""
+
+    def test_returns_1_when_file_not_found(self, tmp_path):
+        repo_root = tmp_path
+        result = validate_mermaid._validate_mmd_file(
+            str(tmp_path / "nonexistent.mmd"), repo_root
+        )
+        assert result == 1
+
+    def test_returns_1_when_path_outside_repo_root(self, tmp_path):
+        outside = tmp_path.parent / "outside.mmd"
+        outside.write_text("flowchart LR\n  A-->B\n", encoding="utf-8")
+        result = validate_mermaid._validate_mmd_file(str(outside), tmp_path)
+        assert result == 1
+
+    def test_returns_0_when_diagram_passes(self, tmp_path):
+        mmd = tmp_path / "flow.mmd"
+        mmd.write_text("flowchart LR\n  A-->B\n", encoding="utf-8")
+        with (
+            patch("validate_mermaid.PUPPETEER_CONFIG") as mock_cfg,
+            patch("validate_mermaid.validate_block", return_value=(True, "")),
+        ):
+            mock_cfg.exists.return_value = False
+            result = validate_mermaid._validate_mmd_file(str(mmd), tmp_path)
+        assert result == 0
+
+    def test_returns_1_when_diagram_fails(self, tmp_path):
+        mmd = tmp_path / "flow.mmd"
+        mmd.write_text("flowchart LR\n  A-->B\n", encoding="utf-8")
+        with (
+            patch("validate_mermaid.PUPPETEER_CONFIG") as mock_cfg,
+            patch("validate_mermaid.validate_block", return_value=(False, "bad diagram")),
+        ):
+            mock_cfg.exists.return_value = False
+            result = validate_mermaid._validate_mmd_file(str(mmd), tmp_path)
+        assert result == 1
+
+    def test_returns_1_on_read_error(self, tmp_path):
+        mmd = tmp_path / "flow.mmd"
+        mmd.write_text("flowchart LR\n  A-->B\n", encoding="utf-8")
+        with patch("validate_mermaid.Path.read_text", side_effect=OSError("perm denied")):
+            result = validate_mermaid._validate_mmd_file(str(mmd), tmp_path)
+        assert result == 1
+
+
+class TestRunWithMmdFile:
+    """Covers lines 253-255: .mmd branch in run()."""
+
+    def test_run_handles_standalone_mmd_file(self, tmp_path):
+        mmd = tmp_path / "flow.mmd"
+        mmd.write_text("flowchart LR\n  A-->B\n", encoding="utf-8")
+        with (
+            patch("validate_mermaid.shutil.which", return_value="/usr/bin/mmdc"),
+            patch("validate_mermaid._validate_mmd_file", return_value=0) as mock_validate,
+            patch(
+                "validate_mermaid._repo_root",
+                return_value=tmp_path,
+            ),
+        ):
+            result = validate_mermaid.run([str(mmd)])
+        mock_validate.assert_called_once()
+        assert result == 0
+
+
+class TestMainEntryPoint:
+    """Covers lines 301-302 and 306: main() body and __main__ guard."""
+
+    def test_main_calls_parse_args_and_exits(self):
+        with (
+            patch("validate_mermaid.shutil.which", return_value="/usr/bin/mmdc"),
+            patch("validate_mermaid.parse_args") as mock_parse,
+            patch("validate_mermaid.run", return_value=0),
+            pytest.raises(SystemExit) as exc_info,
+        ):
+            mock_parse.return_value.md_files = []
+            validate_mermaid.main()
+        assert exc_info.value.code == 0
