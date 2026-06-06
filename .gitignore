@@ -65,3 +65,7 @@ node_modules/
 .hermes_tmp_prompt.txt
 .codegraph/codegraph.db
 openspec/
+# BEGIN workspace-orchestrator
+.hermes_tmp_prompt.txt
+openspec/
+# END workspace-orchestrator
