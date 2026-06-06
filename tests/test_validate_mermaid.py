@@ -397,7 +397,7 @@ class TestTraversalGuard:
         with tempfile.TemporaryDirectory() as tmp:
             # Create two sibling directories whose names share a prefix.
             repo_root = Path(tmp) / "fake-repo-root"
-            sibling   = Path(tmp) / "fake-repo-root-extra"
+            sibling = Path(tmp) / "fake-repo-root-extra"
             repo_root.mkdir()
             sibling.mkdir()
             outside_file = sibling / "file.md"
