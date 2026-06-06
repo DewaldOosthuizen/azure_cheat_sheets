@@ -1,134 +1,67 @@
-# Azure Cheat Sheets
+# Tech Cheat Sheets And Notes
 
 [![Lint](https://github.com/DewaldOosthuizen/azure_cheat_sheets/actions/workflows/lint.yml/badge.svg)](https://github.com/DewaldOosthuizen/azure_cheat_sheets/actions/workflows/lint.yml)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/paypalme/DewaldOosthuizen1)
 
-Quick-reference study notes for Azure architecture decisions, with tables and
-Mermaid diagrams that compare services by tradeoff, scope, and common exam
-scenarios.
+Quick-reference study notes for technology certifications and architecture decisions.
+Each sheet answers *which service, which pattern, and why* — not how to click through a portal.
+Content is comparison-oriented: tables, decision flowcharts, and Mermaid diagrams side-by-side.
 
-## Purpose
+---
 
-This repository is an exam-prep reference, not a step-by-step tutorial. The
-documents focus on choosing the right Azure service for a requirement and
-understanding why that choice fits.
+## Microsoft Azure
 
-## Target Audience and Scope
+Organised by domain. Each section covers service selection and architectural trade-offs.
 
-The current content is aimed primarily at candidates preparing for
-`AZ-305: Designing Microsoft Azure Infrastructure Solutions`.
+| Domain | Content |
+|--------|---------|
+| [Networking](azure/files/networking/networking.md) | Load balancers, APIM, VNet, DNS, NSG, DDoS, CDN |
+| [Security](azure/files/security/security.md) | Defender for Cloud, Key Vault, Sentinel, Encryption |
+| [Storage](azure/files/storage/storage.md) | Blob, Files, Disk, SQL, Cosmos DB, redundancy |
+| [Monitoring & Observability](azure/files/monitoring/monitoring.md) | Azure Monitor, Log Analytics, Alerts, Agents |
+| [Compute](azure/files/compute/compute.md) | VMs, App Service, Functions, AKS, ACI, Batch |
+| [Identity & Access](azure/files/identity/identity.md) | Entra ID, RBAC, PIM, Hybrid Identity |
+| [High Availability & DR](azure/files/ha-dr/ha-dr.md) | ASR, Azure Backup, Availability Zones |
+| [Governance](azure/files/governance/governance.md) | Policy, Blueprints, Management Groups, Cost |
+| [Messaging & Integration](azure/files/messaging/messaging.md) | Service Bus, Event Grid, Logic Apps, Functions |
+| [Well-Architected Framework](azure/files/waf/waf.md) | Five pillars, trade-off navigator |
 
-Coverage is strongest where the exam expects architectural comparison and
-decision-making. Configuration walkthroughs, portal screenshots, and hands-on
-labs are intentionally out of scope. Other Azure exams may overlap with parts
-of this material, but the repository is not yet organized around those tracks.
+Exam coverage by domain:
 
-### Exam Overlap
+| Section | AZ-900 | AZ-104 | AZ-305 | AZ-500 | AZ-700 |
+|---------|--------|--------|--------|--------|--------|
+| Networking | Partial | Full | Full | Partial | Full |
+| Security | — | Partial | Full | Full | — |
+| Storage | Partial | Full | Full | — | — |
+| Monitoring & Observability | — | Partial | Full | Partial | — |
+| Compute | Partial | Full | Full | — | — |
+| Identity & Access | Partial | Full | Full | Full | — |
+| High Availability & DR | — | Full | Full | — | Partial |
+| Governance | — | Partial | Full | Partial | — |
+| Messaging & Integration | — | — | Full | — | — |
+| Well-Architected Framework | — | — | Full | — | — |
 
-| Exam | Focus | Relevant Sections |
-|------|-------|-------------------|
-| AZ-900 | Fundamentals | Networking (overview), Storage, Compute, Identity & Access (Entra basics) |
-| AZ-104 | Administrator | All sections — administrator-level depth on RBAC, Networking, HA & DR; Messaging & Integration (partial — Service Bus, Event Hub namespace admin) |
-| AZ-305 | Architect | All sections including Messaging & Integration and Well-Architected Framework |
-| AZ-500 | Security Engineer | Security (full), Identity & Access (full), Networking (partial), Monitoring & Observability (partial), Governance (partial) |
-| AZ-700 | Network Engineer | Networking (full), High Availability & Disaster Recovery (partial) |
+---
 
-## Repository Structure
+## How to Use These Sheets
 
-- [`AZ-305.md`](cheat_sheets/AZ-305.md) — AZ-305 architect-focused cheat sheet
-- [`AZ-104.md`](cheat_sheets/AZ-104.md) — AZ-104 administrator-focused cheat sheet
+The cheat sheets are not meant to be read cover-to-cover. Jump to the section relevant to what
+you are studying. Each section contains:
 
-The current cheat sheet is organized into these top-level sections:
+- A comparison table of services in that domain
+- Exam-tip callouts that highlight common decision points in exam questions
+- One or more Mermaid decision flowcharts for branching "which service?" scenarios
+- Deprecation notices where a service has been retired or superseded
 
-1. Networking
-2. Security
-3. Storage
-4. Monitoring & Observability
-5. Compute
-6. Identity & Access
-7. High Availability & Disaster Recovery
-8. Governance
-9. Messaging & Integration
-10. Well-Architected Framework
+The live site renders all diagrams inline. To browse locally, run `make docs-serve`.
 
-## Viewing Mermaid Diagrams
+---
 
-The cheat sheet includes Mermaid flowcharts for service-selection patterns.
-
-- GitHub renders Mermaid diagrams natively in Markdown files.
-- VS Code users can install
-  `Markdown Preview Mermaid Support` to render diagrams in the editor preview.
-- Other local Markdown viewers may show the code block only unless Mermaid
-  rendering is enabled.
-
-When editing or adding material:
-
-- Keep explanations concise and comparison-oriented.
-- Section headings: top-level domain names in ALL CAPS (`# NETWORKING`).
-  Sub-topics as `##`. Do not use Title Case for top-level section headings.
-- Prefer tables when comparing Azure services, tiers, or design options.
-  Use these column templates:
-
-  Networking / compute services:
-  | Service | Layer | Scope | Use Case | Key Feature |
-
-  Data / storage services:
-  | Service | Type | Best For | Key Feature |
-
-  Consistency columns (always present): Service, Key Feature.
-  Do not add free-form columns not in the template above.
-
-- Use short exam-tip callouts only when they clarify a likely decision point.
-  Format: place the callout immediately after the relevant table, using:
-
-  > **Exam tip:** Choose Azure Front Door when the requirement mentions
-  > global HTTP load balancing, WAF, or SSL offload at the edge.
-
-  Do not use plain blockquotes, bold sentences, or note/warning admonitions
-  for exam tips.
-
-- For retired, retiring, or superseded services, use a deprecation callout
-  instead of an exam-tip. See the [Deprecation warnings](https://github.com/DewaldOosthuizen/azure_cheat_sheets/blob/main/CONTRIBUTING.md#10-deprecation-warnings)
-  section in CONTRIBUTING.md for the required format.
-
-- Use Mermaid diagrams for branching decision flows where a visual aid is more
-  useful than prose alone. Choose the variant by purpose:
-
-  | Purpose                        | Directive       |
-  |--------------------------------|-----------------|
-  | Decision flows (if/else trees) | flowchart TD    |
-  | Hierarchy / ecosystem maps     | graph TD        |
-  | Connectivity / network paths   | graph LR        |
-
-  Example decision flow:
-
-  ```mermaid
-  flowchart TD
-      A[Need load balancing?] -->|Global HTTP| B[Azure Front Door]
-      A -->|Regional TCP/UDP| C[Azure Load Balancer]
-  ```
-
-- Avoid documenting features or claims that are not yet reflected in the
-  repository content.
-
-For pull requests:
-
-- Keep changes scoped to one improvement area where possible.
-- Explain what section changed and why it improves the cheat sheet for readers.
-- Run `make ci` locally before opening a PR — it replicates the full CI
-  pipeline (markdownlint, Mermaid validation, ruff lint + format check,
-  pytest with coverage). See the [Makefile](Makefile) for individual targets.
-- Run `make install` once after cloning to create the `.venv` and install
-  all Python and Node dev dependencies.
-- Verify that Markdown formatting and Mermaid blocks still render cleanly on
-  GitHub.
-  
 ## Contributing
 
-Contributions are welcome. Please read [CONTRIBUTING.md](https://github.com/DewaldOosthuizen/azure_cheat_sheets/blob/main/CONTRIBUTING.md) for
-the full workflow, including how to pick up an issue, branch naming conventions,
-local validation steps, and the pull request process.
+See [CONTRIBUTING.md](https://github.com/DewaldOosthuizen/azure_cheat_sheets/blob/main/CONTRIBUTING.md)
+for the full contributor workflow.
 
 ## License
 
-This project is licensed under the [`GPL-3.0`](LICENSE).
+This project is licensed under the [`GPL-3.0`](https://github.com/DewaldOosthuizen/tech-cheat-sheets/blob/main/LICENSE).

@@ -1,11 +1,10 @@
-site_name: Azure Cheat Sheets
+site_name: Tech Cheat Sheets
 site_description: >-
-  Quick-reference study notes for Azure architecture decisions.
-  Covers AZ-305, AZ-104, AZ-900, AZ-500, and AZ-700.
-site_url: https://azure-cheat-sheets.vercel.app/
-
-repo_name: DewaldOosthuizen/azure-cheat-sheets
-repo_url: https://github.com/DewaldOosthuizen/azure-cheat-sheets
+  Quick-reference study notes for tech certifications and architecture decisions.
+  Currently focused on Microsoft Azure, organised by domain.
+site_url: https://tech-cheat-sheets.vercel.app/
+repo_name: DewaldOosthuizen/tech-cheat-sheets
+repo_url: https://github.com/DewaldOosthuizen/tech-cheat-sheets
 
 docs_dir: docs
 site_dir: site
@@ -37,7 +36,7 @@ theme:
 markdown_extensions:
   # pymdownx.snippets: expands --8<-- "path/to/file" directives.
   # base_path is relative to docs_dir so paths in cheat sheets start
-  # with diagrams/ and resolve to docs/diagrams/.
+  # with azure/diagrams/ and resolve to docs/azure/diagrams/.
   - pymdownx.snippets:
       base_path:
         - docs
@@ -58,5 +57,15 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - AZ-305 Architect: cheat_sheets/AZ-305.md
-  - AZ-104 Administrator: cheat_sheets/AZ-104.md
+  - Azure:
+      - Exam Coverage: azure/files/exams/exams.md
+      - Networking: azure/files/networking/networking.md
+      - Security: azure/files/security/security.md
+      - Storage: azure/files/storage/storage.md
+      - Monitoring & Observability: azure/files/monitoring/monitoring.md
+      - Compute: azure/files/compute/compute.md
+      - Identity & Access: azure/files/identity/identity.md
+      - High Availability & DR: azure/files/ha-dr/ha-dr.md
+      - Governance: azure/files/governance/governance.md
+      - Messaging & Integration: azure/files/messaging/messaging.md
+      - Well-Architected Framework: azure/files/waf/waf.md

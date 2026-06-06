@@ -33,10 +33,13 @@ PUPPETEER_CONFIG_FILE ?= /tmp/puppeteer-config.json
 
 MD_GLOBS         = "docs/**/*.md" "README.md" "AGENTS.md"
 LINT_TARGETS     = scripts/ tests/
-# Validate the cheat-sheet .md files (snippets are expanded at validation time)
-MD_FILES_VALIDATE = docs/cheat_sheets/AZ-305.md docs/cheat_sheets/AZ-104.md docs/index.md
+# Validate all Markdown files that contain Mermaid fences or snippet references to .mmd files.
+# This includes both cheat sheets and the section snippet files under docs/<section>/.
+MD_FILES_VALIDATE := $(shell find docs -name '*.md' \
+  ! -path 'docs/azure/diagrams/*' \
+  ! -path 'docs/overrides/*')
 # All standalone .mmd diagram files
-MMD_FILES_VALIDATE := $(shell find docs/diagrams -name '*.mmd' 2>/dev/null)
+MMD_FILES_VALIDATE := $(shell find docs/azure/diagrams -name '*.mmd' 2>/dev/null)
 
 # ── Phony declarations ─────────────────────────────────────────────────────────
 .PHONY: help venv install \

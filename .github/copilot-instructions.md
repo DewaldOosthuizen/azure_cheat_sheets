@@ -1,9 +1,10 @@
-# GitHub Copilot Instructions — azure-cheat-sheets
+# GitHub Copilot Instructions — tech-cheat-sheets
 
 ## Project Overview
 
-Quick-reference study notes for Azure architecture decisions. Aimed primarily at
-candidates preparing for AZ-305: Designing Microsoft Azure Infrastructure Solutions.
+Quick-reference study notes for technology certifications and architecture decisions.
+Currently focused on Microsoft Azure (AZ-305 primary, with AZ-104, AZ-900, AZ-500, and AZ-700
+overlap). More topics will be added under their own subdirectory inside `docs/` over time.
 The focus is service selection, architectural trade-offs, and decision reasoning —
 not step-by-step walkthroughs, portal screenshots, or hands-on labs.
 
@@ -11,18 +12,19 @@ All primary content lives in the Markdown files under `docs/`. A Makefile with
 Python and Node dev tooling handles validation and CI (markdownlint, Mermaid
 validation, ruff lint + format check, pytest with coverage, MkDocs strict build).
 
-Live site: https://azure-cheat-sheets.vercel.app
+Live site: https://tech-cheat-sheets.vercel.app
 
 ## Repository Structure
 
 ```
 docs/
-  cheat_sheets/
-    AZ-305.md               — AZ-305 architect cheat sheet
-    AZ-104.md               — AZ-104 administrator cheat sheet
-  diagrams/<section>/       — standalone Mermaid sources (.mmd), one per file
-    az305-<slug>.mmd
-    az104-<slug>.mmd
+  azure/
+    files/
+      <domain>/<domain>.md   — One page per domain (networking, security, …)
+    diagrams/<section>/     — standalone Mermaid sources (.mmd), one per file
+      <slug>.mmd            — exam-agnostic slug
+    files/<section>/        — shared section snippet files
+      <section>.md          — e.g. networking/networking.md
   index.md                  — MkDocs home page
 scripts/
   validate_mermaid.py       — Mermaid diagram validation helper
@@ -36,7 +38,7 @@ Makefile                    — all local CI targets
 openspec/archive/           — closed spec/impl records (read-only reference)
 ```
 
-Section directories under `docs/diagrams/`:
+Section directories under `docs/azure/diagrams/` and `docs/azure/files/`:
 `networking`, `security`, `storage`, `monitoring`, `compute`, `identity`,
 `ha-dr`, `governance`, `messaging`, `waf`
 
@@ -132,12 +134,12 @@ When adding or editing content, follow these rules precisely:
 
 ## Mermaid Diagrams
 
-Each diagram lives in its own `docs/diagrams/<section>/<exam>-<slug>.mmd` file.
+Each diagram lives in its own `docs/azure/diagrams/<section>/<slug>.mmd` file.
 Reference it from a cheat sheet via a PyMdown Snippets directive:
 
 ```text
 ```mermaid
---8<-- "diagrams/<section>/<exam>-<slug>.mmd"
+--8<-- "azure/diagrams/<section>/<slug>.mmd"
 ```
 ```
 

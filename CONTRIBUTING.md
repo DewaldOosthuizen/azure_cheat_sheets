@@ -1,4 +1,4 @@
-# Contributing to Azure Cheat Sheets
+# Contributing to Tech Cheat Sheets
 
 Thank you for contributing. This guide covers the full workflow for making
 clean, reviewable contributions to this repository.
@@ -237,27 +237,49 @@ Closes #42
 - Keep scripts small and single-purpose.
 - Add or update tests in `tests/` whenever script behaviour changes.
 
+### Section Snippet Files
+
+Each top-level domain section lives in its own standalone snippet file:
+
+Each domain page lives at:
+
+```
+docs/azure/files/<section>/<section>.md
+```
+
+Examples: `docs/azure/files/networking/networking.md`, `docs/azure/files/security/security.md`.
+
+Domain pages are first-class MkDocs pages listed directly in the nav. All content goes into the
+domain page for that section — there are no cheat-sheet wrapper files.
+
+Rules:
+
+- Add content to the domain page file for that section.
+- Mermaid diagrams are stored as standalone `.mmd` files and included via `--8<--` directives
+  inside fenced blocks in the domain page.
+- Do NOT include `> Also relevant for:` callout blocks.
+
 ### Diagram Files
 
-Mermaid diagrams live in `docs/diagrams/<section>/<exam>-<slug>.mmd`.
-They are referenced from the cheat-sheet Markdown files using a PyMdown Snippets
+Mermaid diagrams live in `docs/azure/diagrams/<section>/<slug>.mmd`.
+They are referenced from section snippet files using a PyMdown Snippets
 directive inside a fenced code block:
 
 ```text
 ```mermaid
---8<-- "diagrams/<section>/<exam>-<slug>.mmd"
+--8<-- "azure/diagrams/<section>/<slug>.mmd"
 ``` (closing backticks)
 ```
 
 Rules:
 
 - One diagram per `.mmd` file — do not combine multiple `flowchart`/`graph` blocks.
-- File names: `<exam>-<descriptive-slug>.mmd` (`az305-`, `az104-`). Use lowercase hyphens.
+- File names: `<descriptive-slug>.mmd`. Use lowercase hyphens. No exam prefix.
 - Section sub-directories match the top-level cheat-sheet section slugs:
   `networking`, `security`, `storage`, `monitoring`, `compute`, `identity`,
   `ha-dr`, `governance`, `messaging`, `waf`.
-- To reuse a diagram in a second cheat sheet, add the same `--8<-- "..."` reference
-  in that file. The `.mmd` source is the single source of truth.
+- To reuse a diagram in a second cheat sheet, reference the same `.mmd` file from
+  the shared section snippet. The `.mmd` source is the single source of truth.
 - Run `make mermaid-check` after adding or editing any `.mmd` file.
 
 ---

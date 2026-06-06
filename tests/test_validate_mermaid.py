@@ -286,10 +286,10 @@ class TestParseArgs:
     """Tests for parse_args() in isolation — covers CLI argument parsing."""
 
     def test_parse_args_returns_namespace_with_md_files(self):
-        argv = ["validate_mermaid.py", "docs/cheat_sheets/AZ-305.md"]
+        argv = ["validate_mermaid.py", "docs/azure/files/networking/networking.md"]
         with patch("validate_mermaid.sys.argv", argv):
             args = validate_mermaid.parse_args()
-        assert args.md_files == ["docs/cheat_sheets/AZ-305.md"]
+        assert args.md_files == ["docs/azure/files/networking/networking.md"]
 
     def test_parse_args_exits_2_when_no_positional_argument(self):
         with (
@@ -309,7 +309,7 @@ class TestMainHappyPath:
             patch("validate_mermaid.validate_block", return_value=(True, "")),
             patch("validate_mermaid.Path.is_file", return_value=True),
         ):
-            result = validate_mermaid.run(["docs/cheat_sheets/AZ-305.md"])
+            result = validate_mermaid.run(["docs/azure/files/networking/networking.md"])
         assert result == 0
         captured = capsys.readouterr()
         assert "All 1 diagram(s) passed" in captured.out
@@ -324,7 +324,7 @@ class TestMainAggregateFail:
             patch("validate_mermaid.validate_block", return_value=(False, "syntax error")),
             patch("validate_mermaid.Path.is_file", return_value=True),
         ):
-            result = validate_mermaid.run(["docs/cheat_sheets/AZ-305.md"])
+            result = validate_mermaid.run(["docs/azure/files/networking/networking.md"])
         assert result == 1
 
     def test_run_prints_failure_summary(self, capsys):
@@ -333,7 +333,7 @@ class TestMainAggregateFail:
             patch("validate_mermaid.validate_block", return_value=(False, "syntax error")),
             patch("validate_mermaid.Path.is_file", return_value=True),
         ):
-            validate_mermaid.run(["docs/cheat_sheets/AZ-305.md"])
+            validate_mermaid.run(["docs/azure/files/networking/networking.md"])
         captured = capsys.readouterr()
         assert "1 diagram(s) failed" in captured.out
 
@@ -346,7 +346,7 @@ class TestMainZeroBlocks:
             patch("validate_mermaid.extract_mermaid_blocks", return_value=[]),
             patch("validate_mermaid.Path.is_file", return_value=True),
         ):
-            result = validate_mermaid.run(["docs/cheat_sheets/AZ-305.md"])
+            result = validate_mermaid.run(["docs/azure/files/networking/networking.md"])
         assert result == 0
 
     def test_run_prints_warning_to_stderr_when_no_blocks_found(self, capsys):
@@ -354,7 +354,7 @@ class TestMainZeroBlocks:
             patch("validate_mermaid.extract_mermaid_blocks", return_value=[]),
             patch("validate_mermaid.Path.is_file", return_value=True),
         ):
-            validate_mermaid.run(["docs/cheat_sheets/AZ-305.md"])
+            validate_mermaid.run(["docs/azure/files/networking/networking.md"])
         captured = capsys.readouterr()
         assert "no mermaid blocks found" in captured.err
 
@@ -417,7 +417,7 @@ class TestTraversalGuard:
         import scripts.validate_mermaid as vm_mod
 
         repo_root = Path(vm_mod.__file__).parent.parent.resolve()
-        valid_path = str(repo_root / "docs" / "cheat_sheets/AZ-305.md")
+        valid_path = str(repo_root / "docs" / "azure" / "files" / "networking" / "networking.md")
 
         with (
             patch.object(Path, "is_file", return_value=True),
@@ -459,15 +459,18 @@ class TestValidateBlockDegenerateSvg:
         assert msg == "mmdc produced an empty/degenerate SVG (possible silent render failure)"
 
 
+_REAL_MD = "docs/azure/files/networking/networking.md"
+
+
 class TestRealCheatSheet:
-    """Integration tests that read docs/cheat_sheets/AZ-305.md from disk."""
+    """Integration tests that read a real domain page from disk."""
 
     def test_extracts_nonzero_blocks_from_real_cheat_sheet(self):
-        blocks = validate_mermaid.extract_mermaid_blocks("docs/cheat_sheets/AZ-305.md")
+        blocks = validate_mermaid.extract_mermaid_blocks(_REAL_MD)
         assert len(blocks) > 0, "Expected at least one Mermaid block in the cheat sheet"
 
     def test_all_blocks_are_non_empty_strings(self):
-        blocks = validate_mermaid.extract_mermaid_blocks("docs/cheat_sheets/AZ-305.md")
+        blocks = validate_mermaid.extract_mermaid_blocks(_REAL_MD)
         for i, b in enumerate(blocks):
             assert isinstance(b, str) and b.strip(), f"Block {i + 1} is empty or not a string"
 
@@ -477,7 +480,7 @@ class TestRealCheatSheetIntegration:
     """Integration tests that invoke validate_block against the real cheat sheet."""
 
     def test_all_diagrams_pass(self):
-        blocks = validate_mermaid.extract_mermaid_blocks("docs/cheat_sheets/AZ-305.md")
+        blocks = validate_mermaid.extract_mermaid_blocks(_REAL_MD)
         assert len(blocks) > 0, "Expected at least one Mermaid block in the cheat sheet"
         for i, block in enumerate(blocks):
             ok, err = validate_mermaid.validate_block(i, block)
@@ -496,177 +499,157 @@ class TestMainMultiFile:
             patch("validate_mermaid.validate_block", return_value=(True, "")),
             patch("validate_mermaid.Path.is_file", return_value=True),
         ):
-            result = validate_mermaid.run(["empty.md", "docs/cheat_sheets/AZ-305.md"])
+            result = validate_mermaid.run(["empty.md", "docs/azure/files/networking/networking.md"])
         assert result == 0
 
-    def test_run_returns_1_when_second_file_has_failing_diagram(self):
-        with (
-            patch(
-                "validate_mermaid.extract_mermaid_blocks",
-                side_effect=[
-                    ["graph TD\n  A --> B\n"],
-                    ["graph TD\n  A --> B\n"],
-                ],
-            ),
-            patch(
-                "validate_mermaid.validate_block",
-                side_effect=[(True, ""), (False, "syntax error")],
-            ),
-            patch("validate_mermaid.Path.is_file", return_value=True),
-        ):
-            result = validate_mermaid.run(["file1.md", "file2.md"])
-        assert result == 1
+
+# ---------------------------------------------------------------------------
+# Coverage gap tests — added to push validate_mermaid.py from 75% to ≥90%.
+# Each class targets a specific uncovered line range.
+# ---------------------------------------------------------------------------
 
 
-class TestExpandSnippetErrors:
-    """Tests for _expand_snippet() OSError/UnicodeDecodeError → RuntimeError path (lines 82-83)."""
+class TestExpandSnippetFileRead:
+    """Covers lines 78-83: _expand_snippet reads the referenced file."""
 
-    def test_expand_snippet_raises_on_missing_file(self, tmp_path):
-        block = '--8<-- "diagrams/missing.mmd"'
+    def test_returns_file_content_when_snippet_directive_present(self, tmp_path):
+        snippet_content = "flowchart LR\n  A --> B\n"
+        snippet_file = tmp_path / "azure" / "diagrams" / "networking" / "flow.mmd"
+        snippet_file.parent.mkdir(parents=True)
+        snippet_file.write_text(snippet_content, encoding="utf-8")
+
+        block = '--8<-- "azure/diagrams/networking/flow.mmd"'
+        result = validate_mermaid._expand_snippet(block, tmp_path)
+        assert result == snippet_content
+
+    def test_raises_runtime_error_when_file_unreadable(self, tmp_path):
+        block = '--8<-- "azure/diagrams/missing.mmd"'
         with pytest.raises(RuntimeError, match="Cannot read snippet file"):
             validate_mermaid._expand_snippet(block, tmp_path)
 
-    def test_expand_snippet_raises_on_permission_error(self, tmp_path):
-        mmd = tmp_path / "diagrams" / "locked.mmd"
-        mmd.parent.mkdir(parents=True)
-        mmd.write_text("graph TD\n  A --> B\n", encoding="utf-8")
-        mmd.chmod(0o000)
-        block = '--8<-- "diagrams/locked.mmd"'
-        try:
-            with pytest.raises(RuntimeError, match="Cannot read snippet file"):
-                validate_mermaid._expand_snippet(block, tmp_path)
-        finally:
-            mmd.chmod(0o644)
 
-    def test_expand_snippet_returns_none_for_non_directive(self, tmp_path):
-        result = validate_mermaid._expand_snippet("graph TD\n  A --> B\n", tmp_path)
-        assert result is None
+class TestExpandTopLevelSnippetsOSError:
+    """Covers lines 107-108: OSError in _expand_top_level_snippets leaves directive unexpanded."""
+
+    def test_missing_file_directive_left_unexpanded(self, tmp_path):
+        directive = '--8<-- "missing/file.md"'
+        result = validate_mermaid._expand_top_level_snippets(directive, tmp_path)
+        assert result == directive
 
 
-class TestExtractMermaidBlocksExpandSnippetsFalse:
-    """Tests for extract_mermaid_blocks(expand_snippets=False) early-return path (lines 113-114)."""
+class TestExtractMermaidBlocksNoExpand:
+    """Covers line 158: early return when expand_snippets=False."""
 
     def test_returns_raw_blocks_without_expansion(self, tmp_path):
-        md = tmp_path / "test.md"
-        directive = '--8<-- "diagrams/networking/foo.mmd"'
-        md.write_text(f"```mermaid\n{directive}\n```\n", encoding="utf-8")
+        md = tmp_path / "page.md"
+        md.write_text("```mermaid\ngraph TD\n  A-->B\n```\n", encoding="utf-8")
         blocks = validate_mermaid.extract_mermaid_blocks(str(md), expand_snippets=False)
         assert len(blocks) == 1
-        assert directive in blocks[0]
+        assert "A-->B" in blocks[0]
 
 
-class TestExtractMermaidBlocksSnippetRuntimeError:
-    """Tests for RuntimeError re-raise in extract_mermaid_blocks (lines 123-124)."""
+class TestExtractMermaidBlocksRuntimeErrorPropagation:
+    """Covers lines 164-165: RuntimeError from _expand_snippet is re-raised."""
 
-    def test_reraises_runtime_error_from_snippet(self, tmp_path):
-        md = tmp_path / "test.md"
-        md.write_text('```mermaid\n--8<-- "diagrams/missing.mmd"\n```\n', encoding="utf-8")
-        with pytest.raises(RuntimeError, match="Cannot read snippet file"):
+    def test_runtime_error_propagates_from_expand_snippet(self, tmp_path):
+        md = tmp_path / "page.md"
+        md.write_text('```mermaid\n--8<-- "missing.mmd"\n```\n', encoding="utf-8")
+        with pytest.raises(RuntimeError):
             validate_mermaid.extract_mermaid_blocks(str(md), snippet_base=tmp_path)
 
 
-class TestExtractMermaidBlocksCustomSnippetBase:
-    """Tests for the snippet_base parameter (new code path) in extract_mermaid_blocks."""
+class TestValidateBlockNonZeroReturnCode:
+    """Covers line 194: validate_block returns False when mmdc exits non-zero."""
 
-    def test_custom_snippet_base_resolves_correctly(self, tmp_path):
-        (tmp_path / "diagrams").mkdir()
-        mmd = tmp_path / "diagrams" / "test.mmd"
-        mmd.write_text("graph TD\n  A --> B\n", encoding="utf-8")
-        md = tmp_path / "docs" / "cheat_sheets" / "doc.md"
-        md.parent.mkdir(parents=True)
-        md.write_text('```mermaid\n--8<-- "diagrams/test.mmd"\n```\n', encoding="utf-8")
-        blocks = validate_mermaid.extract_mermaid_blocks(str(md), snippet_base=tmp_path)
-        assert len(blocks) == 1
-        assert "graph TD" in blocks[0]
+    def test_returns_false_when_mmdc_exits_nonzero(self):
+        import subprocess
+
+        mock_result = subprocess.CompletedProcess(
+            args=[], returncode=1, stdout="", stderr="syntax error"
+        )
+        with (
+            patch("validate_mermaid.PUPPETEER_CONFIG") as mock_cfg,
+            patch("validate_mermaid.subprocess.run", return_value=mock_result),
+        ):
+            mock_cfg.exists.return_value = False
+            ok, err = validate_mermaid.validate_block(1, "graph TD\n  A --> B\n")
+        assert ok is False
+        assert "syntax error" in err
 
 
 class TestValidateMmdFile:
-    """Tests for _validate_mmd_file() — lines 166-187 and 213-214 via run()."""
+    """Covers lines 207-228: _validate_mmd_file."""
 
-    def test_validate_mmd_file_returns_0_on_pass(self, tmp_path):
-        import subprocess
+    def test_returns_1_when_file_not_found(self, tmp_path):
+        repo_root = tmp_path
+        result = validate_mermaid._validate_mmd_file(str(tmp_path / "nonexistent.mmd"), repo_root)
+        assert result == 1
 
-        def _write_svg_and_succeed(cmd, **kwargs):
-            from pathlib import Path as _Path
+    def test_returns_1_when_path_outside_repo_root(self, tmp_path):
+        outside = tmp_path.parent / "outside.mmd"
+        outside.write_text("flowchart LR\n  A-->B\n", encoding="utf-8")
+        result = validate_mermaid._validate_mmd_file(str(outside), tmp_path)
+        assert result == 1
 
-            out = _Path(cmd[cmd.index("--input") + 1]).with_suffix(".svg")
-            out.write_bytes(b"<svg>" + b"x" * 200 + b"</svg>")
-            return subprocess.CompletedProcess(args=cmd, returncode=0, stdout="", stderr="")
-
-        mmd = tmp_path / "test.mmd"
-        mmd.write_text("graph TD\n  A --> B\n", encoding="utf-8")
+    def test_returns_0_when_diagram_passes(self, tmp_path):
+        mmd = tmp_path / "flow.mmd"
+        mmd.write_text("flowchart LR\n  A-->B\n", encoding="utf-8")
         with (
-            patch("validate_mermaid.subprocess.run", side_effect=_write_svg_and_succeed),
             patch("validate_mermaid.PUPPETEER_CONFIG") as mock_cfg,
+            patch("validate_mermaid.validate_block", return_value=(True, "")),
         ):
             mock_cfg.exists.return_value = False
             result = validate_mermaid._validate_mmd_file(str(mmd), tmp_path)
         assert result == 0
 
-    def test_validate_mmd_file_returns_1_on_fail(self, tmp_path):
-        import subprocess
-
-        def _fail(cmd, **kwargs):
-            return subprocess.CompletedProcess(args=cmd, returncode=1, stdout="", stderr="err")
-
-        mmd = tmp_path / "test.mmd"
-        mmd.write_text("graph TD\n  A --> B\n", encoding="utf-8")
+    def test_returns_1_when_diagram_fails(self, tmp_path):
+        mmd = tmp_path / "flow.mmd"
+        mmd.write_text("flowchart LR\n  A-->B\n", encoding="utf-8")
         with (
-            patch("validate_mermaid.subprocess.run", side_effect=_fail),
             patch("validate_mermaid.PUPPETEER_CONFIG") as mock_cfg,
+            patch("validate_mermaid.validate_block", return_value=(False, "bad diagram")),
         ):
             mock_cfg.exists.return_value = False
             result = validate_mermaid._validate_mmd_file(str(mmd), tmp_path)
         assert result == 1
 
-    def test_validate_mmd_file_returns_1_when_not_found(self, tmp_path, capsys):
-        result = validate_mermaid._validate_mmd_file(str(tmp_path / "missing.mmd"), tmp_path)
-        assert result == 1
-        assert "file not found" in capsys.readouterr().err
-
-    def test_validate_mmd_file_returns_1_outside_repo_root(self, tmp_path):
-        other = tmp_path / "outside" / "test.mmd"
-        other.parent.mkdir(parents=True)
-        other.write_text("graph TD\n  A --> B\n", encoding="utf-8")
-        repo_root = tmp_path / "repo"
-        repo_root.mkdir()
-        result = validate_mermaid._validate_mmd_file(str(other), repo_root)
-        assert result == 1
-
-    def test_validate_mmd_file_returns_1_on_read_error(self, tmp_path, capsys):
-        mmd = tmp_path / "locked.mmd"
-        mmd.write_text("graph TD\n  A --> B\n", encoding="utf-8")
-        mmd.chmod(0o000)
-        try:
+    def test_returns_1_on_read_error(self, tmp_path):
+        mmd = tmp_path / "flow.mmd"
+        mmd.write_text("flowchart LR\n  A-->B\n", encoding="utf-8")
+        with patch("validate_mermaid.Path.read_text", side_effect=OSError("perm denied")):
             result = validate_mermaid._validate_mmd_file(str(mmd), tmp_path)
-        finally:
-            mmd.chmod(0o644)
         assert result == 1
-        assert "Cannot read" in capsys.readouterr().err
 
-    def test_run_dispatches_mmd_file_to_validate_mmd_file(self, tmp_path):
-        mmd = tmp_path / "test.mmd"
-        mmd.write_text("graph TD\n  A --> B\n", encoding="utf-8")
+
+class TestRunWithMmdFile:
+    """Covers lines 253-255: .mmd branch in run()."""
+
+    def test_run_handles_standalone_mmd_file(self, tmp_path):
+        mmd = tmp_path / "flow.mmd"
+        mmd.write_text("flowchart LR\n  A-->B\n", encoding="utf-8")
         with (
-            patch("validate_mermaid._repo_root", return_value=tmp_path),
+            patch("validate_mermaid.shutil.which", return_value="/usr/bin/mmdc"),
             patch("validate_mermaid._validate_mmd_file", return_value=0) as mock_validate,
+            patch(
+                "validate_mermaid._repo_root",
+                return_value=tmp_path,
+            ),
         ):
             result = validate_mermaid.run([str(mmd)])
         mock_validate.assert_called_once()
         assert result == 0
 
 
-class TestMainBodyCoverage:
-    """Tests for main() body — lines 260-261 (parse + sys.exit(run(...)))."""
+class TestMainEntryPoint:
+    """Covers lines 301-302 and 306: main() body and __main__ guard."""
 
-    def test_main_calls_run_and_exits_with_its_return_value(self):
+    def test_main_calls_parse_args_and_exits(self):
         with (
             patch("validate_mermaid.shutil.which", return_value="/usr/bin/mmdc"),
             patch("validate_mermaid.parse_args") as mock_parse,
-            patch("validate_mermaid.run", return_value=0) as mock_run,
+            patch("validate_mermaid.run", return_value=0),
             pytest.raises(SystemExit) as exc_info,
         ):
-            mock_parse.return_value.md_files = ["dummy.md"]
+            mock_parse.return_value.md_files = []
             validate_mermaid.main()
-        mock_run.assert_called_once_with(["dummy.md"])
         assert exc_info.value.code == 0

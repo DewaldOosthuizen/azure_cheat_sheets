@@ -1,0 +1,133 @@
+# Security
+
+## Microsoft Defender for Cloud
+
+| Plan | Covers | Key Feature |
+| --- | --- | --- |
+| **Defender for Servers** | VMs, Arc servers | Vulnerability assessment, JIT VM access |
+| **Defender for Storage** | Blob, Files, ADLS | Malware scanning, anomaly detection |
+| **Defender for SQL** | Azure SQL, SQL Server | SQL injection detection, anomalous access |
+| **Defender for Containers** | AKS, ACR, Arc K8s | Image scanning, runtime threat detection |
+| **Defender for App Service** | Web apps | Threat detection, malicious domain alerts |
+| **Defender for Key Vault** | Key Vault | Suspicious access pattern alerts |
+| **Defender for DNS** | DNS layer | Detect C2 communication |
+| **Defender CSPM** | Cloud posture | Attack path analysis, governance |
+
+> **⚠️ Deprecation warning:** "Security Center" and "Azure Defender" are legacy names.
+> The current product is **Microsoft Defender for Cloud**. Older exam questions may still
+> use the former names.
+
+> **Exam tip (AZ-500):** JIT VM Access (under Defender for Servers) locks down management
+> ports and opens them only on approved request; choose it when the requirement mentions
+> reducing the attack surface on VM management ports.
+
+## Azure Key Vault
+
+| Feature | Detail |
+| --- | --- |
+| **Secrets** | Connection strings, passwords, API keys |
+| **Keys** | Encryption keys (RSA, EC) — HSM-backed option |
+| **Certificates** | Manage TLS/SSL lifecycle |
+| **Soft Delete** | Retain deleted objects for 7–90 days |
+| **Purge Protection** | Prevent permanent deletion during retention |
+| **RBAC vs Access Policies** | RBAC preferred (granular, Azure AD-native) |
+| **Private Endpoint** | Restrict Key Vault to VNet-only access |
+
+> Exam tip: Always use **Managed Identity** to access Key Vault — never store credentials in app config.
+
+## Key Vault Access Models
+
+| Service | Access Model | Audit | Granularity | Key Feature |
+| --- | --- | --- | --- | --- |
+| **Key Vault** | Vault Access Policies (legacy) | Per-vault log; no per-operation identity trail | Coarse — get/list/set apply to all secrets | Simple setup; max 1024 policies per vault |
+| **Key Vault** | Azure RBAC | Full Azure Activity Log + Entra audit trail | Fine-grained — role assignment per secret/key/cert | Entra-native; supports PIM, Conditional Access |
+
+> **⚠️ Deprecation warning:** Vault Access Policies are the legacy authorization model for
+> Key Vault. Microsoft recommends migrating to **Azure RBAC** for new and existing vaults.
+> RBAC provides Entra-native granularity, PIM support, and a unified audit trail.
+
+> **Exam tip:** Choose Azure RBAC for Key Vault when the requirement mentions
+> Entra integration, Privileged Identity Management (PIM), per-resource
+> granularity, or migration away from legacy Access Policies.
+
+```mermaid
+--8<-- "azure/diagrams/security/key-vault-access-decision-flow.mmd"
+```
+
+Use **Managed Identity** bound to an Azure RBAC role (e.g. Key Vault Secrets User)
+as the credential-free pattern — no secrets stored in application configuration.
+
+## Encryption
+
+| Type | Description | Service |
+| --- | --- | --- |
+| **Encryption at rest** | Data encrypted on disk | Default in Azure Storage, SQL, etc. |
+| **CMK (Customer-Managed Keys)** | You control key in Key Vault | Stricter compliance, storage + SQL |
+| **PMK (Platform-Managed Keys)** | Microsoft manages key | Default, lower admin overhead |
+| **Double Encryption** | Two layers of encryption | Azure Storage, Disks |
+| **Encryption in transit** | TLS enforced | All Azure services |
+| **Azure Disk Encryption** | BitLocker (Windows) / dm-crypt (Linux) | VM OS and data disks |
+| **SSE (Server-Side Encryption)** | Storage service encrypts before writing | Azure Blob, Files, Queues |
+
+## Policy & Compliance
+
+| Concept | Description |
+| --- | --- |
+| **Azure Policy** | Enforce, audit, or remediate resource configurations |
+| **Policy Initiative** | Group of policies (e.g., CIS benchmark) |
+| **Deny Effect** | Block non-compliant resource creation |
+| **Audit Effect** | Flag non-compliance without blocking |
+| **DeployIfNotExists** | Auto-remediate — deploy missing configs |
+| **Modify Effect** | Auto-add tags or properties |
+| **Compliance Dashboard** | See % compliance across subscriptions |
+| **Regulatory Compliance** | Pre-built initiatives: NIST, ISO 27001, PCI-DSS |
+
+> Exam tip: **DeployIfNotExists** requires a managed identity for the policy assignment to execute remediation.
+
+## Authentication & Password Security
+
+| Feature | Description | Use Case |
+| --- | --- | --- |
+| **MFA** | Multi-factor authentication | All users, especially admins |
+| **Passwordless** | FIDO2 key, Microsoft Authenticator, Windows Hello | Zero-password auth |
+| **Conditional Access** | Policy-based access decisions | Enforce MFA by location/risk/device |
+| **Identity Protection** | Risk-based sign-in/user risk policies | Auto-block risky sign-ins |
+| **SSPR (Self-Service Password Reset)** | Users reset their own passwords | Reduce helpdesk load |
+| **Password Protection** | Block weak/known-bad passwords | On-prem AD + Azure AD |
+| **PIM (Privileged Identity Management)** | Just-in-time privileged access | Admin roles activated on demand |
+| **Access Reviews** | Periodic review of group/role membership | Compliance, least-privilege enforcement |
+
+## Microsoft Sentinel
+
+| Component | Purpose |
+| --- | --- |
+| **Data Connectors** | Ingest logs from Azure, M365, 3rd party |
+| **Analytics Rules** | Detect threats from log patterns |
+| **Playbooks (Logic Apps)** | Auto-respond to incidents |
+| **Workbooks** | Visualize security data |
+| **UEBA** | User and entity behavior analytics |
+| **Threat Intelligence** | Feed-based IOC matching |
+
+> Sentinel = SIEM + SOAR. Defender for Cloud = CSPM + workload protection. They integrate but serve different roles.
+
+> **Exam tip (AZ-500):** Sentinel is a cloud-native SIEM + SOAR; Defender for
+> Cloud is CSPM + workload protection. AZ-500 questions that mention "incident
+> response automation" or "playbook" point to Sentinel. Questions that mention
+> "secure score" or "recommendations" point to Defender for Cloud.
+
+## Defender for Cloud
+
+| Service | Layer | Scope | Use Case | Key Feature |
+| --- | --- | --- | --- | --- |
+| **Defender CSPM (Free)** | Posture | Subscription | Secure Score, recommendations | Always on; no cost |
+| **Defender CSPM (Paid)** | Posture | Subscription | Advanced posture, attack paths | Governance rules, regulatory compliance |
+| **Defender for Servers** | Workload | VM/Arc | Threat detection on VMs | MDE integration, vulnerability assessment |
+| **Defender for Storage** | Workload | Storage Account | Malware scanning, anomaly detection | Per-storage-account enablement |
+
+> **Exam tip:** Enabling Defender for Cloud at the subscription level automatically covers all existing and future resources. Use the "Enhanced Security" toggle per workload plan to control cost.
+
+### Defender for Cloud Coverage
+
+```mermaid
+--8<-- "azure/diagrams/security/defender-for-cloud-coverage.mmd"
+```
