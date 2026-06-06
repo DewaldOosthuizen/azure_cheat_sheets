@@ -57,11 +57,15 @@ class TestAwsSnippetFileContent:
             # Must start with an ALL-CAPS # heading
             lines = [ln for ln in text.splitlines() if ln.startswith("# ")]
             assert lines, f"{snippet}: no top-level heading found"
-            assert lines[0][2:].isupper() or lines[0][2:].replace(" ", "").replace(
-                "&", ""
-            ).replace("-", "").replace(",", "").isupper(), (
-                f"{snippet}: top-level heading not ALL-CAPS: {lines[0]!r}"
-            )
+            assert (
+                lines[0][2:].isupper()
+                or lines[0][2:]
+                .replace(" ", "")
+                .replace("&", "")
+                .replace("-", "")
+                .replace(",", "")
+                .isupper()
+            ), f"{snippet}: top-level heading not ALL-CAPS: {lines[0]!r}"
 
     @pytest.mark.parametrize("domain", AWS_DOMAINS)
     def test_has_service_column(self, domain: str) -> None:
@@ -86,9 +90,7 @@ class TestAwsSnippetFileContent:
         snippet = DOCS / "aws" / "files" / domain / f"{domain}.md"
         if snippet.exists():
             text = snippet.read_text(encoding="utf-8")
-            assert "> **Exam tip:**" in text, (
-                f"{snippet}: missing '> **Exam tip:**' callout"
-            )
+            assert "> **Exam tip:**" in text, f"{snippet}: missing '> **Exam tip:**' callout"
 
     @pytest.mark.parametrize("domain", AWS_DOMAINS)
     def test_has_mermaid_snippet_directive(self, domain: str) -> None:
@@ -96,8 +98,7 @@ class TestAwsSnippetFileContent:
         if snippet.exists():
             text = snippet.read_text(encoding="utf-8")
             assert f'--8<-- "aws/diagrams/{domain}/decision-flow.mmd"' in text, (
-                f"{snippet}: missing snippet directive for "
-                f'aws/diagrams/{domain}/decision-flow.mmd'
+                f"{snippet}: missing snippet directive for aws/diagrams/{domain}/decision-flow.mmd"
             )
 
 
