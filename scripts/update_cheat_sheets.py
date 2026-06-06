@@ -38,38 +38,10 @@ def update_az305() -> None:
     src = DOCS / "cheat_sheets/AZ-305.md"
     lines = src.read_text(encoding="utf-8").splitlines(keepends=True)
 
-    # Section boundaries: (heading_line_1idx, sep_line_1idx_or_none, domain)
-    # heading_line is the line with '# SECTION'
-    # sep_line is the '---' line that ends the section (None for last section)
-    sections = [
-        (87, 273, "networking"),
-        (275, 391, "security"),
-        (393, 522, "storage"),
-        (524, 589, "monitoring"),
-        (591, 784, "compute"),
-        (786, 876, "identity"),
-        (878, 922, "ha-dr"),
-        (924, 1023, "governance"),
-        (1025, 1080, "messaging"),
-        (1082, None, "waf"),
-    ]
-
-    # Build new file by keeping lines outside sections, replacing sections
-    # with snippet directives. Work from end to start to preserve line numbers.
-
     # First, handle the "Also relevant for:" callouts - remove them from AZ-305
     lines = remove_also_relevant_for_lines(lines)
 
-    # Recompute line numbers after removal (use grep on modified content)
-    # Rebuild whole file from scratch using text manipulation
-
-    # Now replace each section body with snippet directive
-    # Pattern: after '# SECTION\n' and optional callout, up to '---\n' separator
-    for _heading_1idx, _sep_1idx, _domain in sections:
-        # We need to find the heading in current text and replace body
-        pass
-
-    # Better approach: parse by section headings
+    # Parse by section headings to replace each section body with a snippet directive.
     current_lines = "".join(lines).splitlines(keepends=True)
 
     # Find section heading positions in the current (already cleaned) text

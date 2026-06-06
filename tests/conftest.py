@@ -35,6 +35,8 @@ def expand_snippets(text: str, base: Path = SNIPPET_BASE) -> str:
     def _replace(m: re.Match) -> str:
         rel = m.group(1)
         abs_path = (base / rel).resolve()
+        if not abs_path.is_relative_to(base.resolve()):
+            return m.group(0)  # reject path traversal outside docs/
         try:
             return abs_path.read_text(encoding="utf-8")
         except OSError:

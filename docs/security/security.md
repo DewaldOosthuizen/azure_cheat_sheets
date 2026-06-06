@@ -48,6 +48,10 @@
 > Entra integration, Privileged Identity Management (PIM), per-resource
 > granularity, or migration away from legacy Access Policies.
 
+```mermaid
+--8<-- "diagrams/security/key-vault-access-decision-flow.mmd"
+```
+
 Use **Managed Identity** bound to an Azure RBAC role (e.g. Key Vault Secrets User)
 as the credential-free pattern — no secrets stored in application configuration.
 
