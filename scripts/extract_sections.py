@@ -75,7 +75,7 @@ DIAGRAM_RENAMES: dict[str, str] = {
 def fix_diagram_refs(text: str) -> str:
     """Replace old exam-prefixed diagram paths with new agnostic paths."""
     for old, new in DIAGRAM_RENAMES.items():
-        text = text.replace(f'diagrams/{old}', f'diagrams/{new}')
+        text = text.replace(f"diagrams/{old}", f"diagrams/{new}")
     return text
 
 
@@ -86,13 +86,15 @@ def remove_also_relevant_for(lines: list[str]) -> list[str]:
     while i < len(lines):
         line = lines[i]
         # Check if this is an 'Also relevant for' callout
-        if line.strip().startswith('> Also relevant for:') or line.strip().startswith('>Also relevant for:'):
+        if line.strip().startswith("> Also relevant for:") or line.strip().startswith(
+            ">Also relevant for:"
+        ):
             # Skip this line and all following '> ' lines that are part of same blockquote
             i += 1
-            while i < len(lines) and lines[i].strip().startswith('>'):
+            while i < len(lines) and lines[i].strip().startswith(">"):
                 i += 1
             # Skip one trailing blank line if present
-            if i < len(lines) and lines[i].strip() == '':
+            if i < len(lines) and lines[i].strip() == "":
                 i += 1
         else:
             result.append(line)
@@ -113,51 +115,55 @@ def extract_section(file_lines: list[str], heading_line: int, sep_line: int | No
     section_lines = file_lines[start:end]
 
     # Remove leading blank line(s) right after heading
-    while section_lines and section_lines[0].strip() == '':
+    while section_lines and section_lines[0].strip() == "":
         section_lines = section_lines[1:]
 
     # Remove "Also relevant for:" callouts
     section_lines = remove_also_relevant_for(section_lines)
 
     # Remove trailing blank lines
-    while section_lines and section_lines[-1].strip() == '':
+    while section_lines and section_lines[-1].strip() == "":
         section_lines = section_lines[:-1]
 
-    content = ''.join(section_lines)
+    content = "".join(section_lines)
     return fix_diagram_refs(content)
 
 
 def main() -> None:
-    az305_lines = (DOCS / "cheat_sheets/AZ-305.md").read_text(encoding="utf-8").splitlines(keepends=True)
-    az104_lines = (DOCS / "cheat_sheets/AZ-104.md").read_text(encoding="utf-8").splitlines(keepends=True)
+    az305_lines = (
+        (DOCS / "cheat_sheets/AZ-305.md").read_text(encoding="utf-8").splitlines(keepends=True)
+    )
+    az104_lines = (
+        (DOCS / "cheat_sheets/AZ-104.md").read_text(encoding="utf-8").splitlines(keepends=True)
+    )
 
     # AZ-305 section boundaries (1-indexed line numbers)
     # heading_line is where # SECTION is, sep_line is where --- is
     az305_sections = {
-        "networking":  (87, 273),
-        "security":    (275, 391),
-        "storage":     (393, 522),
-        "monitoring":  (524, 589),
-        "compute":     (591, 784),
-        "identity":    (786, 876),
-        "ha-dr":       (878, 922),
-        "governance":  (924, 1023),
-        "messaging":   (1025, 1080),
-        "waf":         (1082, None),
+        "networking": (87, 273),
+        "security": (275, 391),
+        "storage": (393, 522),
+        "monitoring": (524, 589),
+        "compute": (591, 784),
+        "identity": (786, 876),
+        "ha-dr": (878, 922),
+        "governance": (924, 1023),
+        "messaging": (1025, 1080),
+        "waf": (1082, None),
     }
 
     # AZ-104 section boundaries (1-indexed line numbers)
     az104_sections = {
-        "networking":  (23, 80),
-        "security":    (82, 124),
-        "storage":     (126, 168),
-        "monitoring":  (170, 218),
-        "compute":     (220, 263),
-        "identity":    (265, 303),
-        "ha-dr":       (305, 336),
-        "governance":  (338, 376),
-        "messaging":   (378, 418),
-        "waf":         (420, None),
+        "networking": (23, 80),
+        "security": (82, 124),
+        "storage": (126, 168),
+        "monitoring": (170, 218),
+        "compute": (220, 263),
+        "identity": (265, 303),
+        "ha-dr": (305, 336),
+        "governance": (338, 376),
+        "messaging": (378, 418),
+        "waf": (420, None),
     }
 
     for domain, (h305, s305) in az305_sections.items():
@@ -186,8 +192,8 @@ def merge_content(domain: str, az305: str, az104: str) -> str:
     - Include both, deduplicating subsections that appear in both
     """
     # Find headings in each
-    az305_headings = set(re.findall(r'^## .+', az305, re.MULTILINE))
-    az104_headings = set(re.findall(r'^## .+', az104, re.MULTILINE))
+    az305_headings = set(re.findall(r"^## .+", az305, re.MULTILINE))
+    az104_headings = set(re.findall(r"^## .+", az104, re.MULTILINE))
 
     # Find AZ-104 subsections NOT in AZ-305 (headings unique to AZ-104)
     unique_az104_headings = az104_headings - az305_headings
@@ -200,7 +206,7 @@ def merge_content(domain: str, az305: str, az104: str) -> str:
     az104_unique_parts = []
     for heading in sorted(unique_az104_headings):
         # Extract the subsection
-        pattern = re.escape(heading) + r'(.*?)(?=\n## |\Z)'
+        pattern = re.escape(heading) + r"(.*?)(?=\n## |\Z)"
         m = re.search(pattern, az104, re.DOTALL)
         if m:
             section_text = heading + m.group(1)

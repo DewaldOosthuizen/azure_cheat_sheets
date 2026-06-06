@@ -63,9 +63,7 @@ class TestAZ305SnippetDirectives:
     def test_snippet_directive_in_az305(self, domain: str) -> None:
         text = self._az305_text()
         directive = f'--8<-- "{domain}/{domain}.md"'
-        assert directive in text, (
-            f"AZ-305.md missing snippet directive: {directive}"
-        )
+        assert directive in text, f"AZ-305.md missing snippet directive: {directive}"
 
     def test_exam_track_index_retained(self) -> None:
         text = self._az305_text()
@@ -88,9 +86,7 @@ class TestAZ104SnippetDirectives:
     def test_snippet_directive_in_az104(self, domain: str) -> None:
         text = self._az104_text()
         directive = f'--8<-- "{domain}/{domain}.md"'
-        assert directive in text, (
-            f"AZ-104.md missing snippet directive: {directive}"
-        )
+        assert directive in text, f"AZ-104.md missing snippet directive: {directive}"
 
 
 class TestSnippetFileContent:
@@ -273,16 +269,12 @@ class TestMmdFilesRenamed:
     @pytest.mark.parametrize("rel", OLD_MMD)
     def test_old_mmd_does_not_exist(self, rel: str) -> None:
         old_path = DIAGRAMS / rel
-        assert not old_path.exists(), (
-            f"Old exam-prefixed .mmd file still exists: {old_path}"
-        )
+        assert not old_path.exists(), f"Old exam-prefixed .mmd file still exists: {old_path}"
 
     @pytest.mark.parametrize("rel", NEW_MMD)
     def test_new_mmd_exists(self, rel: str) -> None:
         new_path = DIAGRAMS / rel
-        assert new_path.exists(), (
-            f"New exam-agnostic .mmd file missing: {new_path}"
-        )
+        assert new_path.exists(), f"New exam-agnostic .mmd file missing: {new_path}"
 
 
 # ── Issue 3: mkdocs.yml not_in_nav block ──────────────────────────────────────
@@ -299,17 +291,13 @@ class TestMkdocsNotInNav:
     @pytest.mark.parametrize("domain", DOMAINS)
     def test_domain_listed_in_not_in_nav(self, domain: str) -> None:
         text = self._mkdocs_text()
-        assert f"{domain}/*.md" in text, (
-            f"mkdocs.yml not_in_nav missing entry: {domain}/*.md"
-        )
+        assert f"{domain}/*.md" in text, f"mkdocs.yml not_in_nav missing entry: {domain}/*.md"
 
     def test_not_in_nav_before_nav_key(self) -> None:
         text = self._mkdocs_text()
         nav_pos = text.find("\nnav:")
         not_in_nav_pos = text.find("not_in_nav:")
-        assert not_in_nav_pos < nav_pos, (
-            "not_in_nav: block should appear before nav: in mkdocs.yml"
-        )
+        assert not_in_nav_pos < nav_pos, "not_in_nav: block should appear before nav: in mkdocs.yml"
 
 
 # ── Issue 4: conftest.py recursive expand_snippets ────────────────────────────
@@ -321,9 +309,7 @@ class TestExpandSnippetsRecursive:
 
     def test_max_expand_depth_defined(self) -> None:
         text = self._conftest_text()
-        assert "_MAX_EXPAND_DEPTH" in text, (
-            "conftest.py missing _MAX_EXPAND_DEPTH constant"
-        )
+        assert "_MAX_EXPAND_DEPTH" in text, "conftest.py missing _MAX_EXPAND_DEPTH constant"
 
     def test_expand_snippets_has_loop(self) -> None:
         text = self._conftest_text()
@@ -333,10 +319,9 @@ class TestExpandSnippetsRecursive:
 
     def test_expand_snippets_stabilizes(self) -> None:
         """A snippet that references another snippet is fully expanded."""
-        from tests.conftest import expand_snippets  # noqa: PLC0415
-
         import tempfile
-        import os
+
+        from tests.conftest import expand_snippets
 
         with tempfile.TemporaryDirectory() as tmpdir:
             base = Path(tmpdir)
@@ -346,13 +331,11 @@ class TestExpandSnippetsRecursive:
             outer.write_text('--8<-- "inner.md"', encoding="utf-8")
 
             result = expand_snippets('--8<-- "outer.md"', base=base)
-            assert result == "INNER CONTENT", (
-                f"Recursive expansion failed; got: {result!r}"
-            )
+            assert result == "INNER CONTENT", f"Recursive expansion failed; got: {result!r}"
 
     def test_expand_snippets_missing_file_left_unexpanded(self) -> None:
         """Missing snippet references are left as-is (not raised as error)."""
-        from tests.conftest import expand_snippets  # noqa: PLC0415
+        from tests.conftest import expand_snippets
 
         original = '--8<-- "nonexistent/file.md"'
         result = expand_snippets(original)
@@ -374,17 +357,15 @@ class TestMakefileMdFilesValidate:
 
     def test_md_files_validate_excludes_diagrams(self) -> None:
         text = self._makefile_text()
-        assert "docs/diagrams" in text or "'docs/diagrams/*'" in text or \
-               "docs/diagrams" in text, (
+        assert "docs/diagrams" in text or "'docs/diagrams/*'" in text or "docs/diagrams" in text, (
             "Makefile MD_FILES_VALIDATE should exclude docs/diagrams/ paths"
         )
 
     def test_static_list_removed(self) -> None:
         text = self._makefile_text()
-        assert "docs/cheat_sheets/AZ-305.md docs/cheat_sheets/AZ-104.md docs/index.md" \
-               not in text, (
-            "Makefile still has old static MD_FILES_VALIDATE list"
-        )
+        assert (
+            "docs/cheat_sheets/AZ-305.md docs/cheat_sheets/AZ-104.md docs/index.md" not in text
+        ), "Makefile still has old static MD_FILES_VALIDATE list"
 
 
 # ── Issue 6: Documentation updates ───────────────────────────────────────────
@@ -423,11 +404,12 @@ class TestAgentsMdUpdated:
     def test_section_snippet_paths_in_layout(self) -> None:
         text = self._agents_text()
         # Should mention the new docs/<section>/<section>.md pattern
-        assert "docs/<section>" in text or "section>.md" in text or \
-               "networking/networking.md" in text or \
-               "<section>/<section>.md" in text, (
-            "AGENTS.md repository layout should mention section snippet files"
-        )
+        assert (
+            "docs/<section>" in text
+            or "section>.md" in text
+            or "networking/networking.md" in text
+            or "<section>/<section>.md" in text
+        ), "AGENTS.md repository layout should mention section snippet files"
 
     def test_exam_agnostic_mmd_convention(self) -> None:
         text = self._agents_text()
@@ -443,6 +425,4 @@ class TestIndexMdUpdated:
 
     def test_snippet_files_mentioned(self) -> None:
         text = self._index_text()
-        assert "snippet" in text.lower(), (
-            "docs/index.md should mention section snippet files"
-        )
+        assert "snippet" in text.lower(), "docs/index.md should mention section snippet files"

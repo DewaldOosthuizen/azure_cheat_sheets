@@ -36,6 +36,9 @@ ignore = []
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**/*.py" = ["S101"]
+# extract_sections.py contains a rename-mapping dict whose string keys/values
+# exceed 100 chars; these cannot be reformatted without losing readability.
+"scripts/extract_sections.py" = ["E501"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["scripts"]
@@ -46,6 +49,12 @@ indent-style = "space"
 
 [tool.coverage.run]
 source = ["scripts"]
+# Migration scripts are one-shot utilities — run once to produce the current
+# repo state and not re-executed during CI. Exclude them from coverage measurement.
+omit = [
+    "scripts/extract_sections.py",
+    "scripts/update_cheat_sheets.py",
+]
 
 [tool.coverage.report]
 fail_under = 90

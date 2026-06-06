@@ -7,7 +7,6 @@ Run once from repo root:
 
 from __future__ import annotations
 
-import re
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).parent.parent
@@ -20,13 +19,13 @@ def remove_also_relevant_for_lines(lines: list[str]) -> list[str]:
     i = 0
     while i < len(lines):
         line = lines[i]
-        if line.strip().startswith('> Also relevant for:'):
+        if line.strip().startswith("> Also relevant for:"):
             # Skip this and continuation '> ' lines
             i += 1
-            while i < len(lines) and lines[i].strip().startswith('>'):
+            while i < len(lines) and lines[i].strip().startswith(">"):
                 i += 1
             # Skip trailing blank line
-            if i < len(lines) and lines[i].strip() == '':
+            if i < len(lines) and lines[i].strip() == "":
                 i += 1
         else:
             result.append(line)
@@ -62,18 +61,15 @@ def update_az305() -> None:
     lines = remove_also_relevant_for_lines(lines)
 
     # Recompute line numbers after removal (use grep on modified content)
-    # Actually, we need to reconstruct based on new content
-    # Easier: rebuild whole file from scratch using text manipulation
-    text = "".join(lines)
+    # Rebuild whole file from scratch using text manipulation
 
     # Now replace each section body with snippet directive
     # Pattern: after '# SECTION\n' and optional callout, up to '---\n' separator
-    for heading_1idx, sep_1idx, domain in sections:
+    for _heading_1idx, _sep_1idx, _domain in sections:
         # We need to find the heading in current text and replace body
         pass
 
     # Better approach: parse by section headings
-    result_lines = []
     current_lines = "".join(lines).splitlines(keepends=True)
 
     # Find section heading positions in the current (already cleaned) text
@@ -91,8 +87,16 @@ def update_az305() -> None:
     }
 
     section_order = [
-        "networking", "security", "storage", "monitoring", "compute",
-        "identity", "ha-dr", "governance", "messaging", "waf"
+        "networking",
+        "security",
+        "storage",
+        "monitoring",
+        "compute",
+        "identity",
+        "ha-dr",
+        "governance",
+        "messaging",
+        "waf",
     ]
 
     # Find heading line indices in current_lines
@@ -111,7 +115,7 @@ def update_az305() -> None:
 
     new_lines = list(pre_section)
 
-    for idx, domain in enumerate(section_order):
+    for _idx, domain in enumerate(section_order):
         heading_pos = heading_positions[domain]
         heading_line = current_lines[heading_pos]
 
@@ -119,21 +123,21 @@ def update_az305() -> None:
         # Look for '---\n' after heading_pos
         sep_pos = None
         for j in range(heading_pos + 1, len(current_lines)):
-            if current_lines[j].strip() == '---':
+            if current_lines[j].strip() == "---":
                 sep_pos = j
                 break
 
         # Add heading
         new_lines.append(heading_line)
-        new_lines.append('\n')
+        new_lines.append("\n")
         # Add snippet directive
         new_lines.append(f'--8<-- "{domain}/{domain}.md"\n')
-        new_lines.append('\n')
+        new_lines.append("\n")
 
         if sep_pos is not None:
             # Add separator
-            new_lines.append('---\n')
-            new_lines.append('\n')
+            new_lines.append("---\n")
+            new_lines.append("\n")
         # (last section has no separator)
 
     # Write
@@ -161,8 +165,16 @@ def update_az104() -> None:
     }
 
     section_order = [
-        "networking", "security", "storage", "monitoring", "compute",
-        "identity", "ha-dr", "governance", "messaging", "waf"
+        "networking",
+        "security",
+        "storage",
+        "monitoring",
+        "compute",
+        "identity",
+        "ha-dr",
+        "governance",
+        "messaging",
+        "waf",
     ]
 
     # Find heading positions
@@ -186,19 +198,19 @@ def update_az104() -> None:
         # Find the --- separator after heading
         sep_pos = None
         for j in range(heading_pos + 1, len(lines)):
-            if lines[j].strip() == '---':
+            if lines[j].strip() == "---":
                 sep_pos = j
                 break
 
         # Add heading
         new_lines.append(heading_line)
-        new_lines.append('\n')
+        new_lines.append("\n")
         new_lines.append(f'--8<-- "{domain}/{domain}.md"\n')
-        new_lines.append('\n')
+        new_lines.append("\n")
 
         if sep_pos is not None:
-            new_lines.append('---\n')
-            new_lines.append('\n')
+            new_lines.append("---\n")
+            new_lines.append("\n")
 
     result = "".join(new_lines)
     src.write_text(result, encoding="utf-8")
