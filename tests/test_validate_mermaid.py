@@ -391,8 +391,8 @@ class TestTraversalGuard:
         A naive startswith check would pass because the path string starts with
         the root string.  Path.is_relative_to() correctly rejects it.
         """
+        import tempfile
         from pathlib import Path
-        import tempfile, os
 
         with tempfile.TemporaryDirectory() as tmp:
             # Create two sibling directories whose names share a prefix.
