@@ -232,3 +232,76 @@
 ```mermaid
 --8<-- "azure/diagrams/networking/vnet-connectivity-decision-flow.mmd"
 ```
+
+## IP Addressing and Subnet Ranges
+
+### Common CIDR Reference
+
+Azure reserves **5 IP addresses** in every subnet (not 2 as in standard TCP/IP):
+
+| CIDR | Total IPs | Usable (Standard) | Usable (Azure) | Typical Use |
+| --- | --- | --- | --- | --- |
+| **/8** | 16,777,216 | 16,777,214 | 16,777,211 | Entire private Class A block — theoretical maximum |
+| **/12** | 1,048,576 | 1,048,574 | 1,048,571 | Extremely large; rarely practical for a single subnet |
+| **/16** | 65,536 | 65,534 | 65,531 | Large VNet address space; covers ≥12,000 host requirement |
+| **/20** | 4,096 | 4,094 | 4,091 | Medium subnet; good for thousands of hosts |
+| **/24** | 256 | 254 | 251 | Classic "Class C" size; common for small application subnets |
+| **/27** | 32 | 30 | 27 | Small subnet; minimum recommended size for GatewaySubnet |
+| **/28** | 16 | 14 | 11 | Very small; Azure Firewall, Bastion, or Application Gateway subnets |
+| **/29** | 8 | 6 | 3 | Minimum usable Azure subnet; 3 hosts only |
+| **/30** | 4 | 2 | n/a | Point-to-point links (on-prem only — not usable in Azure) |
+| **/32** | 1 | 0 | 0 | Single host route; not a subnet |
+
+### How CIDR Is Calculated
+
+CIDR notation (e.g. `10.0.1.0/24`) encodes two things in one expression:
+the network address and the prefix length. The prefix length (the number after the slash)
+tells you how many bits identify the network. The remaining bits identify hosts.
+
+**Formula:**
+
+```text
+Total IPs       = 2 ^ (32 - prefix)
+Usable (std)    = Total - 2           (subtract network address + broadcast)
+Usable (Azure)  = Total - 5           (subtract network + default gateway + 2 DNS + broadcast)
+```
+
+**Azure-reserved addresses in every subnet (example: 10.0.1.0/24):**
+
+| Address | Reserved For |
+| --- | --- |
+| 10.0.1.0 | Network address |
+| 10.0.1.1 | Default gateway (reserved by Azure) |
+| 10.0.1.2 | DNS mapping (reserved by Azure) |
+| 10.0.1.3 | DNS mapping (reserved by Azure) |
+| 10.0.1.255 | Broadcast address |
+
+**Worked example — sizing a subnet for 500 VMs in Azure:**
+
+```text
+Required hosts  = 500
+Add Azure overhead → 500 + 5 = 505
+Nearest power of 2 ≥ 505 → 2^10 = 1,024
+Prefix length   = 32 - 10 = /22  (1,024 total; 1,019 usable in Azure)
+```
+
+**Quick power-of-2 lookup:**
+
+| Prefix | 2^(32−n) |
+| --- | --- |
+| /20 | 4,096 |
+| /21 | 2,048 |
+| /22 | 1,024 |
+| /23 | 512 |
+| /24 | 256 |
+| /25 | 128 |
+| /26 | 64 |
+| /27 | 32 |
+| /28 | 16 |
+| /29 | 8 |
+
+> **Exam tip:** Azure always reserves 5 addresses per subnet. When a question gives a host
+> count requirement, add 5 before selecting the prefix — a /24 supports 251 hosts, not 254.
+> The minimum subnet size for most Azure services is /29 (3 usable hosts). Dedicated subnets
+> such as GatewaySubnet, AzureFirewallSubnet, and AzureBastionSubnet each require their own
+> dedicated subnet and have minimum size requirements (/27 for GatewaySubnet, /26 for Bastion).

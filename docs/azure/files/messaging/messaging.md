@@ -73,6 +73,25 @@
 > **SLA note:** Messaging scenarios that emphasize strict reliability,
 > predictable throughput, and isolation generally indicate Service Bus Premium.
 
+## Message Size Limits
+
+| Service | Type | Best For | Key Feature |
+| --- | --- | --- | --- |
+| **Service Bus** | Basic / Standard | Fixed-size command or control messages | Max **256 KB** per message; fixed, not configurable |
+| **Service Bus** | Premium | Large payload or document delivery | Default **1 MB**; configurable up to **100 MB** per message via namespace setting |
+| **Storage Queue** | Standard (no sub-tiers) | Simple async task offloading | Max **64 KB** per message; fixed, not configurable |
+| **Event Hubs** | Basic / Standard | High-throughput telemetry and log streaming | Max **1 MB** per individual event or batch; fixed ceiling; Basic/Standard namespaces cannot be upgraded to Premium |
+| **Event Hubs** | Premium / Dedicated | Large event streaming | Default **1 MB**; increase to **20 MB** available via Azure support request |
+| **Event Grid** | All resource types | Lightweight reactive event notification | Max **1 MB** per event or batch; fixed; events > 64 KB billed as multiple 64 KB units (e.g. 130 KB event = 3 billing units) |
+
+> **Exam tip:** Service Bus Premium is the only tier that supports messages beyond 256 KB —
+> default 1 MB, configurable up to 100 MB. Storage Queue has the tightest cap at 64 KB
+> and is unsuitable for large payloads. Event Hubs and Event Grid both cap at 1 MB but
+> serve different patterns: Event Hubs is a partitioned stream (ordered per partition,
+> replay-capable); Event Grid is a push-delivery notification bus (no replay, no ordering
+> guarantee). If a scenario requires messages larger than 256 KB with dead-lettering and
+> ordering, the answer is Service Bus Premium.
+
 ## Azure Functions Trigger Bindings (AZ-204)
 
 | Service | Binding | Direction | Key Feature |

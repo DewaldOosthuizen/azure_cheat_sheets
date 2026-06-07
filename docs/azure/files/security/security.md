@@ -83,6 +83,82 @@ as the credential-free pattern — no secrets stored in application configuratio
 | **Azure Disk Encryption** | BitLocker (Windows) / dm-crypt (Linux) | VM OS and data disks |
 | **SSE (Server-Side Encryption)** | Storage service encrypts before writing | Azure Blob, Files, Queues |
 
+## Azure SQL Encryption
+
+Three distinct mechanisms control how Azure SQL protects data. They operate at
+different layers, have different key ownership models, and are not interchangeable.
+
+| Mechanism | Protection Layer | DB Engine Sees Plaintext | Keys Owned By | Use Case | Key Feature |
+| --- | --- | --- | --- | --- | --- |
+| **Transparent Data Encryption (TDE)** | Data files at rest (disk) | Yes — plaintext in memory | Microsoft (PMK default) or customer (CMK via Key Vault) | Compliance baseline; protects against physical media or backup file theft | Enabled by default on Azure SQL and SQL MI; zero application change required |
+| **Always Encrypted** | Column-level; client driver | No — ciphertext only | Client application (Column Master Key never leaves client) | Highly sensitive columns (PII, PAN, PHI) where DBAs and cloud operators must not see data | Encryption and decryption happen inside the client driver; SQL engine only stores and returns ciphertext |
+| **Dynamic Data Masking (DDM)** | Query result display layer | Yes — data stored unmasked | N/A (not encryption) | Limit sensitive data exposure for non-privileged users without schema changes | Masking rules defined per column; privileged users with `UNMASK` permission bypass masking automatically |
+
+### How Each One Works
+
+#### Transparent Data Encryption (TDE)
+
+Encrypts the entire database, its backups, and transaction log files at rest
+using AES-256. The encryption and decryption are handled by the SQL engine
+transparently — no application change is needed. By default Azure manages the
+key (PMK). For compliance scenarios requiring key ownership, you can bring your
+own key (BYOK/CMK) stored in Azure Key Vault.
+
+- Protects against: stolen backup files, physical disk removal, storage media disposal.
+- Does NOT protect against: a compromised DBA, an SQL injection attack, or any
+  threat that queries data through the engine (data is decrypted in memory for normal queries).
+
+#### Always Encrypted
+
+Encrypts specific columns before data leaves the client application. The SQL
+engine stores and returns only ciphertext and never has access to the plaintext
+or the encryption keys. Key material (Column Master Key) is held in a trusted
+store such as Azure Key Vault or the Windows Certificate Store. The client
+driver (e.g. ADO.NET, JDBC) handles encryption/decryption transparently.
+
+Two encryption types within Always Encrypted:
+
+| Type | Supports Equality Queries | Use Case |
+| --- | --- | --- |
+| **Deterministic** | Yes (same plaintext → same ciphertext) | Columns used in WHERE, JOIN, GROUP BY |
+| **Randomized** | No (same plaintext → different ciphertext each time) | Maximum confidentiality; columns not used in filtering |
+
+- Protects against: compromised DBAs, SQL injection returning column data, cloud
+  operator access.
+- Limitation: randomized columns cannot be used in WHERE clauses or indexes.
+  Computations (e.g. range queries, sorting) on encrypted columns require
+  Always Encrypted with secure enclaves (SQL Server 2019+ / Azure SQL with enclaves).
+
+#### Dynamic Data Masking (DDM)
+
+Applies obfuscation rules to column values at query time. The underlying data
+is stored and processed unmasked. Users with elevated permissions (sysadmin,
+db_owner, or the `UNMASK` permission) always see full data.
+
+Built-in masking functions:
+
+| Function | Example Output | Typical Column |
+| --- | --- | --- |
+| `default()` | `XXXX` or `0` | Any sensitive field |
+| `email()` | `aXXX@XXXX.com` | Email addresses |
+| `partial(n, padding, m)` | `XnXXXXm` | Phone, ID numbers |
+| `random(low, high)` | Random integer in range | Numeric columns |
+
+- Protects against: accidental over-exposure of sensitive data to support staff
+  or low-privilege application roles.
+- Does NOT protect against: any user who holds `UNMASK`, a DBA, or an attacker
+  who has obtained a privileged connection.
+
+> **Exam tip:** TDE, Always Encrypted, and DDM are complementary, not competing.
+> A production Azure SQL deployment commonly uses all three simultaneously:
+> TDE for at-rest file protection (always on by default), Always Encrypted for
+> the most sensitive PII columns where even DBAs must not see the data, and DDM
+> to restrict what support or reporting roles see in query results.
+> When an exam scenario says "the DBA must not be able to read the data" or
+> "data must be encrypted before reaching the server", the answer is Always Encrypted.
+> When it says "encrypt backups and data files at rest", the answer is TDE.
+> When it says "hide part of a credit card number from support staff", the answer is DDM.
+
 ## Policy & Compliance
 
 | Concept | Description |
