@@ -2,6 +2,7 @@
 
 | Section | AZ-900 | AZ-104 | AZ-204 | AZ-305 | AZ-500 | AZ-700 |
 | --- | --- | --- | --- | --- | --- | --- |
+| [Abbreviations](../abbreviations/abbreviations.md) | — | — | — | — | — | — |
 | [Networking](../networking/networking.md) | Partial | Full | — | Full | Partial | Full |
 | [Security](../security/security.md) | — | Partial | Partial | Full | Full | — |
 | [Storage](../storage/storage.md) | Partial | Full | Partial | Full | — | — |

@@ -164,7 +164,7 @@ class TestExistingContentPreserved:
         assert 'The "s" suffix (e.g., Dsv5) indicates Premium SSD support' in compute_text
 
     def test_vm_family_decision_flow_diagram_present(self, compute_text):
-        assert '### VM Family Decision Flow' in compute_text
+        assert "### VM Family Decision Flow" in compute_text
 
     def test_vm_family_decision_flow_mmd_snippet(self, compute_text):
         assert '--8<-- "azure/diagrams/compute/vm-family-decision-flow.mmd"' in compute_text

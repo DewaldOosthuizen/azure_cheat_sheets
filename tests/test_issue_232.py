@@ -150,13 +150,13 @@ class TestAWSExamsFileContent:
         assert "Well-Architected" in aws_exams_text
 
     def test_eleven_data_rows(self, aws_exams_text):
-        # 11 domain rows expected (header + separator + 11 data rows)
+        # 11 domain rows + 1 abbreviations row = 12 total data rows (issue #234)
         data_rows = [
             line
             for line in aws_exams_text.splitlines()
             if line.strip().startswith("|") and "---" not in line and "Section" not in line
         ]
-        assert len(data_rows) == 11, f"Expected 11 data rows, got {len(data_rows)}"
+        assert len(data_rows) == 12, f"Expected 12 data rows, got {len(data_rows)}"
 
 
 # ── TASK 4: mkdocs.yml — AWS Exam Coverage registered ────────────────────────
@@ -170,9 +170,7 @@ class TestMkdocsAWSExamCoverage:
 
     def test_aws_exam_coverage_is_first_under_aws(self, mkdocs_text):
         lines = mkdocs_text.splitlines()
-        aws_idx = next(
-            (i for i, line in enumerate(lines) if line.strip() == "- AWS:"), None
-        )
+        aws_idx = next((i for i, line in enumerate(lines) if line.strip() == "- AWS:"), None)
         assert aws_idx is not None, "- AWS: section not found in mkdocs.yml"
         # Find next nav entries after - AWS:
         child_entries = []
@@ -187,8 +185,10 @@ class TestMkdocsAWSExamCoverage:
                 child_entries.append(stripped)
                 break
         assert child_entries, "No child entries found under - AWS:"
-        assert "Exam Coverage" in child_entries[0], (
-            f"First AWS child is not Exam Coverage, got: {child_entries[0]}"
+        # Abbreviations is now the first entry under AWS (issue #234);
+        # Exam Coverage is the second entry.
+        assert "Abbreviations" in child_entries[0], (
+            f"First AWS child is not Abbreviations, got: {child_entries[0]}"
         )
 
 
@@ -202,9 +202,7 @@ class TestAzureExamsUnchanged:
         assert "AZ-204" in azure_exams_text
 
     def test_azure_exams_has_seven_columns(self, azure_exams_text):
-        header = next(
-            (line for line in azure_exams_text.splitlines() if "Section" in line), None
-        )
+        header = next((line for line in azure_exams_text.splitlines() if "Section" in line), None)
         assert header is not None
         # 7 columns: Section, AZ-900, AZ-104, AZ-204, AZ-305, AZ-500, AZ-700
         assert header.count("|") >= 8  # at least 7 columns = 8 pipes
@@ -215,4 +213,5 @@ class TestAzureExamsUnchanged:
             for line in azure_exams_text.splitlines()
             if line.strip().startswith("|") and "---" not in line and "Section" not in line
         ]
-        assert len(data_rows) == 10, f"Expected 10 data rows, got {len(data_rows)}"
+        # 10 domain rows + 1 abbreviations row = 11 total data rows (issue #234)
+        assert len(data_rows) == 11, f"Expected 11 data rows, got {len(data_rows)}"
