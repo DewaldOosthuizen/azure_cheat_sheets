@@ -100,3 +100,30 @@
 ```mermaid
 --8<-- "azure/diagrams/monitoring/agent-selection-decision-flow.mmd"
 ```
+
+## Application Insights — Developer Focus (AZ-204)
+
+| Service | Type | Best For | Key Feature |
+| --- | --- | --- | --- |
+| TelemetryClient | SDK Class | Manual, code-level telemetry instrumentation | Root class for all manual Track* calls; initialised once per app with the instrumentation key or connection string |
+| TrackEvent | SDK Method | Custom business events (user actions, domain milestones) | Recorded with custom properties and measurements; queryable in Logs as `customEvents` table |
+| TrackMetric | SDK Method | Custom numeric metrics (queue depth, cache hit rate) | Aggregated before sending to reduce bandwidth; queryable in `customMetrics` table |
+| TrackDependency | SDK Method | Outbound calls (HTTP, SQL, Redis, Service Bus) | Records target, duration, and success; links to the parent operation via Operation ID |
+| TrackException | SDK Method | Caught exceptions requiring structured telemetry | Records exception type, message, and stack trace; queryable in `exceptions` table |
+| TrackRequest | SDK Method | Server-side request telemetry for non-auto-instrumented hosts | Records URL, duration, response code, and success; queryable in `requests` table |
+
+> **Exam tip:** Application Insights injects W3C trace context headers (`traceparent` / `tracestate`) on outbound calls, propagating the Operation ID across service boundaries. Use `TrackDependency` for any outbound HTTP, database, or messaging call not already captured by auto-instrumentation. All telemetry sharing the same Operation ID is linked in the end-to-end transaction view — this is the distributed tracing model tested by AZ-204.
+
+| Service | Type | Best For | Key Feature |
+| --- | --- | --- | --- |
+| Adaptive Sampling | Sampling Strategy | Default SDK behaviour; general-purpose telemetry volume control | Dynamically adjusts the sampling rate to keep volume within the daily telemetry cap; no configuration required |
+| Fixed-rate Sampling | Sampling Strategy | Consistent, predictable sample fraction for statistical analysis | Configured in the SDK; client and server sampling rates must match for accurate correlation |
+| Ingestion Sampling | Sampling Strategy | Last-resort volume reduction at the Azure ingestion endpoint | Applied after telemetry arrives at Azure — does NOT reduce SDK-side volume or network bandwidth |
+
+> **Exam tip:** Adaptive sampling is the default and requires no configuration — it adjusts automatically to stay within volume limits. Ingestion sampling is a portal-side filter applied after data arrives at Azure; it does not reduce bandwidth or SDK overhead. Fixed-rate sampling is used when you need a consistent, known fraction for statistical queries. If the exam asks which strategy reduces SDK-side bandwidth, the answer is adaptive or fixed-rate sampling — NOT ingestion sampling.
+
+**Log-based vs Pre-aggregated (Standard) Metrics:**
+
+Log-based metrics are derived from raw telemetry stored in the Logs table — they support arbitrary KQL queries and full-dimension filtering but have higher alert evaluation latency (query must run on each evaluation). Pre-aggregated (standard) metrics are computed at collection time and stored in the Metrics store — they support near real-time alerting and are lower cost to query.
+
+> **Exam tip:** For alerting on response time, failure rate, or request count, use pre-aggregated (standard) metrics — they support near real-time alerts and are cheaper to evaluate. Log-based metric alerts run as KQL queries on the Logs table and have higher latency; use them only when you need custom dimensions or filters not available in standard metrics.

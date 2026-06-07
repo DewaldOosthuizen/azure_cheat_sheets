@@ -57,6 +57,20 @@
 Use **Managed Identity** bound to an Azure RBAC role (e.g. Key Vault Secrets User)
 as the credential-free pattern — no secrets stored in application configuration.
 
+> **Exam tip:** Access Key Vault from code using `DefaultAzureCredential` (azure-identity) with `SecretClient` (azure-keyvault-secrets). No credentials are stored in application configuration — `DefaultAzureCredential` resolves through: environment variables → workload identity → managed identity → Visual Studio → Azure CLI → Azure PowerShell → interactive browser. In production the managed identity is used automatically; locally the Azure CLI credential is used — the same code runs in both environments without modification.
+
+> **Exam tip:** Certificate auto-rotation: Key Vault monitors certificate expiry and triggers renewal via the configured CA issuer (DigiCert or GlobalSign) or a self-signed renewal policy. The application retrieves the updated certificate on the next polling interval or receives a near-expiry notification via Event Grid (`Microsoft.KeyVault.CertificateNearExpiry`). The app does not need to be redeployed — it re-reads the certificate from Key Vault on the next request or on the Event Grid event.
+
+## App Configuration
+
+| Service | Type | Best For | Key Feature |
+| --- | --- | --- | --- |
+| App Configuration Feature Flags | Feature | Runtime feature toggling without redeployment | Boolean flags with audience-targeting filters; integrated with .NET, Java, Python SDKs |
+| App Configuration Key Vault References | Configuration | Centralised secret consumption without copying secret values | Stores only the Key Vault secret URI; actual value fetched from Key Vault at runtime |
+| App Configuration Label-based Config | Configuration | Environment-specific configuration (dev, staging, prod) in one store | Labels act as a filter on key-value pairs; the app selects the label at startup |
+
+> **Exam tip:** App Configuration Key Vault references never copy or cache the secret value inside App Configuration — only the Key Vault URI is stored. When the secret rotates in Key Vault, the updated value is returned on the next runtime fetch without any change to App Configuration. This is the recommended pattern for secret rotation transparency.
+
 ## Encryption
 
 | Type | Description | Service |

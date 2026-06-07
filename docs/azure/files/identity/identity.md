@@ -41,6 +41,40 @@
 --8<-- "azure/diagrams/identity/entra-identity-scenario-decision-flow.mmd"
 ```
 
+## MSAL Authentication Flows (AZ-204)
+
+| Service | Flow | Use Case | Key Feature |
+| --- | --- | --- | --- |
+| MSAL | Authorization Code + PKCE | Interactive sign-in from a browser SPA or native app | PKCE eliminates the need for a client secret in public clients; most secure interactive flow |
+| MSAL | Client Credentials | Daemon or service-to-service call with no signed-in user | Uses app identity (client ID + secret or certificate); no user context |
+| MSAL | On-Behalf-Of (OBO) | Middle-tier API calls a downstream API on behalf of the signed-in user | Middle tier exchanges its access token for a new token scoped to the downstream API |
+| MSAL | Device Code | Input-constrained devices (CLI tools, smart TVs, IoT) | Device displays a code; user authenticates on a separate browser |
+
+> **Exam tip:** On-behalf-of (OBO) is the correct flow when a middle-tier web API receives a token from a client and must call another downstream API using the signed-in user's identity — it propagates the user context through the call chain. Client credentials is for daemon apps or background services where no user is involved. Authorization code + PKCE is the secure flow for browser-based or native apps.
+
+## DefaultAzureCredential Resolution Chain
+
+`DefaultAzureCredential` (azure-identity) attempts credentials in the following order, stopping at the first that succeeds:
+
+1. `EnvironmentCredential` — reads `AZURE_CLIENT_ID`, `AZURE_CLIENT_SECRET` / `AZURE_CLIENT_CERTIFICATE_PATH`, `AZURE_TENANT_ID`
+2. `WorkloadIdentityCredential` — federated identity in Kubernetes (AKS workload identity)
+3. `ManagedIdentityCredential` — Azure-hosted compute (App Service, Functions, VMs, ACI, AKS pod identity)
+4. `VisualStudioCredential` — signed-in identity in Visual Studio (Windows)
+5. `AzureCliCredential` — `az login` credential on the local machine
+6. `AzurePowerShellCredential` — `Connect-AzAccount` credential
+7. `InteractiveBrowserCredential` — browser-based interactive login (disabled by default in `DefaultAzureCredential`)
+
+> **Exam tip:** `DefaultAzureCredential` lets the same application code run locally (resolves to Azure CLI credentials via `az login`) and in production on Azure (resolves to the managed identity assigned to the hosting resource) without any environment-specific branching or secret management. This is the recommended pattern for all Azure SDK clients.
+
+## App Registration: Scopes vs Application Roles
+
+| Service | Type | Best For | Key Feature |
+| --- | --- | --- | --- |
+| Delegated Scopes (OAuth2 Permissions) | Permission Type | APIs called on behalf of a signed-in user | Require user consent or admin pre-consent; user identity is present in the token |
+| Application Roles (App Permissions) | Permission Type | Daemon apps and service-to-service calls with no user context | Granted to the app's own identity; used with the client credentials flow; require admin consent |
+
+> **Exam tip:** Delegated scopes (OAuth2 permissions) require a signed-in user — the token contains both the user and the app identity. Application roles (app permissions) are assigned to the application's own service principal and are used in the client credentials flow where no user is present. If the scenario describes a background job, scheduler, or daemon calling an API, the answer is application roles + client credentials.
+
 ## Hybrid Identity
 
 | Service | Purpose | Protocol | Use Case | Key Feature |

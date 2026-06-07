@@ -44,6 +44,8 @@
 > that require a formal uptime guarantee should point to paid production tiers
 > with redundant instances.
 
+> **Exam tip:** Deployment slots run inside the same App Service Plan. On slot swap, IIS/Node warm-up completes before traffic is routed — eliminating cold starts. Sticky (slot) settings are NOT swapped; non-sticky settings are swapped with the slot. Use `routingRules` to send a percentage of production traffic to a staging slot for canary testing. Auto-swap immediately promotes the slot after a successful warm-up — use it for continuous deployment pipelines where manual approval is not required.
+
 ## Azure Functions Hosting Plans
 
 | Plan | Scale | Cold Start | Use Case |
@@ -55,6 +57,20 @@
 > **SLA note:** Consumption is optimized for elastic execution and can include
 > cold starts. For strict uptime or latency guarantees, exam scenarios typically
 > favour Premium or Dedicated hosting with warm capacity.
+
+## Durable Functions Orchestration Patterns
+
+| Service | Pattern | Use Case | Key Feature |
+| --- | --- | --- | --- |
+| Durable Functions | Function Chaining | Sequential pipeline — output of one function feeds the next | Guaranteed execution order; state persisted between steps |
+| Durable Functions | Fan-out / Fan-in | Parallel processing of multiple work items, then aggregate results | Activity functions run in parallel; orchestrator awaits all completions |
+| Durable Functions | Async HTTP API (Human Interaction) | Long-running workflow requiring human approval or external event | Orchestrator suspends; resumes on external event or timer expiry |
+| Durable Functions | Eternal Orchestration | Continuous monitoring loop (e.g. price watch, health check) | Uses `ContinueAsNew` to restart the orchestration — avoids history bloat |
+| Durable Functions | Timer / Monitor | Polling or scheduled delay within an orchestration | Durable timer via `CreateTimer`; survives app restarts |
+
+> **Exam tip:** Use fan-out/fan-in when work items can be processed in parallel and results must be aggregated. Use eternal orchestration (with `ContinueAsNew`) for recurring monitors — do NOT use a plain `while(true)` loop as it bloats the history. Use human interaction when a workflow must pause for an external approval; the orchestrator suspends via `WaitForExternalEvent` and resumes when the event arrives or a timer expires.
+
+> **Exam tip:** WebJobs (continuous or triggered) run inside an existing App Service Plan and share its compute — no cold start and no separate billing unit. Prefer WebJobs when the workload must run in-process with a web app and you do not want the overhead of a separate Functions host.
 
 ## Runtime & Language Fit (Functions vs Logic Apps vs App Service)
 
@@ -160,6 +176,16 @@ in an **InfiniBand-enabled** cluster via a Placement Group or proximity placemen
 > inside a private VNet (e.g. Azure Container Registry with private endpoint, on-prem NuGet feed,
 > or private AKS API server). Microsoft-hosted agents run outside your VNet and cannot reach
 > private endpoints without additional networking configuration.
+
+## Azure Container Registry (ACR)
+
+| Service | Type | Use Case | Key Feature |
+| --- | --- | --- | --- |
+| ACR Basic | Registry SKU | Dev/test image storage; low throughput | Shared capacity; no geo-replication; no content trust |
+| ACR Standard | Registry SKU | Production CI/CD pipelines; moderate pull throughput | Increased storage and throughput over Basic; webhook support |
+| ACR Premium | Registry SKU | Enterprise multi-region deployments; security-sensitive workloads | Geo-replication, private endpoints, content trust (DCT), dedicated throughput |
+
+> **Exam tip:** Geo-replication is a Premium-only feature that pushes images to paired regions — reduces pull latency and provides regional failover. ACR Tasks automate image builds on `git push` or base-image update without requiring a local Docker daemon. Content trust (Docker Content Trust / Notary) signs images at push time; pull fails unless the image signature is verified — use this for supply-chain security requirements.
 
 ## Caching
 

@@ -131,11 +131,7 @@ class TestExamsAZ204Column:
     def test_monitoring_az204_is_partial(self, exams_text):
         lines = exams_text.splitlines()
         monitoring_line = next(
-            (
-                line
-                for line in lines
-                if "Monitoring" in line and "monitoring.md" in line
-            ),
+            (line for line in lines if "Monitoring" in line and "monitoring.md" in line),
             None,
         )
         assert monitoring_line is not None, "Monitoring row not found"
@@ -532,7 +528,8 @@ class TestMonitoringLogBasedVsPreAggregatedSection:
         assert "Log-based metrics are derived from raw telemetry" in monitoring_text
 
     def test_pre_aggregated_metrics_explained(self, monitoring_text):
-        assert "Pre-aggregated (standard) metrics are computed at collection time" in monitoring_text
+        expected = "Pre-aggregated (standard) metrics are computed at collection time"
+        assert expected in monitoring_text
 
     def test_pre_aggregated_exam_tip(self, monitoring_text):
         assert "use pre-aggregated (standard) metrics" in monitoring_text

@@ -126,6 +126,64 @@
 | **Consistent Prefix** | No out-of-order reads | Low | Social media feeds |
 | **Eventual** | No ordering guarantee | Lowest | High availability, non-critical |
 
+## Cosmos DB — Developer Focus (AZ-204)
+
+**Partition key design rules:**
+
+- Choose a high-cardinality key (many distinct values) to distribute RUs and storage uniformly across logical partitions.
+- Avoid hot partitions — a key that concentrates most reads/writes on one partition causes throttling (429 errors).
+- The partition key must be immutable — it cannot be changed after the item is created.
+- Include the partition key in all queries; without it, Cosmos DB performs a cross-partition fan-out, increasing RU cost and latency.
+
+| Service | Type | Best For | Key Feature |
+| --- | --- | --- | --- |
+| Cosmos DB Provisioned Throughput | RU Model | Predictable, steady-state workloads with defined peak load | Fixed RU/s ceiling; most cost-effective when utilisation is consistently high |
+| Cosmos DB Autoscale | RU Model | Variable workloads with bounded but unpredictable peaks | Scales between 10% and 100% of the configured max RU/s; you pay for peak consumed |
+| Cosmos DB Serverless | RU Model | Intermittent or unpredictable workloads; development/test | Billed per RU consumed per operation; no pre-provisioned capacity; no SLA for throughput |
+
+> **Exam tip:** Choose serverless for sporadic or unpredictable access patterns where pre-provisioning RUs would be wasteful. Choose autoscale when the workload is variable but has a defined maximum. Choose provisioned (manual) throughput when the load is predictable and steady — it gives a hard cost ceiling and the best price per RU at sustained utilisation.
+
+SDK access pattern (Python — azure-cosmos v4):
+
+```python
+from azure.cosmos import CosmosClient, PartitionKey
+
+client = CosmosClient(url=COSMOS_ENDPOINT, credential=COSMOS_KEY)
+database = client.create_database_if_not_exists(id="MyDatabase")
+container = database.create_container_if_not_exists(
+    id="MyContainer",
+    partition_key=PartitionKey(path="/category"),
+    offer_throughput=400,
+)
+container.create_item(body={"id": "item1", "category": "gear", "name": "Helmet"})
+```
+
+## Blob Storage SAS Tokens
+
+| Service | Type | Best For | Key Feature |
+| --- | --- | --- | --- |
+| Service SAS | SAS Token | Delegating access to a specific Blob, Queue, Table, or File resource | Signed with the storage account key; scoped to one service type |
+| Account SAS | SAS Token | Delegating access across multiple storage services in one token | Signed with the storage account key; broadest scope — use with caution |
+| User Delegation SAS | SAS Token | Delegated external access without exposing the account key | Signed with Entra ID (Azure AD) credentials; requires Storage Blob Delegator RBAC role |
+
+> **Exam tip:** User Delegation SAS is the most secure option — it is signed with Entra credentials, not the storage account key. The caller must hold the Storage Blob Delegator role on the storage account. Use it whenever you need to grant time-limited external access without distributing account keys.
+
+SDK pattern (Python — azure-storage-blob v12):
+
+```python
+from azure.storage.blob import BlobServiceClient, BlobSasPermissions, generate_blob_sas
+from datetime import datetime, timedelta, timezone
+
+sas_token = generate_blob_sas(
+    account_name=ACCOUNT_NAME,
+    container_name="mycontainer",
+    blob_name="report.pdf",
+    account_key=ACCOUNT_KEY,          # omit and pass user_delegation_key for User Delegation SAS
+    permission=BlobSasPermissions(read=True),
+    expiry=datetime.now(timezone.utc) + timedelta(hours=1),
+)
+```
+
 ## Managed Disk Types
 
 | Service | Type | Best For | Key Feature |
