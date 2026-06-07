@@ -170,9 +170,7 @@ class TestMkdocsAWSExamCoverage:
 
     def test_aws_exam_coverage_is_first_under_aws(self, mkdocs_text):
         lines = mkdocs_text.splitlines()
-        aws_idx = next(
-            (i for i, line in enumerate(lines) if line.strip() == "- AWS:"), None
-        )
+        aws_idx = next((i for i, line in enumerate(lines) if line.strip() == "- AWS:"), None)
         assert aws_idx is not None, "- AWS: section not found in mkdocs.yml"
         # Find next nav entries after - AWS:
         child_entries = []
@@ -204,9 +202,7 @@ class TestAzureExamsUnchanged:
         assert "AZ-204" in azure_exams_text
 
     def test_azure_exams_has_seven_columns(self, azure_exams_text):
-        header = next(
-            (line for line in azure_exams_text.splitlines() if "Section" in line), None
-        )
+        header = next((line for line in azure_exams_text.splitlines() if "Section" in line), None)
         assert header is not None
         # 7 columns: Section, AZ-900, AZ-104, AZ-204, AZ-305, AZ-500, AZ-700
         assert header.count("|") >= 8  # at least 7 columns = 8 pipes

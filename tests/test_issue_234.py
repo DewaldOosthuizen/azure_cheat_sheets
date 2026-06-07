@@ -138,13 +138,9 @@ class TestAzureAbbreviationsTableStructure:
         data_rows = [
             ln
             for ln in lines
-            if ln.strip().startswith("|")
-            and "---" not in ln
-            and "Abbreviation" not in ln
+            if ln.strip().startswith("|") and "---" not in ln and "Abbreviation" not in ln
         ]
-        assert len(data_rows) >= 10, (
-            f"Expected at least 10 abbreviation rows, got {len(data_rows)}"
-        )
+        assert len(data_rows) >= 10, f"Expected at least 10 abbreviation rows, got {len(data_rows)}"
 
 
 class TestAzureAbbreviationsAlphaOrder:
@@ -154,16 +150,10 @@ class TestAzureAbbreviationsAlphaOrder:
         lines = azure_abbrev_text.splitlines()
         abbrevs = []
         for ln in lines:
-            if (
-                ln.strip().startswith("|")
-                and "---" not in ln
-                and "Abbreviation" not in ln
-            ):
+            if ln.strip().startswith("|") and "---" not in ln and "Abbreviation" not in ln:
                 first_col = ln.split("|")[1].strip()
                 abbrevs.append(first_col)
-        assert abbrevs == sorted(abbrevs), (
-            f"Abbreviations are not sorted: {abbrevs}"
-        )
+        assert abbrevs == sorted(abbrevs), f"Abbreviations are not sorted: {abbrevs}"
 
 
 class TestAzureRequiredAbbreviations:
@@ -209,13 +199,9 @@ class TestAwsAbbreviationsTableStructure:
         data_rows = [
             ln
             for ln in lines
-            if ln.strip().startswith("|")
-            and "---" not in ln
-            and "Abbreviation" not in ln
+            if ln.strip().startswith("|") and "---" not in ln and "Abbreviation" not in ln
         ]
-        assert len(data_rows) >= 10, (
-            f"Expected at least 10 abbreviation rows, got {len(data_rows)}"
-        )
+        assert len(data_rows) >= 10, f"Expected at least 10 abbreviation rows, got {len(data_rows)}"
 
 
 class TestAwsAbbreviationsAlphaOrder:
@@ -225,16 +211,10 @@ class TestAwsAbbreviationsAlphaOrder:
         lines = aws_abbrev_text.splitlines()
         abbrevs = []
         for ln in lines:
-            if (
-                ln.strip().startswith("|")
-                and "---" not in ln
-                and "Abbreviation" not in ln
-            ):
+            if ln.strip().startswith("|") and "---" not in ln and "Abbreviation" not in ln:
                 first_col = ln.split("|")[1].strip()
                 abbrevs.append(first_col)
-        assert abbrevs == sorted(abbrevs), (
-            f"Abbreviations are not sorted: {abbrevs}"
-        )
+        assert abbrevs == sorted(abbrevs), f"Abbreviations are not sorted: {abbrevs}"
 
 
 class TestAwsRequiredAbbreviations:
@@ -260,9 +240,7 @@ class TestMkdocsNavAzure:
         )
         assert azure_section is not None, "Azure nav section not found in mkdocs.yml"
         entry_keys = [next(iter(e.keys())) for e in azure_section]
-        assert "Abbreviations" in entry_keys, (
-            "Abbreviations entry not found in Azure nav block"
-        )
+        assert "Abbreviations" in entry_keys, "Abbreviations entry not found in Azure nav block"
 
     def test_azure_abbreviations_points_to_correct_file(self, mkdocs_config):
         azure_section = next(
@@ -302,9 +280,7 @@ class TestMkdocsNavAws:
         )
         assert aws_section is not None, "AWS nav section not found in mkdocs.yml"
         entry_keys = [next(iter(e.keys())) for e in aws_section]
-        assert "Abbreviations" in entry_keys, (
-            "Abbreviations entry not found in AWS nav block"
-        )
+        assert "Abbreviations" in entry_keys, "Abbreviations entry not found in AWS nav block"
 
     def test_aws_abbreviations_points_to_correct_file(self, mkdocs_config):
         aws_section = next(
