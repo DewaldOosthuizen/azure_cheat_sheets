@@ -151,3 +151,47 @@
 ```mermaid
 --8<-- "azure/diagrams/identity/rbac-role-assignment-decision-flow.mmd"
 ```
+
+## Microsoft Entra Enterprise Applications
+
+> **⚠️ Deprecation warning:** The name "Azure AD Enterprise Applications" is retired (October 2023).
+> This feature is now **Microsoft Entra Enterprise Applications** under Microsoft Entra ID.
+> Portal functionality and APIs are unchanged — only the branding has moved.
+> See: [Microsoft Entra ID rename announcement](https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id)
+
+| Concept | Description |
+| --- | --- |
+| **Enterprise Application** | Tenant-specific service principal created when an app is registered or consented to |
+| **Gallery App** | Pre-integrated SaaS apps (Salesforce, ServiceNow, Workday) with SAML/OIDC templates |
+| **Non-gallery App** | Custom or unlisted apps — add manually and configure the SSO protocol |
+| **SSO Modes** | SAML 2.0, OpenID Connect, Password-based (form-fill), Linked (redirect only) |
+| **User / Group Assignment** | Controls who can access the app; enforced when "Assignment required" is enabled |
+| **Provisioning (SCIM)** | Automatic user and group sync from Entra ID to the SaaS app over SCIM 2.0 |
+| **Conditional Access** | Access policies (MFA, compliant device, location) scoped to a specific application |
+
+> **Exam tip:** Enterprise Applications manages the tenant-level service principal for an app;
+> App Registration defines the app identity and API surface. For a multi-tenant app the
+> App Registration lives in the home tenant, while an Enterprise Application (service principal)
+> is created in every tenant that consents to the app.
+
+## Microsoft Entra Application Proxy
+
+> **⚠️ Deprecation warning:** The name "Azure AD Application Proxy" is retired (October 2023).
+> This feature is now **Microsoft Entra application proxy** under Microsoft Entra ID.
+> The service itself remains fully supported, but for new hybrid remote-access designs
+> Microsoft recommends evaluating **Microsoft Entra Private Access** (zero-trust network access)
+> as the strategic successor.
+> See: [Microsoft Entra ID rename announcement](https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id)
+
+| Component | Layer | Scope | Use Case | Key Feature |
+| --- | --- | --- | --- | --- |
+| **Application Proxy Connector** | On-premises agent | On-premises | Outbound HTTPS tunnel to Entra ID cloud service | No inbound firewall ports required; connectors grouped for HA |
+| **Application Proxy Service** | Cloud relay | Global | Routes external requests to the on-prem connector | Entra ID pre-authentication before traffic reaches the internal app |
+| **Pre-authentication** | Security | Per-app | Enforce Entra ID sign-in before granting app access | Supports Conditional Access, MFA, and token-based auth |
+| **Microsoft Entra Private Access** | ZTNA | Global | Zero-trust per-resource access; strategic successor to App Proxy | Per-app segmentation; no full network tunnel; part of Global Secure Access |
+
+> **Exam tip:** Application Proxy requires only an outbound TCP 443 connection from the on-premises
+> connector to Azure — no inbound firewall rules are needed on the corporate network.
+> Pre-authentication means only Entra ID-authenticated users (with optional MFA via Conditional
+> Access) can reach the internal application. Deploy multiple connectors in a connector group
+> for high availability.
