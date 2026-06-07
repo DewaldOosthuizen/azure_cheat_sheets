@@ -142,29 +142,6 @@
 > (Virtual Kubelet) burst workloads to ACI with no node-provisioning delay — choose
 > this when the requirement mentions instant scale-out or cost-optimised spikes.
 
-## Virtual Machine SKU Families
-
-| Family | Purpose |
-| --- | --- |
-| **D-series** | General purpose — balanced CPU/memory |
-| **E-series** | Memory optimized — databases, caches |
-| **F-series** | Compute optimized — batch, game servers |
-| **N-series** | GPU — AI/ML, rendering |
-| **L-series** | Storage optimized — NoSQL, data warehousing |
-| **M-series** | Large memory — SAP HANA |
-| **B-series** | Burstable — dev/test, low-sustained CPU |
-
-## HPC Networking — RDMA
-
-Remote Direct Memory Access (RDMA) enables VM-to-VM communication that bypasses the OS kernel,
-delivering microsecond latency and high throughput for tightly coupled HPC and AI training
-workloads. RDMA-capable VM sizes (H-series, HB-series, HC-series, ND-series) must be deployed
-in an **InfiniBand-enabled** cluster via a Placement Group or proximity placement group.
-
-> **Exam tip:** Choose RDMA-capable VM sizes (H, HB, HC, ND series) when the requirement
-> mentions MPI workloads, tightly coupled HPC, or GPU-to-GPU training that cannot tolerate
-> standard Ethernet latency. RDMA is not available on general-purpose D/E-series VMs.
-
 ## CI/CD — Azure Pipelines Agent
 
 | Service | Layer | Scope | Use Case | Key Feature |
@@ -234,15 +211,32 @@ in an **InfiniBand-enabled** cluster via a Placement Group or proximity placemen
 --8<-- "azure/diagrams/compute/availability-decision-flow.mmd"
 ```
 
-## VM Sizing Families
+## Virtual Machine Families
 
 | Service | Layer | Scope | Use Case | Key Feature |
 | --- | --- | --- | --- | --- |
 | **D-series (General Purpose)** | Balanced | General | Web servers, dev/test, small databases | Balanced CPU:memory ratio |
-| **F-series (Compute Optimized)** | High CPU | Compute | Batch, gaming, web front-ends | High CPU:memory ratio |
 | **E-series (Memory Optimized)** | High RAM | Memory | SAP, in-memory databases, caches | High memory:CPU ratio |
-| **L-series (Storage Optimized)** | High throughput | Storage | Cassandra, MongoDB, big data | High local disk IOPS/throughput |
+| **F-series (Compute Optimized)** | High CPU | Compute | Batch, gaming, web front-ends | High CPU:memory ratio |
 | **N-series (GPU)** | GPU | GPU | ML training, rendering, visualization | NVIDIA GPU; NC/ND/NV variants |
+| **L-series (Storage Optimized)** | High throughput | Storage | Cassandra, MongoDB, big data | High local disk IOPS/throughput |
+| **M-series (Large Memory)** | High RAM | Memory | SAP HANA, largest in-memory workloads | Largest memory SKUs; up to 12 TiB RAM |
+| **B-series (Burstable)** | Burstable | General | Dev/test, low-sustained CPU tasks | CPU credits; cost-effective for bursty workloads |
+| **H-series (HPC)** | HPC | Compute | MPI workloads, tightly coupled HPC | InfiniBand RDMA; high CPU clock speed |
+| **HB-series (HPC Memory-Bandwidth)** | HPC | Compute | Memory-bandwidth-intensive HPC (CFD, weather) | AMD EPYC; high memory bandwidth; InfiniBand RDMA |
+| **HC-series (HPC Dense Compute)** | HPC | Compute | Dense compute HPC (molecular dynamics, FEA) | Intel Xeon; high core count; InfiniBand RDMA |
+| **ND-series (GPU HPC)** | GPU / HPC | GPU | GPU-to-GPU AI training, large model training | NVIDIA A100/H100; NVLink; InfiniBand RDMA |
+
+## HPC Networking — RDMA
+
+Remote Direct Memory Access (RDMA) enables VM-to-VM communication that bypasses the OS kernel,
+delivering microsecond latency and high throughput for tightly coupled HPC and AI training
+workloads. RDMA-capable VM sizes (H-series, HB-series, HC-series, ND-series) must be deployed
+in an **InfiniBand-enabled** cluster via a Placement Group or proximity placement group.
+
+> **Exam tip:** Choose RDMA-capable VM sizes (H, HB, HC, ND series) when the requirement
+> mentions MPI workloads, tightly coupled HPC, or GPU-to-GPU training that cannot tolerate
+> standard Ethernet latency. RDMA is not available on general-purpose D/E-series VMs.
 
 > **Exam tip:** For SAP HANA workloads use M-series (memory optimized, largest RAM). For high-throughput NVMe workloads use Lsv3. The "s" suffix (e.g., Dsv5) indicates Premium SSD support.
 
