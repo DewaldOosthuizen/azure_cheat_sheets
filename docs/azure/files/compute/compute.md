@@ -13,6 +13,7 @@
 | **Azure Container Apps** | Serverless containers | Microservices without K8s complexity |
 | **Azure Batch** | HPC jobs | Large parallel compute jobs |
 | **Azure Spring Apps** | PaaS Java | Spring Boot microservices |
+| **Azure Service Fabric** | Microservices runtime | Stateful/stateless distributed services and containers |
 
 > **Exam tip:** SLA guarantee requirements usually eliminate dev/test tiers or
 > single-instance designs. When the scenario says "guaranteed uptime", choose
@@ -125,6 +126,73 @@
 > Choose App Service Containers for simple, single-container web apps that benefit from
 > built-in deployment slots and App Service features without microservice overhead.
 > Use ACI for one-off batch jobs or CI/CD pipeline steps that need an isolated container burst.
+
+## Azure Service Fabric
+
+Azure Service Fabric is a distributed systems platform for building and operating reliable,
+scalable microservices and container applications. Unlike AKS (which orchestrates containers)
+or ACA (which hides the runtime), Service Fabric provides a full application model including
+service lifecycle, state management, partitioning, and cluster health management.
+
+### Service Programming Models
+
+| Model | Type | Description | Use Case |
+| --- | --- | --- | --- |
+| **Reliable Services** | Stateless or stateful | First-class SF programming model; stateful services use Reliable Collections (replicated, transactional data structures) | Business logic services that must own and persist partitioned state without an external database |
+| **Reliable Actors** | Stateful (actor pattern) | Single-threaded virtual actors; state automatically persisted per actor instance | Per-entity state machines, IoT device shadows, session state at large scale |
+| **Guest Executables** | Existing binary | Run any existing executable (Java, Node, Python, .NET) as a SF service without code changes | Lift-and-shift existing processes into a managed cluster without rewriting |
+| **Guest Containers** | Container | Run Docker containers as SF services | Containerised workloads that benefit from SF placement policies and health monitoring |
+
+Reliable Collections are the key differentiator: a replicated `IReliableDictionary<K,V>` or
+`IReliableQueue<T>` that behaves like an in-memory data structure but is persisted and
+replicated across the service's replicas, enabling stateful services with no external database.
+
+### Cluster Types
+
+| Cluster Type | Hosting | Management | Use Case |
+| --- | --- | --- | --- |
+| **Managed Cluster** | Azure only | Azure manages the underlying VMSS and networking | Recommended for new Azure deployments; simpler lifecycle, node type management via ARM |
+| **Classic Cluster** | Azure | Customer manages VMSS, LB, NSG | Legacy; full low-level control; more operational overhead |
+| **Standalone Cluster** | On-premises or any cloud | Customer fully managed | Air-gapped or regulatory environments requiring on-premises deployment |
+
+### Cluster Concepts
+
+Fault domains and upgrade domains are the two placement constraints that control availability:
+
+| Concept | What It Represents | Purpose |
+| --- | --- | --- |
+| **Fault Domain (FD)** | Physical failure boundary (rack, power unit, network switch) | SF spreads replicas across FDs so a hardware failure does not take all replicas of a partition |
+| **Upgrade Domain (UD)** | Logical group for rolling upgrades | SF upgrades one UD at a time; services in different UDs continue serving traffic during a cluster upgrade |
+| **Node Type** | VMSS-backed pool of identical nodes | Primary node type hosts SF system services; additional node types isolate workload classes |
+| **Partition** | Horizontal data shard of a stateful service | Each partition has a primary replica and N secondary replicas; partitioning key range determined at service creation |
+| **Replica** | Copy of a partition's state | SF maintains a target replica set size (e.g., 3 or 5); primary handles writes and coordinates replication to secondaries |
+
+### Service Fabric vs AKS vs ACA
+
+| Dimension | Service Fabric | AKS | Azure Container Apps |
+| --- | --- | --- | --- |
+| **State model** | Built-in Reliable Collections (replicated in-memory) | External (Redis, DB) | External |
+| **Programming model** | Reliable Services, Reliable Actors, Guest EXE, containers | Any container | Any container |
+| **Cluster management** | Managed cluster (recommended) or classic/standalone | Managed control plane | Fully managed (no cluster) |
+| **Partition-local state** | Yes — native, low latency | No | No |
+| **Upgrade model** | Rolling upgrade with FD/UD awareness | Rolling deploy, node drain | Revision-based traffic split |
+| **Ops overhead** | Medium (cluster health, node types) | High (node pools, add-ons) | Low |
+| **Typical workload** | Stateful microservices, actor-per-entity patterns | General container orchestration | Event-driven, serverless containers |
+
+> **Exam tip:** Choose Service Fabric when the requirement explicitly mentions stateful
+> microservices with partition-local, low-latency state access — Reliable Collections
+> eliminate the need for an external cache or database for hot data. The Reliable Actors
+> model is the answer when the scenario describes per-entity state at scale (millions of
+> devices, users, or sessions). Service Fabric is also the answer when the question
+> mentions running existing executables (Guest Executable model) alongside new services
+> in the same cluster with unified health monitoring and placement.
+>
+> Managed Cluster is the recommended cluster type for new Azure deployments — it removes
+> the need to manage the underlying VMSS, load balancer, and NSG directly.
+>
+> Fault domains and upgrade domains work together: FDs protect against simultaneous
+> hardware failure of all replicas; UDs ensure rolling upgrades never take all replicas
+> offline at the same time. SF places replicas to maximise FD and UD spread automatically.
 
 ## AKS Scaling Mechanisms
 
