@@ -3,7 +3,7 @@
 Quick-reference study notes for technology certifications and architecture decisions.
 Currently focused on Microsoft Azure (AZ-305, AZ-104, with overlap for AZ-900, AZ-500, AZ-700).
 More topics will be added under their own subdirectory inside `docs/`.
-Live site: <https://tech-cheat-sheets.vercel.app>
+Live site: <https://tech-cheat-sheets-and-notes.vercel.app>
 
 ---
 
