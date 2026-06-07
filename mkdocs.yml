@@ -63,6 +63,7 @@ nav:
       - Networking: azure/files/networking/networking.md
       - Security: azure/files/security/security.md
       - Storage: azure/files/storage/storage.md
+      - Migration: azure/files/migration/migration.md
       - Monitoring & Observability: azure/files/monitoring/monitoring.md
       - Compute: azure/files/compute/compute.md
       - Identity & Access: azure/files/identity/identity.md

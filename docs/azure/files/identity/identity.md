@@ -195,3 +195,102 @@
 > Pre-authentication means only Entra ID-authenticated users (with optional MFA via Conditional
 > Access) can reach the internal application. Deploy multiple connectors in a connector group
 > for high availability.
+
+## Microsoft Entra ID License Comparison
+
+Entra ID is available in four editions. Each edition is a strict superset of the one below it
+(except Governance, which is an add-on). Features not listed here are available across all tiers.
+
+### Feature Matrix
+
+| Feature | Free | P1 | P2 | Governance |
+| --- | :---: | :---: | :---: | :---: |
+| **Core directory (users, groups, devices)** | ✓ | ✓ | ✓ | ✓ |
+| **Basic MFA (per-user MFA, Security Defaults)** | ✓ | ✓ | ✓ | ✓ |
+| **B2B guest collaboration** | ✓ | ✓ | ✓ | ✓ |
+| **Application SSO — limited (10 apps / user)** | ✓ | — | — | — |
+| **Application SSO — unlimited** | — | ✓ | ✓ | ✓ |
+| **Self-Service Password Reset — cloud only** | ✓ | ✓ | ✓ | ✓ |
+| **Self-Service Password Reset — on-prem writeback** | — | ✓ | ✓ | ✓ |
+| **Conditional Access policies** | — | ✓ | ✓ | ✓ |
+| **Dynamic groups (attribute-based membership)** | — | ✓ | ✓ | ✓ |
+| **Microsoft Entra Application Proxy** | — | ✓ | ✓ | ✓ |
+| **Group-based application assignment** | — | ✓ | ✓ | ✓ |
+| **SharePoint Limited Access** | — | ✓ | ✓ | ✓ |
+| **SLA 99.99%** | — | ✓ | ✓ | ✓ |
+| **Identity Protection (risk-based sign-in / user risk)** | — | — | ✓ | ✓ |
+| **Risk-based Conditional Access** | — | — | ✓ | ✓ |
+| **Privileged Identity Management (PIM)** | — | — | ✓ | ✓ |
+| **Access Reviews (basic)** | — | — | ✓ | ✓ |
+| **Entitlement Management (access packages)** | — | — | — | ✓ |
+| **Lifecycle Workflows (joiner / mover / leaver)** | — | — | — | ✓ |
+| **PIM for Groups** | — | — | — | ✓ |
+| **Advanced Access Reviews (machine-assisted)** | — | — | — | ✓ |
+| **My Access portal for request approvals** | — | — | — | ✓ |
+
+> Note: Governance is a paid add-on that requires an existing P1 or P2 licence per user.
+> It is not a standalone tier.
+
+### Tier Descriptions
+
+#### Free
+
+Included with any Azure subscription or Microsoft 365 licence. Covers core cloud identity:
+user accounts, group management, device registration, basic MFA via Security Defaults,
+B2B guest access, and SSO to up to 10 apps per user (gallery apps). No Conditional Access,
+no risk-based features, no dynamic groups. SSPR is cloud-only — no writeback to on-premises AD.
+
+#### P1 (Entra ID Plan 1)
+
+Included with Microsoft 365 E3, EMS E3, and Microsoft 365 Business Premium.
+Adds the full Conditional Access engine (location, device compliance, app, sign-in risk with
+Named Locations), unlimited SSO, SSPR with on-prem password writeback, dynamic groups,
+Application Proxy for on-prem app publishing, and group-based application assignment.
+P1 is sufficient for most production Zero Trust designs that do not require PIM or risk signals.
+
+#### P2 (Entra ID Plan 2)
+
+Included with Microsoft 365 E5, EMS E5, and Microsoft 365 E5 Security.
+Superset of P1. Adds Entra ID Identity Protection (real-time risk scoring of sign-ins and
+users), risk-based Conditional Access policies (block or require MFA when risk is Medium/High),
+Privileged Identity Management (just-in-time role activation, approval workflows, activation
+alerts), and basic Access Reviews (periodic certification of role and group membership).
+
+#### Entra ID Governance (add-on)
+
+Requires P1 or P2 per user as a prerequisite — not a standalone tier.
+Adds identity lifecycle automation: Entitlement Management (access packages with approval
+workflows and expiry), Lifecycle Workflows (automated tasks on join/move/leave events such as
+provisioning accounts or revoking access), PIM for Groups (just-in-time group membership),
+advanced machine-assisted Access Reviews (AI reviewer recommendations), and the My Access
+portal for end-user entitlement requests.
+
+### License Selection Decision Flow
+
+```mermaid
+--8<-- "azure/diagrams/identity/entra-license-selection-decision-flow.mmd"
+```
+
+> **Exam tip — PIM requires P2:**
+> Privileged Identity Management is a P2-only feature. Any scenario that mentions
+> just-in-time role activation, activation approval workflows, PIM alerts, or eligible
+> vs active role assignments requires P2 (or Governance). P1 Conditional Access cannot
+> substitute for PIM — CA enforces sign-in policy; PIM controls role elevation.
+
+> **Exam tip — Identity Protection requires P2:**
+> Risk-based Conditional Access (sign-in risk policy, user risk policy) requires
+> Identity Protection, which is P2-only. P1 Conditional Access policies can enforce
+> MFA by location or device, but they cannot consume Identity Protection risk signals
+> (Low / Medium / High). If the scenario mentions blocking risky sign-ins automatically
+> or requiring MFA when sign-in risk is Medium, the answer is P2 + Identity Protection.
+
+> **Exam tip — SSPR writeback requires P1:**
+> Self-Service Password Reset is available in the Free tier for cloud-only accounts.
+> But if users must be able to reset passwords that sync back to on-premises Active
+> Directory, password writeback (via Entra Connect) is required — and that requires P1.
+
+> **Exam tip — Governance vs P2:**
+> Access Reviews exist in both P2 (basic) and Governance (advanced with AI recommendations).
+> Entitlement Management (access packages) and Lifecycle Workflows are Governance-only.
+> If the scenario involves automating the joiner/mover/leaver process or building a
+> self-service access request catalogue, the answer is Entra ID Governance, not P2.

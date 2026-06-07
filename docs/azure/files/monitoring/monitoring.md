@@ -127,3 +127,53 @@
 Log-based metrics are derived from raw telemetry stored in the Logs table — they support arbitrary KQL queries and full-dimension filtering but have higher alert evaluation latency (query must run on each evaluation). Pre-aggregated (standard) metrics are computed at collection time and stored in the Metrics store — they support near real-time alerting and are lower cost to query.
 
 > **Exam tip:** For alerting on response time, failure rate, or request count, use pre-aggregated (standard) metrics — they support near real-time alerts and are cheaper to evaluate. Log-based metric alerts run as KQL queries on the Logs table and have higher latency; use them only when you need custom dimensions or filters not available in standard metrics.
+
+## Application Insights Built-in Features
+
+Application Insights ships a set of built-in tools on top of the core telemetry pipeline.
+Each solves a distinct observability problem — the exam tests which feature to choose
+for a given scenario.
+
+```mermaid
+--8<-- "azure/diagrams/monitoring/app-insights-features-overview.mmd"
+```
+
+| Feature | What it does | Key detail |
+| --- | --- | --- |
+| **Application Map** | Automatically visualizes the topology of your distributed application — each component (App Service, SQL, Service Bus, external calls) becomes a node; edges show call volume, response times, and failure rates | Built from `TrackDependency` telemetry; no configuration required after instrumentation |
+| **Live Metrics** | Real-time telemetry stream with sub-second latency (requests/sec, failure rate, CPU, dependency calls) | Read-only stream; does NOT store data; ideal for watching a deployment roll out |
+| **Availability Tests** | Scheduled external URL probes from up to 16 Azure PoP locations worldwide | Three probe types: URL ping (basic), Standard (TLS check, custom headers), Custom TrackAvailability (scripted multi-step via Azure Functions) |
+| **Smart Detection** | AI-powered anomaly detection that fires alerts when failure rates, response times, or dependency call patterns deviate from the learned baseline | Zero configuration; alert rules created automatically; separate from Metric Alerts |
+| **Profiler** | Attaches a sampling profiler to live production workloads and captures CPU flame graphs (call stacks) without code changes | Requires App Service or AKS with Application Insights agent; data retained 5 days |
+| **Snapshot Debugger** | Captures a memory snapshot (locals, call stack, parameters) the moment a handled or unhandled exception is thrown in production | Requires the Snapshot Collector SDK NuGet package or Application Insights agent; snapshots retained 15 days |
+| **Usage Analytics** | Three interconnected tools — **Users** (unique users over time), **Sessions** (session count and duration), **Events** (custom `TrackEvent` call frequency) | All backed by `customEvents` and `pageViews` tables; supports cohort and funnel analysis |
+
+### Application Map — How it works
+
+Application Map is built entirely from the `cloud_RoleName` property stamped on every telemetry
+item and from `TrackDependency` calls (auto-instrumented HTTP, SQL, gRPC, Service Bus, etc.).
+Each unique role becomes a node. Edges carry aggregated call count, average duration, and
+failure percentage. A red node indicates a failure rate above the component's learned baseline.
+
+You can override the node name via `TelemetryClient.Context.Cloud.RoleName` — this is how
+multiple instances of the same service appear as a single node rather than N separate nodes.
+
+> **Exam tip:** Application Map is the correct answer when the question asks how to visualize
+> dependencies between microservices or identify which component in a distributed system is
+> causing elevated failure rates. It is NOT a manually configured diagram — it is generated
+> automatically from instrumentation telemetry. Smart Detection is for anomaly alerting, not
+> topology visualization.
+
+### Availability Tests — Probe Types
+
+| Type | Scope | How to create | Max locations |
+| --- | --- | --- | --- |
+| URL Ping | Single HTTP/HTTPS endpoint | Portal, no code | 16 |
+| Standard | Single endpoint + TLS cert validation + custom request headers | Portal, no code | 16 |
+| Custom TrackAvailability | Multi-step scripted transaction (login → search → checkout) | Azure Function calling `TelemetryClient.TrackAvailability()` | Unlimited |
+
+> **Exam tip:** Standard availability tests are the correct choice when you need TLS certificate
+> expiry alerting or custom HTTP request headers. Use Custom TrackAvailability (via Azure
+> Functions) when you need a multi-step, stateful transaction test — for example, a login flow
+> that requires session cookies. URL Ping tests do NOT support multi-step flows or
+> TLS validation.

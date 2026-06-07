@@ -233,6 +233,60 @@
 --8<-- "azure/diagrams/networking/vnet-connectivity-decision-flow.mmd"
 ```
 
+## NAT Gateway
+
+Azure NAT Gateway provides **managed, fully SNAT-based outbound internet connectivity**
+for resources in a private subnet. It replaces the fragile default SNAT behaviour of the
+Standard Load Balancer and eliminates SNAT port exhaustion for high-connection-count workloads.
+
+NAT Gateway is associated with a **subnet** (not a VM or NIC). Every VM in that subnet uses
+the NAT Gateway for outbound traffic; inbound-initiated connections are still blocked
+(NAT Gateway is outbound-only).
+
+### Key Properties
+
+| Property | Value | Notes |
+| --- | --- | --- |
+| Max public IPs | 16 (Public IP address or Prefix) | Each IP provides 64,512 SNAT ports |
+| Max SNAT ports per subnet | 16 × 64,512 = **1,032,192** | Eliminates port exhaustion for large VM or container farms |
+| IP SKU requirement | Standard only | Basic public IPs are not supported |
+| Outbound idle timeout | 4–120 minutes (default 4 min) | TCP keepalives required for long-lived connections |
+| Protocol support | TCP, UDP, ICMP | Does not support IP fragments or ESP/GRE tunnels |
+| Availability Zone scope | Zonal or no-zone | A single NAT Gateway covers one zone; zone-redundant = deploy one per zone |
+| Integration | Subnet-level association | Overrides Standard LB outbound rules; takes priority |
+
+### NAT Gateway vs Alternatives
+
+| Option | Inspection | Static IPs | SNAT ports | When to choose |
+| --- | --- | --- | --- | --- |
+| **NAT Gateway** | None (pass-through) | Yes — predictable | Very high (>1M) | Outbound-only, no inspection needed, third-party IP whitelist required, or SNAT exhaustion |
+| **Azure Firewall** | L3–L7, FQDN, IDPS | Yes (Firewall PIPs) | Scaled by SKU | Centralised egress with policy control, threat intelligence, or URL filtering |
+| **Standard LB Outbound Rules** | None | Yes (LB frontend IPs) | Configurable per rule | VMs already behind an existing Standard LB; simpler but fewer ports |
+| **Default SNAT (Azure platform)** | None | No — unstable, shared | Limited; port exhaustion risk | Dev/test only; never rely on this in production |
+
+> **Critical distinction — Default SNAT:**
+> Azure provides default outbound internet access for VMs with no public IP,
+> NAT Gateway, or LB outbound rule configured. This is being **retired** and its behaviour
+> is undefined — ports are shared across all VMs in the subscription region without guarantees.
+> For any production outbound scenario, explicitly configure one of: NAT Gateway, LB outbound
+> rules, or a public IP directly on the NIC.
+
+### Outbound Egress Decision Flow
+
+```mermaid
+--8<-- "azure/diagrams/networking/nat-gateway-decision-flow.mmd"
+```
+
+> **Exam tip:** NAT Gateway is the correct answer when the scenario requires **predictable
+> static egress IPs** (for third-party IP allowlisting), high SNAT port scale (AKS node pools,
+> containerised workloads, large VM farms), or when SNAT port exhaustion is the stated problem.
+> It does NOT inspect traffic — choose Azure Firewall when FQDN filtering or threat intelligence
+> is required alongside egress control.
+
+> **Exam tip (zonal design):** A single NAT Gateway is zonal (tied to one AZ or no zone).
+> For zone-redundant outbound, deploy one NAT Gateway per availability zone and associate
+> each to zone-specific subnets. This is tested in AZ-700 architecture scenarios.
+
 ## IP Addressing and Subnet Ranges
 
 ### Common CIDR Reference
@@ -305,3 +359,57 @@ Prefix length   = 32 - 10 = /22  (1,024 total; 1,019 usable in Azure)
 > The minimum subnet size for most Azure services is /29 (3 usable hosts). Dedicated subnets
 > such as GatewaySubnet, AzureFirewallSubnet, and AzureBastionSubnet each require their own
 > dedicated subnet and have minimum size requirements (/27 for GatewaySubnet, /26 for Bastion).
+
+## Azure Traffic Manager
+
+Traffic Manager is a **DNS-based** global traffic load balancer. It resolves a client's DNS
+query to one of the configured endpoints based on the selected routing method and endpoint
+health probes. Because it operates at DNS layer (Layer 7 DNS, not HTTP proxy), there is no
+data-plane traversal — client connections go directly to the resolved endpoint.
+
+Traffic Manager supports **external endpoints** (any internet-facing IP/FQDN), **Azure
+endpoints** (App Service, VM, cloud service, etc.), and **nested profiles** (a child Traffic
+Manager profile as an endpoint of a parent).
+
+```mermaid
+--8<-- "azure/diagrams/networking/traffic-manager-routing-decision-flow.mmd"
+```
+
+### Traffic-Routing Methods
+
+| Method | Decision basis | Typical use case | Key constraint |
+| --- | --- | --- | --- |
+| **Priority** | Static priority number (1 = highest) assigned per endpoint | Active/standby failover — always send to primary, failover to secondary | All endpoints must be in the same or reachable regions; first healthy endpoint in priority order wins |
+| **Weighted** | Numeric weight 1–1000 assigned per endpoint; traffic distributed proportionally | Canary deployments (5% weight to new version) or gradual migration | Randomised distribution — not session-sticky; combine with Application Gateway for session affinity |
+| **Performance** | Azure latency table maps client source IP to the region with lowest measured latency | Globally distributed apps where users should hit the closest region | Uses pre-measured Azure network latency tables, not real-time RTT probes |
+| **Geographic** | DNS query source IP mapped to a geographic region; each region assigned to one endpoint | Data residency, legal compliance, regional content | If no mapping exists for a region the query returns NXDOMAIN — traffic is **denied**, not fallen back |
+| **Multivalue** | Returns multiple healthy endpoints (up to 10 IPv4/IPv6 addresses) in a single DNS response | DNS client-side load balancing without a secondary LB hop | Endpoint type must be **External** with IPv4 or IPv6 addresses only — Azure endpoints not supported |
+| **Subnet** | Maps specific client IP address ranges (subnets) to named endpoints | Force corporate-network users to an internal endpoint; route specific ISP ranges | Requires explicit subnet-to-endpoint mapping; unmapped ranges can be directed to a default endpoint |
+
+### Health Probes
+
+Traffic Manager continuously probes each endpoint using HTTP, HTTPS, or TCP. An endpoint must
+pass the configured number of consecutive probe successes before it is considered healthy and
+eligible to receive traffic. Failed endpoints are removed from DNS responses until they recover.
+
+| Setting | Default | Notes |
+| --- | --- | --- |
+| Protocol | HTTP | HTTPS preferred in production; validates TLS chain |
+| Port | 80 | Customisable per endpoint |
+| Path | / | Should return HTTP 200; any non-200 counts as failure |
+| Probe interval | 30 s | Fast interval (10 s) available on Standard+ profiles |
+| Tolerated failures | 3 | Endpoint marked degraded after 3 consecutive failures |
+
+> **Exam tip (routing method selection):**
+> Priority = failover. Weighted = canary/A-B split. Performance = latency-based global
+> distribution. Geographic = data residency and compliance. Multivalue = client-side DNS round-
+> robin (External/IP endpoints only). Subnet = route by known client IP range (corporate vs
+> public internet). Geographic routing silently denies traffic if a region has no mapping —
+> this is a deliberate design for compliance, not a misconfiguration.
+
+> **Exam tip (Traffic Manager vs Front Door):**
+> Traffic Manager is DNS-only — it cannot inspect HTTP headers, apply WAF rules, do SSL
+> offload, or provide caching. Azure Front Door does all of those at the HTTP layer globally.
+> Choose Traffic Manager when you need DNS-level global routing across non-HTTP endpoints
+> (TCP, custom protocols) or when nested profile hierarchies are required.
+> Choose Front Door when you need HTTP acceleration, WAF, caching, or URL-based routing.

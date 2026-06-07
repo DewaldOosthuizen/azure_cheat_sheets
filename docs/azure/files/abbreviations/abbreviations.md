@@ -14,12 +14,14 @@ identity, ha-dr, governance, messaging, waf).
 | ADF | Azure Data Factory — managed ETL and data integration service |
 | ADLS | Azure Data Lake Storage — hierarchical namespace storage built on Blob |
 | AKS | Azure Kubernetes Service — managed Kubernetes cluster service |
+| AM | Azure Migrate — central hub for discovery, assessment, and migration of on-premises workloads to Azure |
 | AMA | Azure Monitor Agent — unified agent replacing MMA and WAD for telemetry collection |
 | APIM | Azure API Management — managed API gateway with policies and developer portal |
 | APM | Application Performance Monitoring — observability of application response times and errors |
 | ARM | Azure Resource Manager — deployment and management layer for all Azure resources |
 | ASE | App Service Environment — isolated, dedicated App Service plan in a VNet |
 | ASG | Application Security Group — groups VMs for NSG rule simplification |
+| ASMA | App Service Migration Assistant — tool for assessing and migrating IIS web apps to Azure App Service |
 | ASR | Azure Site Recovery — disaster recovery replication and failover service |
 | AZ | Availability Zone — physically separate datacenter within an Azure region |
 | BGP | Border Gateway Protocol — dynamic routing protocol used in ExpressRoute and VPN Gateway |
@@ -35,6 +37,7 @@ identity, ha-dr, governance, messaging, waf).
 | CSPM | Cloud Security Posture Management — continuous assessment of cloud resource configurations |
 | DCR | Data Collection Rule — configuration object that controls log and metric routing in Azure Monitor |
 | DLQ | Dead-Letter Queue — holding queue for undeliverable messages in Service Bus and Event Hubs |
+| DMS | Azure Database Migration Service — managed service for online and offline database migration to Azure |
 | DNS | Domain Name System — resolves hostnames to IP addresses; Azure provides Azure DNS and Private DNS |
 | DR | Disaster Recovery — strategies and services to restore operations after a catastrophic failure |
 | DTU | Database Transaction Unit — blended compute, memory, and I/O capacity unit for Azure SQL Basic/Standard/Premium tiers |
@@ -98,6 +101,7 @@ identity, ha-dr, governance, messaging, waf).
 | SKU | Stock Keeping Unit — product tier or size identifier for Azure services |
 | SLA | Service Level Agreement — Microsoft's uptime and connectivity commitments per service |
 | SMB | Server Message Block — file-sharing protocol used by Azure Files |
+| SMS | Storage Migration Service — Windows feature that inventories, transfers, and cuts over file server shares to Azure Files |
 | SNAT | Source Network Address Translation — translates outbound private IP to a public IP |
 | SOAR | Security Orchestration, Automation, and Response — automated incident response via playbooks |
 | SPA | Single-Page Application — browser-based app using OAuth 2.0 Authorization Code + PKCE flow |

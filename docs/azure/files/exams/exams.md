@@ -13,3 +13,4 @@
 | [Governance](../governance/governance.md) | — | Partial | — | Full | Partial | — |
 | [Messaging & Integration](../messaging/messaging.md) | — | — | Partial | Full | — | — |
 | [Well-Architected Framework](../waf/waf.md) | — | — | — | Full | — | — |
+| [Migration](../migration/migration.md) | — | Partial | — | Full | — | — |

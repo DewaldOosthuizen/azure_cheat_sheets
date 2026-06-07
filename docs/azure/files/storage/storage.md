@@ -108,11 +108,11 @@ Azure SQL Database supports two purchasing models with different tier sets.
 
 **vCore model** (compute and storage billed independently):
 
-| Tier | Use Case | Key Feature |
-| --- | --- | --- |
-| **General Purpose** | Standard production OLTP | Remote SSD storage; cost-balanced; supports Serverless auto-pause |
-| **Business Critical** | High I/O, in-memory OLTP, low latency | Local SSD; built-in Always On replicas; one free read replica |
-| **Hyperscale** | Very large databases (up to 100 TB) | Distributed page server architecture; near-instant backup and restore |
+| Tier | Max Storage | Use Case | Key Feature |
+| --- | --- | --- | --- |
+| **General Purpose** | 4 TB | Standard production OLTP | Remote SSD storage; cost-balanced; supports Serverless auto-pause |
+| **Business Critical** | 4 TB | High I/O, in-memory OLTP, low latency | Local SSD; built-in Always On replicas; one free read replica |
+| **Hyperscale** | 100 TB | Very large databases | Distributed page server architecture; near-instant backup and restore |
 
 > **Exam tip:** Hyperscale is only available on Azure SQL Database (not SQL MI). Serverless
 > (auto-pause/auto-resume) is only available within the General Purpose vCore tier.
@@ -122,10 +122,10 @@ Azure SQL Database supports two purchasing models with different tier sets.
 
 SQL Managed Instance uses the vCore model only (DTU is not supported).
 
-| Tier | Use Case | Key Feature |
-| --- | --- | --- |
-| **General Purpose** | Typical performance and standard I/O latency requirements | Remote SSD storage; budget-friendly; suitable for most lift-and-shift workloads |
-| **Business Critical** | Low I/O latency and minimal impact from maintenance operations | Local SSD; built-in Always On availability group; one free readable secondary replica |
+| Tier | Max Storage | Use Case | Key Feature |
+| --- | --- | --- | --- |
+| **General Purpose** | 16 TB | Typical performance and standard I/O latency requirements | Remote SSD storage; budget-friendly; suitable for most lift-and-shift workloads |
+| **Business Critical** | 4 TB | Low I/O latency and minimal impact from maintenance operations | Local SSD; built-in Always On availability group; one free readable secondary replica |
 
 > **Exam tip:** SQL MI Business Critical provides a built-in read replica at no additional
 > cost — use it for read-scale-out or as a reporting endpoint. General Purpose is the
@@ -136,21 +136,21 @@ SQL Managed Instance uses the vCore model only (DTU is not supported).
 Cosmos DB does not have service tiers in the traditional sense. Capacity is selected
 per container at creation time.
 
-| Mode | Use Case | Key Feature |
-| --- | --- | --- |
-| **Provisioned Throughput (Manual)** | Predictable, steady-state workloads | Fixed RU/s ceiling; best price per RU at sustained utilisation |
-| **Provisioned Throughput (Autoscale)** | Variable workloads with bounded peaks | Scales 10–100% of configured max RU/s; you pay for peak consumed |
-| **Serverless** | Sporadic or dev/test workloads | No pre-provisioned capacity; billed per RU consumed per operation |
+| Mode | Max Storage | Use Case | Key Feature |
+| --- | --- | --- | --- |
+| **Provisioned Throughput (Manual)** | Unlimited (per container) | Predictable, steady-state workloads | Fixed RU/s ceiling; best price per RU at sustained utilisation |
+| **Provisioned Throughput (Autoscale)** | Unlimited (per container) | Variable workloads with bounded peaks | Scales 10–100% of configured max RU/s; you pay for peak consumed |
+| **Serverless** | 1 TB per container | Sporadic or dev/test workloads | No pre-provisioned capacity; billed per RU consumed per operation |
 
 ### Azure Database for PostgreSQL and MySQL — Flexible Server Compute Tiers
 
 Both PostgreSQL and MySQL Flexible Server share the same three compute tiers.
 
-| Tier | Use Case | Key Feature |
-| --- | --- | --- |
-| **Burstable** | Dev/test, low-traffic applications | Variable CPU (B-series); lowest cost; not for sustained CPU-intensive workloads |
-| **General Purpose** | Most production workloads | Balanced CPU/memory ratio; 2–96 vCores |
-| **Memory Optimized** | High-concurrency, in-memory analytics, large caches | Higher memory-to-vCore ratio; 2–64 vCores; suited for PostgreSQL connection-heavy workloads |
+| Tier | Max Storage | Use Case | Key Feature |
+| --- | --- | --- | --- |
+| **Burstable** | 16 TB | Dev/test, low-traffic applications | Variable CPU (B-series); lowest cost; not for sustained CPU-intensive workloads |
+| **General Purpose** | 16 TB | Most production workloads | Balanced CPU/memory ratio; 2–96 vCores |
+| **Memory Optimized** | 16 TB | High-concurrency, in-memory analytics, large caches | Higher memory-to-vCore ratio; 2–64 vCores; suited for PostgreSQL connection-heavy workloads |
 
 > **Exam tip:** Burstable tier does not support high-availability (zone-redundant standby)
 > or read replicas — choose General Purpose or Memory Optimized when the requirement
@@ -161,11 +161,11 @@ Both PostgreSQL and MySQL Flexible Server share the same three compute tiers.
 Synapse is not a single database with tiers — it is a workspace containing multiple
 pool types that you provision independently.
 
-| Pool Type | Billing Unit | Use Case | Key Feature |
-| --- | --- | --- | --- |
-| **Serverless SQL Pool** | Per TB of data processed | Ad-hoc T-SQL queries directly over ADLS Gen2 | No infrastructure to provision; always-on; pay-per-query |
-| **Dedicated SQL Pool** | Data Warehouse Units (DWU) | Predictable BI/DW workloads with known query patterns | Massively parallel processing; scale DWU up/down without data loss |
-| **Apache Spark Pool** | Node-hours (auto-pause supported) | Big data engineering, Delta Lake, ML data pipelines | Managed Spark clusters; auto-scale and auto-pause; integrated notebooks |
+| Pool Type | Max Storage | Billing Unit | Use Case | Key Feature |
+| --- | --- | --- | --- | --- |
+| **Serverless SQL Pool** | No local storage (queries ADLS) | Per TB of data processed | Ad-hoc T-SQL queries directly over ADLS Gen2 | No infrastructure to provision; always-on; pay-per-query |
+| **Dedicated SQL Pool** | Up to 240 TB compressed (Petabyte-scale uncompressed) | Data Warehouse Units (DWU) | Predictable BI/DW workloads with known query patterns | Massively parallel processing; scale DWU up/down without data loss |
+| **Apache Spark Pool** | No local storage (uses ADLS Gen2) | Node-hours (auto-pause supported) | Big data engineering, Delta Lake, ML data pipelines | Managed Spark clusters; auto-scale and auto-pause; integrated notebooks |
 
 > **Exam tip:** Serverless SQL Pool queries ADLS data directly using OPENROWSET — no
 > data is loaded or moved. Dedicated SQL Pool requires data to be loaded (COPY INTO or
