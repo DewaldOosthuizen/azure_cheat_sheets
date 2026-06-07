@@ -2,9 +2,9 @@ site_name: Tech Cheat Sheets
 site_description: >-
   Quick-reference study notes for tech certifications and architecture decisions.
   Currently focused on Microsoft Azure, organised by domain.
-site_url: https://tech-cheat-sheets.vercel.app/
-repo_name: DewaldOosthuizen/tech-cheat-sheets
-repo_url: https://github.com/DewaldOosthuizen/tech-cheat-sheets
+site_url: https://tech-cheat-sheets-and-notes.vercel.app/
+repo_name: DewaldOosthuizen/tech-cheat-sheets-and-notes
+repo_url: https://github.com/DewaldOosthuizen/tech-cheat-sheets-and-notes
 
 docs_dir: docs
 site_dir: site

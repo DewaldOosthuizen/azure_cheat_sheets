@@ -84,13 +84,17 @@ class TestMkdocsUrls:
         )
 
     def test_stale_repo_name_absent(self):
+        # Must check full YAML line — the stale slug is a substring of the correct one.
         content = MKDOCS.read_text()
-        assert STALE_REPO_NAME not in content, (
-            f"mkdocs.yml must not contain stale repo_name '{STALE_REPO_NAME}'"
+        stale_line = f"repo_name: {STALE_REPO_NAME}\n"
+        assert stale_line not in content, (
+            f"mkdocs.yml must not contain stale repo_name line '{stale_line.strip()}'"
         )
 
     def test_stale_repo_url_absent(self):
+        # Must check full YAML line — the stale URL is a substring of the correct one.
         content = MKDOCS.read_text()
-        assert STALE_REPO_URL not in content, (
-            f"mkdocs.yml must not contain stale repo_url '{STALE_REPO_URL}'"
+        stale_line = f"repo_url: {STALE_REPO_URL}\n"
+        assert stale_line not in content, (
+            f"mkdocs.yml must not contain stale repo_url line '{stale_line.strip()}'"
         )
