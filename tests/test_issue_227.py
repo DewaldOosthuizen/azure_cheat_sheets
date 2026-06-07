@@ -35,9 +35,7 @@ class TestReadmeBadgeUrl:
             "https://github.com/DewaldOosthuizen/tech-cheat-sheets-and-notes"
             "/actions/workflows/lint.yml/badge.svg"
         )
-        assert expected in content, (
-            f"README.md badge image URL must contain '{expected}'"
-        )
+        assert expected in content, f"README.md badge image URL must contain '{expected}'"
 
     def test_badge_anchor_href_is_current(self):
         content = README.read_text()
@@ -45,9 +43,7 @@ class TestReadmeBadgeUrl:
             "https://github.com/DewaldOosthuizen/tech-cheat-sheets-and-notes"
             "/actions/workflows/lint.yml)"
         )
-        assert expected in content, (
-            f"README.md badge anchor href must contain '{expected}'"
-        )
+        assert expected in content, f"README.md badge anchor href must contain '{expected}'"
 
     def test_stale_repo_slug_absent_from_readme(self):
         content = README.read_text()
