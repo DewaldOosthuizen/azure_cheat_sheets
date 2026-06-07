@@ -178,13 +178,19 @@ class TestIndexMdAwsSection:
         )
 
     def test_exam_grid_clf_c02(self) -> None:
-        text = self._index_text()
-        assert "CLF-C02" in text, "docs/index.md missing CLF-C02 exam coverage grid"
+        # Issue #232 moved exam coverage tables from index.md to dedicated exam pages.
+        # CLF-C02 now lives in docs/aws/files/exams/exams.md.
+        text = (DOCS / "aws" / "files" / "exams" / "exams.md").read_text(encoding="utf-8")
+        assert "CLF-C02" in text, "docs/aws/files/exams/exams.md missing CLF-C02 exam coverage"
 
     def test_exam_grid_saa_c03(self) -> None:
-        text = self._index_text()
-        assert "SAA-C03" in text, "docs/index.md missing SAA-C03 exam coverage grid"
+        # Issue #232 moved exam coverage tables from index.md to dedicated exam pages.
+        # SAA-C03 now lives in docs/aws/files/exams/exams.md.
+        text = (DOCS / "aws" / "files" / "exams" / "exams.md").read_text(encoding="utf-8")
+        assert "SAA-C03" in text, "docs/aws/files/exams/exams.md missing SAA-C03 exam coverage"
 
     def test_exam_grid_sap_c02(self) -> None:
-        text = self._index_text()
-        assert "SAP-C02" in text, "docs/index.md missing SAP-C02 exam coverage grid"
+        # Issue #232 moved exam coverage tables from index.md to dedicated exam pages.
+        # SAP-C02 now lives in docs/aws/files/exams/exams.md.
+        text = (DOCS / "aws" / "files" / "exams" / "exams.md").read_text(encoding="utf-8")
+        assert "SAP-C02" in text, "docs/aws/files/exams/exams.md missing SAP-C02 exam coverage"

@@ -70,6 +70,7 @@ nav:
       - Messaging & Integration: azure/files/messaging/messaging.md
       - Well-Architected Framework: azure/files/waf/waf.md
   - AWS:
+      - Exam Coverage: aws/files/exams/exams.md
       - Compute: aws/files/compute/compute.md
       - Networking: aws/files/networking/networking.md
       - Storage: aws/files/storage/storage.md
