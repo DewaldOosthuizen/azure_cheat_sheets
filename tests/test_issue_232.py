@@ -178,10 +178,14 @@ class TestMkdocsAWSExamCoverage:
         child_entries = []
         for line in lines[aws_idx + 1 :]:
             stripped = line.strip()
-            if stripped.startswith("- ") and not stripped.startswith("- AWS:"):
-                if not stripped.startswith("-   ") and ":" in stripped:
-                    child_entries.append(stripped)
-                    break
+            if (
+                stripped.startswith("- ")
+                and not stripped.startswith("- AWS:")
+                and not stripped.startswith("-   ")
+                and ":" in stripped
+            ):
+                child_entries.append(stripped)
+                break
         assert child_entries, "No child entries found under - AWS:"
         assert "Exam Coverage" in child_entries[0], (
             f"First AWS child is not Exam Coverage, got: {child_entries[0]}"

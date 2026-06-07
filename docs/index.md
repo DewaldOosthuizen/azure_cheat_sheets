@@ -26,20 +26,7 @@ Organised by domain. Each section covers service selection and architectural tra
 | [Messaging & Integration](azure/files/messaging/messaging.md) | Service Bus, Event Grid, Logic Apps, Functions |
 | [Well-Architected Framework](azure/files/waf/waf.md) | Five pillars, trade-off navigator |
 
-Exam coverage by domain:
-
-| Section | AZ-900 | AZ-104 | AZ-305 | AZ-500 | AZ-700 |
-|---------|--------|--------|--------|--------|--------|
-| Networking | Partial | Full | Full | Partial | Full |
-| Security | — | Partial | Full | Full | — |
-| Storage | Partial | Full | Full | — | — |
-| Monitoring & Observability | — | Partial | Full | Partial | — |
-| Compute | Partial | Full | Full | — | — |
-| Identity & Access | Partial | Full | Full | Full | — |
-| High Availability & DR | — | Full | Full | — | Partial |
-| Governance | — | Partial | Full | Partial | — |
-| Messaging & Integration | — | — | Full | — | — |
-| Well-Architected Framework | — | — | Full | — | — |
+See the [Azure Exam Track Index](azure/files/exams/exams.md) for full coverage by certification.
 
 ## Amazon Web Services
 
@@ -59,21 +46,7 @@ Organised by domain. Each section covers service selection and architectural tra
 | [High Availability & DR](aws/files/ha-dr/ha-dr.md) | Multi-AZ, Multi-Region, AWS Backup, Route 53 |
 | [Well-Architected Framework](aws/files/waf/waf.md) | Six pillars, trade-off navigator |
 
-Exam coverage by domain:
-
-| Section | CLF-C02 | SAA-C03 | SAP-C02 |
-|---------|---------|---------|---------|
-| Compute | Partial | Full | Full |
-| Networking | Partial | Full | Full |
-| Storage | Partial | Full | Full |
-| Identity & Access | Partial | Full | Full |
-| Security | Partial | Full | Full |
-| Database | Partial | Full | Full |
-| Monitoring & Observability | — | Partial | Full |
-| Messaging & Integration | — | Full | Full |
-| Governance | — | Partial | Full |
-| High Availability & DR | — | Full | Full |
-| Well-Architected Framework | — | Partial | Full |
+See the [AWS Exam Track Index](aws/files/exams/exams.md) for full coverage by certification.
 
 ---
 
