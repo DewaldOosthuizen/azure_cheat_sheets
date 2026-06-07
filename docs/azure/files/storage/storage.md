@@ -2,12 +2,15 @@
 
 ## Storage Account Types
 
-| Type | Supported Services | Use Case |
-| --- | --- | --- |
-| **Standard GPv2** | Blob, File, Queue, Table | General purpose, most scenarios |
-| **Premium Block Blobs** | Block Blob only | Low-latency blob I/O, analytics |
-| **Premium File Shares** | Azure Files only | High-performance SMB/NFS shares |
-| **Premium Page Blobs** | Page Blob only | Unmanaged VM disks |
+| Type | Supported Services | Supported Replication | Use Case |
+| --- | --- | --- | --- |
+| **Standard GPv2** | Blob, File, Queue, Table | LRS, ZRS, GRS, RA-GRS, GZRS, RA-GZRS | General purpose, most scenarios |
+| **Premium Block Blobs** | Block Blob only | LRS, ZRS | Low-latency blob I/O, analytics |
+| **Premium File Shares** | Azure Files only | LRS, ZRS | High-performance SMB/NFS shares |
+| **Premium Page Blobs** | Page Blob only | LRS only | Unmanaged VM disks |
+
+> **Exam tip:** Premium storage accounts support LRS and ZRS only — geo-redundancy
+> (GRS / GZRS) is not available. Standard GPv2 supports all six replication tiers.
 
 ## Blob Storage Access Tiers
 
