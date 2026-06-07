@@ -14,6 +14,7 @@ answer "which one and why?" — not step-by-step tutorials or portal walkthrough
 | Topic |
 |-------|
 | Microsoft Azure |
+| Amazon Web Services |
 
 More topics (other cloud providers, DevOps tooling, architecture patterns) will be added over time.
 Each new topic lives under its own subdirectory inside `docs/`.
