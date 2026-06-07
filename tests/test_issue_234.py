@@ -81,7 +81,18 @@ def aws_abbrev_text():
 
 @pytest.fixture(scope="module")
 def mkdocs_config():
-    return yaml.safe_load(MKDOCS_YML.read_text())
+    # mkdocs.yml uses !!python/name: tags that yaml.safe_load cannot handle.
+    # Register a constructor that treats unknown python/* tags as plain strings.
+    loader_class = yaml.SafeLoader
+
+    def _python_name_constructor(loader, tag_suffix, node):
+        return loader.construct_scalar(node)
+
+    loader_class.add_multi_constructor(
+        "tag:yaml.org,2002:python/name:",
+        _python_name_constructor,
+    )
+    return yaml.load(MKDOCS_YML.read_text(), Loader=loader_class)
 
 
 @pytest.fixture(scope="module")
@@ -248,7 +259,7 @@ class TestMkdocsNavAzure:
             None,
         )
         assert azure_section is not None, "Azure nav section not found in mkdocs.yml"
-        entry_keys = [list(e.keys())[0] for e in azure_section]
+        entry_keys = [next(iter(e.keys())) for e in azure_section]
         assert "Abbreviations" in entry_keys, (
             "Abbreviations entry not found in Azure nav block"
         )
@@ -272,7 +283,7 @@ class TestMkdocsNavAzure:
             (item["Azure"] for item in mkdocs_config["nav"] if "Azure" in item),
             None,
         )
-        entry_keys = [list(e.keys())[0] for e in azure_section]
+        entry_keys = [next(iter(e.keys())) for e in azure_section]
         abbrev_idx = entry_keys.index("Abbreviations")
         exam_idx = entry_keys.index("Exam Coverage")
         assert abbrev_idx < exam_idx, (
@@ -290,7 +301,7 @@ class TestMkdocsNavAws:
             None,
         )
         assert aws_section is not None, "AWS nav section not found in mkdocs.yml"
-        entry_keys = [list(e.keys())[0] for e in aws_section]
+        entry_keys = [next(iter(e.keys())) for e in aws_section]
         assert "Abbreviations" in entry_keys, (
             "Abbreviations entry not found in AWS nav block"
         )
@@ -314,7 +325,7 @@ class TestMkdocsNavAws:
             (item["AWS"] for item in mkdocs_config["nav"] if "AWS" in item),
             None,
         )
-        entry_keys = [list(e.keys())[0] for e in aws_section]
+        entry_keys = [next(iter(e.keys())) for e in aws_section]
         abbrev_idx = entry_keys.index("Abbreviations")
         exam_idx = entry_keys.index("Exam Coverage")
         assert abbrev_idx < exam_idx, (

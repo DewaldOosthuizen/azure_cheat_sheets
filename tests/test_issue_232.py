@@ -150,13 +150,13 @@ class TestAWSExamsFileContent:
         assert "Well-Architected" in aws_exams_text
 
     def test_eleven_data_rows(self, aws_exams_text):
-        # 11 domain rows expected (header + separator + 11 data rows)
+        # 11 domain rows + 1 abbreviations row = 12 total data rows (issue #234)
         data_rows = [
             line
             for line in aws_exams_text.splitlines()
             if line.strip().startswith("|") and "---" not in line and "Section" not in line
         ]
-        assert len(data_rows) == 11, f"Expected 11 data rows, got {len(data_rows)}"
+        assert len(data_rows) == 12, f"Expected 12 data rows, got {len(data_rows)}"
 
 
 # ── TASK 4: mkdocs.yml — AWS Exam Coverage registered ────────────────────────
@@ -187,8 +187,10 @@ class TestMkdocsAWSExamCoverage:
                 child_entries.append(stripped)
                 break
         assert child_entries, "No child entries found under - AWS:"
-        assert "Exam Coverage" in child_entries[0], (
-            f"First AWS child is not Exam Coverage, got: {child_entries[0]}"
+        # Abbreviations is now the first entry under AWS (issue #234);
+        # Exam Coverage is the second entry.
+        assert "Abbreviations" in child_entries[0], (
+            f"First AWS child is not Abbreviations, got: {child_entries[0]}"
         )
 
 
@@ -215,4 +217,5 @@ class TestAzureExamsUnchanged:
             for line in azure_exams_text.splitlines()
             if line.strip().startswith("|") and "---" not in line and "Section" not in line
         ]
-        assert len(data_rows) == 10, f"Expected 10 data rows, got {len(data_rows)}"
+        # 10 domain rows + 1 abbreviations row = 11 total data rows (issue #234)
+        assert len(data_rows) == 11, f"Expected 11 data rows, got {len(data_rows)}"
