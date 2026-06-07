@@ -73,6 +73,28 @@
 > **SLA note:** Messaging scenarios that emphasize strict reliability,
 > predictable throughput, and isolation generally indicate Service Bus Premium.
 
+## Azure Functions Trigger Bindings (AZ-204)
+
+| Service | Binding | Direction | Key Feature |
+| --- | --- | --- | --- |
+| Service Bus | ServiceBusTrigger | In (trigger) | Invoked on message arrival; supports sessions (`isSessionsEnabled: true`) for FIFO ordering |
+| Service Bus | ServiceBusOutput | Out (output) | Sends a message to a queue or topic from within a function |
+| Event Hubs | EventHubTrigger | In (trigger) | Receives events as an array (batch) by default; one function invocation per batch per partition |
+| Event Hubs | EventHubOutput | Out (output) | Publishes events to an event hub; supports batch send |
+| Event Grid | EventGridTrigger | In (trigger) | Invoked by Event Grid push delivery; handles validation handshake automatically |
+| Event Grid | EventGridOutput | Out (output) | Publishes custom events to an Event Grid topic |
+
+> **Exam tip:** `ServiceBusTrigger` with `isSessionsEnabled: true` processes messages in session order (FIFO within a session) — required when message ordering is a stated requirement. `EventHubTrigger` delivers events as a batch array by default — iterate the array inside the function to maximise throughput and avoid partial-batch re-processing.
+
+## Event Grid Schema vs CloudEvents Schema
+
+| Service | Type | Best For | Key Feature |
+| --- | --- | --- | --- |
+| Event Grid Schema | Event Schema | Azure-native event routing; no interoperability requirement | Default schema for all Azure first-party event sources; uses `eventType`, `subject`, `data` fields |
+| CloudEvents 1.0 Schema | Event Schema | Cross-platform or multi-cloud event pipelines; CNCF compliance | Vendor-neutral CNCF standard; uses `type`, `source`, `datacontenttype` fields; compatible with non-Azure consumers |
+
+> **Exam tip:** Choose CloudEvents 1.0 schema when the requirement mentions cross-platform interoperability, CNCF compliance, or integration with non-Azure event consumers. Event Grid schema is the Azure-native default and requires no additional configuration — choose it for pure Azure-to-Azure routing.
+
 ### Messaging Decision Flow
 
 ```mermaid
