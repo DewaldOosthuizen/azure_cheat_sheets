@@ -85,7 +85,10 @@ class TestVirtualMachineFamiliesTableRows:
             if in_section and line.startswith("## "):
                 # Reached next section — stop
                 break
-            if in_section and line.strip().startswith("|") and "---" not in line and "Service" not in line:
+            is_data_row = (
+                line.strip().startswith("|") and "---" not in line and "Service" not in line
+            )
+            if in_section and is_data_row:
                 data_rows.append(line)
         assert len(data_rows) == 11, f"Expected 11 data rows, got {len(data_rows)}: {data_rows}"
 
@@ -116,11 +119,19 @@ class TestHPCNetworkingRelocation:
 
     def test_hpc_follows_vm_families(self, compute_lines):
         vm_families_idx = next(
-            (i for i, line in enumerate(compute_lines) if line.startswith("## Virtual Machine Families")),
+            (
+                i
+                for i, line in enumerate(compute_lines)
+                if line.startswith("## Virtual Machine Families")
+            ),
             None,
         )
         hpc_idx = next(
-            (i for i, line in enumerate(compute_lines) if line.startswith("## HPC Networking — RDMA")),
+            (
+                i
+                for i, line in enumerate(compute_lines)
+                if line.startswith("## HPC Networking — RDMA")
+            ),
             None,
         )
         assert vm_families_idx is not None, "## Virtual Machine Families not found"
