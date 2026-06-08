@@ -1,6 +1,6 @@
 # Tech Cheat Sheets And Notes
 
-[![Lint](https://github.com/DewaldOosthuizen/tech-cheat-sheets-and-notes/actions/workflows/lint.yml/badge.svg)](https://github.com/DewaldOosthuizen/tech-cheat-sheets-and-notes/actions/workflows/lint.yml)
+[![Lint](https://github.com/DewaldOosthuizen/tech-cheat-sheets-and-notes/actions/workflows/lint.yml/badge.svg?branch=main&event=push)](https://github.com/DewaldOosthuizen/tech-cheat-sheets-and-notes/actions/workflows/lint.yml)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/paypalme/DewaldOosthuizen1)
 
 You can view the live site at [![Live Site](https://img.shields.io/badge/Live%20Site-tech--cheat--sheets--and--notes.vercel.app-black?logo=vercel&logoColor=white)](https://tech-cheat-sheets-and-notes.vercel.app)
