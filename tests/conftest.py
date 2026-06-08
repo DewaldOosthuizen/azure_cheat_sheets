@@ -1,4 +1,4 @@
-"""Shared pytest fixtures and helpers for the azure-cheat-sheets test suite."""
+"""Shared pytest fixtures and helpers for the tech-cheat-sheets-and-notes  test suite."""
 
 from __future__ import annotations
 

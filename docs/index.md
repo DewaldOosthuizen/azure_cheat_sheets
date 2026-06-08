@@ -1,6 +1,6 @@
 # Tech Cheat Sheets And Notes
 
-[![Lint](https://github.com/DewaldOosthuizen/azure_cheat_sheets/actions/workflows/lint.yml/badge.svg)](https://github.com/DewaldOosthuizen/azure_cheat_sheets/actions/workflows/lint.yml)
+[![Lint](https://github.com/DewaldOosthuizen/tech-cheat-sheets-and-notes/actions/workflows/lint.yml/badge.svg)](https://github.com/DewaldOosthuizen/tech-cheat-sheets-and-notes/actions/workflows/lint.yml)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/paypalme/DewaldOosthuizen1)
 
 Quick-reference study notes for technology certifications and architecture decisions.
@@ -69,9 +69,9 @@ The live site renders all diagrams inline. To browse locally, run `make docs-ser
 
 ## Contributing
 
-See [CONTRIBUTING.md](https://github.com/DewaldOosthuizen/azure_cheat_sheets/blob/main/CONTRIBUTING.md)
+See [CONTRIBUTING.md](https://github.com/DewaldOosthuizen/tech-cheat-sheets-and-notes/blob/main/CONTRIBUTING.md)
 for the full contributor workflow.
 
 ## License
 
-This project is licensed under the [`GPL-3.0`](https://github.com/DewaldOosthuizen/tech-cheat-sheets/blob/main/LICENSE).
+This project is licensed under the [`GPL-3.0`](https://github.com/DewaldOosthuizen/tech-cheat-sheets-and-notes/blob/main/LICENSE).

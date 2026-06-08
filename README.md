@@ -79,6 +79,15 @@ Runs in order: markdownlint, Mermaid validation, ruff lint + format check,
 pytest with coverage, and a strict MkDocs build. A failing `make ci` means
 the GitHub Actions pipeline will also fail — fix it before opening a PR.
 
+For dead-link checking, run:
+
+```bash
+make link-check
+```
+
+`make link-check` bootstraps a pinned Lychee binary into `.tools/` on first
+use, so no global Lychee installation is required.
+
 ## Contributing
 
 Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) for

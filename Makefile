@@ -1,4 +1,4 @@
-# Makefile — local CI replication for azure-cheat-sheets
+# Makefile — local CI replication for tech-cheat-sheets-and-notes
 #
 # All Python work runs inside a local .venv so nothing touches the system
 # Python. The venv is created automatically the first time any Python target
@@ -30,6 +30,9 @@ PY       := $(VENV_BIN)/python
 PIP      := $(VENV_BIN)/pip
 
 PUPPETEER_CONFIG_FILE ?= /tmp/puppeteer-config.json
+LYCHEE_VERSION        ?= lychee-v0.24.2
+LYCHEE_DIR            := .tools/lychee/$(LYCHEE_VERSION)
+LYCHEE_BIN            := $(LYCHEE_DIR)/lychee
 
 MD_GLOBS         = "docs/**/*.md" "README.md" "AGENTS.md"
 LINT_TARGETS     = scripts/ tests/
@@ -48,7 +51,7 @@ MMD_FILES_VALIDATE := $(shell find docs/azure/diagrams -name '*.mmd' 2>/dev/null
         python-lint python-lint-fix \
         python-audit \
         python-test python-test-311 python-test-312 python-test-313 python-test-all \
-        link-check \
+		ensure-lychee link-check \
         docs-serve docs-build \
         ci ci-full \
         clean
@@ -56,7 +59,7 @@ MMD_FILES_VALIDATE := $(shell find docs/azure/diagrams -name '*.mmd' 2>/dev/null
 # ── Default target ─────────────────────────────────────────────────────────────
 help:
 	@echo ""
-	@echo "azure-cheat-sheets — local CI targets"
+	@echo "tech-cheat-sheets-and-notes — local CI targets"
 	@echo ""
 	@echo "  make venv              Create .venv and install dev deps (idempotent)"
 	@echo "  make install           venv + npm ci"
@@ -67,7 +70,7 @@ help:
 	@echo "  make python-audit      pip-audit CVE scan (inside .venv)"
 	@echo "  make python-test       pytest with coverage (inside .venv)"
 	@echo "  make python-test-all   pytest on Python 3.11, 3.12, and 3.13"
-	@echo "  make link-check        Dead-link check (requires lychee)"
+	@echo "  make link-check        Dead-link check (auto-installs local lychee binary)"
 	@echo "  make docs-serve        Serve MkDocs site locally at http://127.0.0.1:8000"
 	@echo "  make docs-build        Build static MkDocs site into site/"
 	@echo "  make ci                Full pipeline — markdownlint, mermaid-check, lint, audit, test, docs-build"
@@ -170,9 +173,29 @@ python-test-313: .venv-313/bin/activate
 python-test-all: python-test-311 python-test-312 python-test-313
 
 # ── Link check ────────────────────────────────────────────────────────────────
-link-check:
+$(LYCHEE_BIN):
+	@echo "--- installing lychee ($(LYCHEE_VERSION)) ---"
+	@set -e; \
+	mkdir -p "$(LYCHEE_DIR)"; \
+	tmp_dir=$$(mktemp -d); \
+	asset="lychee-x86_64-unknown-linux-gnu.tar.gz"; \
+	url="https://github.com/lycheeverse/lychee/releases/download/$(LYCHEE_VERSION)/$$asset"; \
+	curl -fsSL "$$url" -o "$$tmp_dir/$$asset"; \
+	tar -xzf "$$tmp_dir/$$asset" -C "$$tmp_dir"; \
+	binary_path=$$(find "$$tmp_dir" -type f -name lychee | head -n 1); \
+	if [ -z "$$binary_path" ]; then \
+		echo "Could not locate lychee binary in downloaded archive"; \
+		rm -rf "$$tmp_dir"; \
+		exit 1; \
+	fi; \
+	install -m 0755 "$$binary_path" "$(LYCHEE_BIN)"; \
+	rm -rf "$$tmp_dir"
+
+ensure-lychee: $(LYCHEE_BIN)
+
+link-check: ensure-lychee
 	@echo "--- link-check ---"
-	lychee --verbose --no-progress \
+	$(LYCHEE_BIN) --verbose --no-progress \
 	  --retry-wait-time 5 --max-retries 3 --timeout 30 \
 	  docs/**/*.md README.md CONTRIBUTING.md AGENTS.md
 
@@ -190,17 +213,18 @@ docs-build: venv
 	$(VENV_BIN)/mkdocs build --strict
 
 # ── Full CI pipeline ──────────────────────────────────────────────────────────
-ci: markdownlint mermaid-check python-lint python-audit python-test docs-build
+ci: markdownlint mermaid-check python-lint-fix python-lint python-audit python-test docs-build
 	@echo ""
 	@echo "=== CI passed ==="
 
-ci-full: markdownlint mermaid-check python-lint python-audit python-test link-check
+ci-full: markdownlint mermaid-check python-lint-fix python-lint python-audit python-test link-check
 	@echo ""
 	@echo "=== CI (full, including link-check) passed ==="
 
 # ── Clean ─────────────────────────────────────────────────────────────────────
 clean:
 	rm -rf $(VENV) .venv-311 .venv-312 .venv-313
+	rm -rf .tools/
 	rm -rf node_modules
 	rm -rf site/
 	rm -rf .coverage .coverage.* htmlcov/ .pytest_cache/ .ruff_cache/
