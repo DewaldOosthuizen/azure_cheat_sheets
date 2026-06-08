@@ -61,6 +61,7 @@ node_modules/
 .idea/**/caches/
 *.iws
 
+
 # Workspace-orchestrator temp file
 .codegraph/codegraph.db
 .hermes_tmp_prompt.txt

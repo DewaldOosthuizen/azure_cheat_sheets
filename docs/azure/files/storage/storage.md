@@ -86,13 +86,42 @@
 
 | Service | Type | Best For | Key Feature |
 | --- | --- | --- | --- |
-| **Azure SQL Database** | Relational PaaS | Cloud-native OLTP | Serverless, elastic pool, hyperscale |
-| **Azure SQL Managed Instance** | Relational PaaS | SQL Server lift-and-shift | Near 100% SQL Server compat, VNet inject |
-| **Cosmos DB** | NoSQL multi-model | Global distributed, low-latency | Multi-region writes, 5 APIs |
-| **Azure Database for PostgreSQL** | Relational PaaS | OSS PostgreSQL | Flexible server, HA, read replicas |
-| **Azure Database for MySQL** | Relational PaaS | OSS MySQL | Flexible server |
-| **Azure Synapse Analytics** | Analytics DW | OLAP, big data | Spark + SQL pool |
+| **Azure SQL Database** | Relational PaaS | Cloud-native OLTP | Serverless, elastic pool, hyperscale up to 100 TB |
+| **Azure SQL Managed Instance** | Relational PaaS | SQL Server lift-and-shift | Near 100% SQL Server compat, VNet inject, SQL Agent |
+| **SQL Server on Azure VM** | Relational IaaS | Full OS-level control, SQL Agent, CLR, linked servers | Customer manages OS and SQL patches; max flexibility |
+| **Cosmos DB** | NoSQL multi-model | Global distributed, low-latency | Multi-region writes, 5 APIs (SQL, MongoDB, Cassandra, Gremlin, Table) |
+| **Azure Database for PostgreSQL** | Relational PaaS | OSS PostgreSQL workloads | Flexible server, HA zone-redundant standby, read replicas |
+| **Azure Database for MySQL** | Relational PaaS | OSS MySQL / MariaDB workloads | Flexible server, geo-redundant backup |
+| **Azure Synapse Analytics** | Analytics DW | OLAP, big data | Serverless SQL Pool, Dedicated SQL Pool (DWU), Spark Pool |
 | **Azure Data Lake Storage Gen2** | Hierarchical Blob | Analytics at scale | POSIX ACL, Hierarchical Namespace, Spark-optimized |
+| **Azure Data Explorer (ADX)** | Time-series analytics | Real-time telemetry, logs, IoT | Kusto Query Language (KQL); ingestion from Event Hub / IoT Hub |
+| **Azure Analysis Services** | Semantic BI layer | Tabular models for Power BI / Excel | SSAS-compatible; vertical scaling; on-prem gateway support |
+| **Azure AI Search** | Full-text / vector search | Semantic and hybrid search over documents | AI enrichment pipeline, vector index, semantic ranker |
+| **Azure Cache for Redis** | In-memory caching | Session state, cache-aside, pub/sub | Sub-millisecond latency; supports RediSearch and active geo-replication (Enterprise tier) |
+| **Azure Table Storage** | NoSQL key-value | Simple schemaless data at very low cost | Part of Storage Account; no server to manage |
+| **Azure SQL Edge** | Relational IoT/edge | Constrained edge devices, OPC-UA streaming | ARM64 / x64 container; time-series streaming built-in; offline-first |
+
+### Azure Database Selection Decision Flow
+
+```mermaid
+--8<-- "azure/diagrams/storage/database-selection-decision-flow.mmd"
+```
+
+> **Exam tip:** Start with the workload type signal — relational, NoSQL, analytics, search,
+> or edge. For relational workloads, the next signal is control level: OS-level access → SQL VM;
+> SQL Server feature parity (SQL Agent, CLR, VNet) → SQL MI; cloud-native new design → SQL DB.
+> For NoSQL, match the API to the data model: documents → Core SQL or MongoDB API, wide-column
+> → Cassandra API, graph → Gremlin API, key-value at scale → Table API. For analytics, if the
+> requirement says "query data in place" or "no ETL" → Synapse Serverless SQL Pool; for
+> predictable BI workloads with defined query patterns → Synapse Dedicated SQL Pool (DWU);
+> for real-time telemetry and time-series log analytics at scale → Azure Data Explorer (KQL).
+>
+> **Exam tip:** Cosmos DB Serverless has a 1 TB per container hard cap — do not choose it
+> for large datasets. Choose Provisioned Throughput (Autoscale) for variable but bounded
+> workloads. Azure AI Search is not a transactional database — it is an indexing and retrieval
+> service sitting in front of a backing store (Blob, SQL, Cosmos DB). Azure SQL Edge runs
+> in a container on ARM/x64 edge hardware and supports T-SQL with built-in time-series
+> streaming — it is not a cloud service, it is an offline-first embedded engine.
 
 ### Azure SQL Database Service Tiers
 
