@@ -12,7 +12,7 @@ import pathlib
 
 import pytest
 
-REPO_ROOT = pathlib.Path(__file__).parent.parent
+REPO_ROOT = pathlib.Path(__file__).parent.parent.parent
 COMPUTE_MD = REPO_ROOT / "docs" / "azure" / "files" / "compute" / "compute.md"
 
 EXPECTED_VM_SERIES = [

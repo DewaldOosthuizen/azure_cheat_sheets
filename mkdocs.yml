@@ -57,31 +57,33 @@ markdown_extensions:
 
 nav:
   - Home: index.md
-  - Azure:
-      - Abbreviations: azure/files/abbreviations/abbreviations.md
-      - Exam Coverage: azure/files/exams/exams.md
-      - Networking: azure/files/networking/networking.md
-      - Security: azure/files/security/security.md
-      - Storage: azure/files/storage/storage.md
-      - Migration: azure/files/migration/migration.md
-      - Monitoring & Observability: azure/files/monitoring/monitoring.md
-      - Compute: azure/files/compute/compute.md
-      - Identity & Access: azure/files/identity/identity.md
-      - High Availability & DR: azure/files/ha-dr/ha-dr.md
-      - Governance: azure/files/governance/governance.md
-      - Messaging & Integration: azure/files/messaging/messaging.md
-      - Well-Architected Framework: azure/files/waf/waf.md
-  - AWS:
-      - Abbreviations: aws/files/abbreviations/abbreviations.md
-      - Exam Coverage: aws/files/exams/exams.md
-      - Compute: aws/files/compute/compute.md
-      - Networking: aws/files/networking/networking.md
-      - Storage: aws/files/storage/storage.md
-      - Identity & Access: aws/files/identity/identity.md
-      - Security: aws/files/security/security.md
-      - Database: aws/files/database/database.md
-      - Monitoring & Observability: aws/files/monitoring/monitoring.md
-      - Messaging & Integration: aws/files/messaging/messaging.md
-      - Governance: aws/files/governance/governance.md
-      - High Availability & DR: aws/files/ha-dr/ha-dr.md
-      - Well-Architected Framework: aws/files/waf/waf.md
+  # Always alphabetically order top-level sections for easier navigation and maintenance.
+  - Cloud Service Providers:
+    - AWS:
+        - Abbreviations: aws/files/abbreviations/abbreviations.md
+        - Exam Coverage: aws/files/exams/exams.md
+        - Compute: aws/files/compute/compute.md
+        - Networking: aws/files/networking/networking.md
+        - Storage: aws/files/storage/storage.md
+        - Identity & Access: aws/files/identity/identity.md
+        - Security: aws/files/security/security.md
+        - Database: aws/files/database/database.md
+        - Monitoring & Observability: aws/files/monitoring/monitoring.md
+        - Messaging & Integration: aws/files/messaging/messaging.md
+        - Governance: aws/files/governance/governance.md
+        - High Availability & DR: aws/files/ha-dr/ha-dr.md
+        - Well-Architected Framework: aws/files/waf/waf.md
+    - Azure:
+        - Abbreviations: azure/files/abbreviations/abbreviations.md
+        - Exam Coverage: azure/files/exams/exams.md
+        - Networking: azure/files/networking/networking.md
+        - Security: azure/files/security/security.md
+        - Storage: azure/files/storage/storage.md
+        - Migration: azure/files/migration/migration.md
+        - Monitoring & Observability: azure/files/monitoring/monitoring.md
+        - Compute: azure/files/compute/compute.md
+        - Identity & Access: azure/files/identity/identity.md
+        - High Availability & DR: azure/files/ha-dr/ha-dr.md
+        - Governance: azure/files/governance/governance.md
+        - Messaging & Integration: azure/files/messaging/messaging.md
+        - Well-Architected Framework: azure/files/waf/waf.md

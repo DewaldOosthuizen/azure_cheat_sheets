@@ -231,6 +231,19 @@ Closes #42
   Consistency columns (always present): Service, Key Feature.
   Do not add free-form columns not in the template above.
 
+### Alphabetical Ordering
+
+All top-level sections in both `index.md` and `mkdocs.yml` must be kept in **strict alphabetical order**.
+This applies to:
+
+- Cloud service providers (Azure, AWS)
+- Domain sections within each provider (Abbreviations, Compute, Database, Exam Coverage, Governance,
+  Identity & Access, Messaging & Integration, Monitoring & Observability, Networking, Security,
+  Storage, Well-Architected Framework, etc.)
+
+Alphabetical ordering ensures consistency, improves navigation, and simplifies maintenance. When
+adding new sections or reorganizing content, verify ordering in both `index.md` and `mkdocs.yml`.
+
 ### Python Scripts
 
 - Follow PEP 8. Use `ruff` for linting and formatting.

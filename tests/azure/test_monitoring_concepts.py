@@ -5,7 +5,7 @@ import pathlib
 import pytest
 from conftest import expand_snippets
 
-REPO_ROOT = pathlib.Path(__file__).parent.parent
+REPO_ROOT = pathlib.Path(__file__).parent.parent.parent
 MONITORING = REPO_ROOT / "docs" / "azure" / "files" / "monitoring" / "monitoring.md"
 
 

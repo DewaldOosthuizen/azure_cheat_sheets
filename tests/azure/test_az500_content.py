@@ -4,7 +4,8 @@ from pathlib import Path
 
 from conftest import expand_snippets
 
-SNIPPETS_DIR = Path("docs/azure/files")
+REPO_ROOT = Path(__file__).parent.parent.parent
+SNIPPETS_DIR = REPO_ROOT / "docs" / "azure" / "files"
 
 
 def _content():

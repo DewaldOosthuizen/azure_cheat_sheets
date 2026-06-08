@@ -9,7 +9,9 @@ Content is comparison-oriented: tables, decision flowcharts, and Mermaid diagram
 
 ---
 
-## Microsoft Azure
+## Cloud Service Providers
+
+### Microsoft Azure
 
 Organised by domain. Each section covers service selection and architectural trade-offs.
 
@@ -29,7 +31,7 @@ Organised by domain. Each section covers service selection and architectural tra
 
 See the [Azure Exam Track Index](azure/files/exams/exams.md) for full coverage by certification.
 
-## Amazon Web Services
+### Amazon Web Services
 
 Organised by domain. Each section covers service selection and architectural trade-offs.
 

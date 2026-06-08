@@ -16,7 +16,7 @@ import re
 import pytest
 from conftest import expand_snippets
 
-REPO_ROOT = pathlib.Path(__file__).parent.parent
+REPO_ROOT = pathlib.Path(__file__).parent.parent.parent
 GOVERNANCE = REPO_ROOT / "docs" / "azure" / "files" / "governance" / "governance.md"
 
 
