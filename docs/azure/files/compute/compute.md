@@ -31,21 +31,41 @@
 
 ## App Service Plans (Tiers)
 
-| Tier | Category | Features |
-| --- | --- | --- |
-| **Free / Shared (F1/D1)** | Dev/Test | No SLA, shared infra, no custom domain SSL |
-| **Basic (B1–B3)** | Dev/Test | Dedicated VMs, manual scale (up to 3 instances) |
-| **Standard (S1–S3)** | Production | Auto-scale, custom domain, SSL, deployment slots (5) |
-| **Premium (P1v3–P3v3)** | Production | More RAM/CPU, VNet integration, 20 deployment slots |
-| **Isolated (I1v2–I3v2)** | Mission-critical | Dedicated ASE, VNet isolated, 100 instances |
+| Tier | Category | Instances | Deployment Slots | Key Features |
+| --- | --- | --- | --- | --- |
+| **Free / Shared (F1/D1)** | Dev/Test | Shared | None | No SLA, no custom domain SSL, shared infrastructure |
+| **Basic (B1–B3)** | Dev/Test | Dedicated, up to 3 (manual) | None | Dedicated VMs, manual scale only, no auto-scale |
+| **Standard (S1–S3)** | Production | Up to 10 (auto-scale) | 5 | Auto-scale, custom domain, SSL certificates |
+| **Premium v2 (P1v2–P3v2)** | Production | Up to 30 (auto-scale) | 20 | VNet integration, higher RAM/CPU, cost-optimised vs. v3 |
+| **Premium v3 (P1v3–P3v3)** | Production | Up to 30 (auto-scale) | 20 | Zone redundancy, highest RAM/CPU ratio, VNet integration |
+| **Isolated v2 / ASEv3 (I1v2–I3v2)** | Mission-critical | Up to 100 | 20 | Dedicated App Service Environment, full VNet isolation, no public endpoint |
 
 > Deployment slots only available on **Standard** tier and above.
 
-> **SLA note:** Free/Shared tiers are not SLA-backed production tiers. Questions
-> that require a formal uptime guarantee should point to paid production tiers
-> with redundant instances.
+> **SLA note:** Free/Shared tiers carry no SLA. Basic provides a single-instance SLA only.
+> Standard and above with two or more instances provide the full 99.95% SLA.
+
+> **Exam tip:** Tier selection signal chain — start from the strongest constraint and work down.
+>
+> VNet isolation / regulatory compliance (PCI-DSS, HIPAA, dedicated egress IP) → **Isolated v2 (ASEv3)**.
+> ASEv3 is the current-generation App Service Environment; it removes the forced-tunnelling requirement of ASEv2.
+>
+> VNet integration, 20 deployment slots, or zone redundancy required → **Premium v3** (P1v3–P3v3).
+> Premium v2 is the cost-optimised alternative where zone redundancy is not required.
+>
+> Auto-scale and up to 5 deployment slots with no VNet requirement → **Standard** (S1–S3).
+>
+> Dedicated compute, predictable load, no auto-scale needed → **Basic** (B1–B3).
+>
+> No production SLA, pure development or prototype → **Free / Shared** (F1/D1).
 
 > **Exam tip:** Deployment slots run inside the same App Service Plan. On slot swap, IIS/Node warm-up completes before traffic is routed — eliminating cold starts. Sticky (slot) settings are NOT swapped; non-sticky settings are swapped with the slot. Use `routingRules` to send a percentage of production traffic to a staging slot for canary testing. Auto-swap immediately promotes the slot after a successful warm-up — use it for continuous deployment pipelines where manual approval is not required.
+
+### App Service Tier Selection Flow
+
+```mermaid
+--8<-- "azure/diagrams/compute/app-service-tier-selection-flow.mmd"
+```
 
 ## Azure Functions Hosting Plans
 
