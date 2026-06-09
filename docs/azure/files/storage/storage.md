@@ -67,7 +67,7 @@
 | --- | --- | --- | --- |
 | **Azure Data Factory** | Cloud ETL / orchestration | Batch data pipelines between cloud and on-prem stores | 90+ connectors, pipeline scheduling, data flows |
 | **Azure Databricks** | Lakehouse analytics | Large-scale Spark engineering, Delta Lake, ML pipelines | Managed Apache Spark with collaborative notebooks and autoscaling clusters |
-| **Azure-SSIS Integration Runtime** | Lift-and-shift ETL | Running existing SSIS packages in ADF without rewrite | Managed SSIS runtime inside ADF; supports Azure SQL MI as SSISDB host |
+| **Azure-SSIS Integration Runtime** | Lift-and-shift ETL | Running existing SSIS packages in ADF without rewrite | Managed SSIS runtime inside ADF; supports Azure SQL and Azure SQL MI as SSISDB host |
 | **Azure Data Box** | Offline bulk transfer | Initial migration of large datasets (TB–PB) to Azure when bandwidth is constrained | Physical device shipped by Microsoft; encrypted, tamper-evident |
 | **Azure Data Box Gateway** | Edge ingestion | Continuous data upload from on-prem to Azure Blob/Files | Virtual appliance; no physical device needed |
 | **Azure Data Box Edge** | Edge compute + transfer | Data processing and inference at the edge before upload | Runs Azure IoT Edge modules and FPGA-accelerated ML inference |
@@ -290,6 +290,52 @@ sas_token = generate_blob_sas(
     expiry=datetime.now(timezone.utc) + timedelta(hours=1),
 )
 ```
+
+## Azure Blob Storage Immutable Policies
+
+Immutable storage for Azure Blob (WORM — Write Once, Read Many) prevents blobs from being
+modified or deleted for a user-specified interval. Designed to satisfy compliance regimes
+that mandate non-erasable records: SEC 17a-4(f), CFTC 1.31, FINRA, and HIPAA audit trails.
+
+### Policy Types
+
+| Policy | Mechanism | Duration | Deletable Before Expiry | Lock Behaviour |
+| --- | --- | --- | --- | --- |
+| **Time-Based Retention** | Blocks delete/overwrite for a fixed period | 1 day – 146,000 days | No | Unlocked: intervals can be extended or shortened. Locked: intervals can only be extended — never shortened or removed |
+| **Legal Hold** | Blocks delete/overwrite until all hold tags cleared | Indefinite (tag-based) | No | No lock state — active while any hold tag exists; cleared only by removing every tag |
+
+> **Exam tip:** A time-based retention policy in **Unlocked** state can be shortened or
+> removed — it is mutable. Once **Locked**, the retention interval can only be **extended**,
+> never reduced and never removed. For SEC 17a-4 compliance, the policy must be Locked.
+> Legal Hold does not use a time interval at all — it persists until every tag is explicitly
+> cleared, regardless of how much time has passed.
+
+### Policy Scope
+
+| Scope | Requires | Granularity | When to Use |
+| --- | --- | --- | --- |
+| **Container-level (version-independent)** | No extra feature | All blobs in the container | Uniform retention for an entire container; simpler setup; classic approach |
+| **Version-level** | Blob versioning enabled on the storage account | Individual blob versions | Different retention periods per version; allows overwrite while keeping immutable prior versions |
+
+> **Exam tip:** Version-level immutability requires blob versioning to be enabled first — a
+> common setup trap. Without versioning, only container-level policies are available.
+> Version-level lets you write a new version while the old version remains WORM-protected;
+> container-level prevents all writes once a policy is active.
+
+### Immutable Policy vs Soft Delete vs Resource Locks
+
+| Mechanism | Scope | Reversible | Who Can Override | Primary Purpose |
+| --- | --- | --- | --- | --- |
+| **Time-Based Retention (Locked)** | Container or blob version | No | Nobody — not even Owner or Microsoft Support | Regulatory compliance (WORM) |
+| **Legal Hold** | Container or blob version | Yes — when all tags cleared | Storage account contributor with tag permission | Litigation / investigation hold |
+| **Soft Delete** | Blob, Container, File Share | Yes — restore within retention window | Storage contributor | Accidental-deletion recovery |
+| **Resource Lock (Delete)** | ARM resource (storage account or RG) | Yes — Owner / User Access Admin | Owner or User Access Administrator | Prevent ARM-level deletion of the resource |
+
+> **Exam tip:** WORM and Soft Delete are complementary, not alternatives. WORM prevents
+> intentional or malicious overwrite/delete at the data plane. Soft Delete is a recycle bin
+> for accidental operations. A secure regulatory deployment uses both. Resource Locks protect
+> the storage account itself from ARM-level deletion but do NOT protect individual blobs from
+> overwrite — do not confuse them with immutable policies.
 
 ## Managed Disk Types
 

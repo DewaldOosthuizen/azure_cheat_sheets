@@ -7,16 +7,24 @@ clean, reviewable contributions to this repository.
 
 ## Table of Contents
 
-1. [Code of Conduct](#1-code-of-conduct)
-2. [Getting Started](#2-getting-started)
-3. [Picking Up an Issue](#3-picking-up-an-issue)
-4. [Branch Naming](#4-branch-naming)
-5. [Development Setup](#5-development-setup)
-6. [Running Checks Locally](#6-running-checks-locally)
-7. [Commit Message Style](#7-commit-message-style)
-8. [Pull Request Process](#8-pull-request-process)
-9. [Coding Standards](#9-coding-standards)
-10. [Deprecation warnings](#10-deprecation-warnings)
+- [Contributing to Tech Cheat Sheets](#contributing-to-tech-cheat-sheets)
+  - [Table of Contents](#table-of-contents)
+  - [1. Code of Conduct](#1-code-of-conduct)
+  - [2. Getting Started](#2-getting-started)
+  - [3. Picking Up an Issue](#3-picking-up-an-issue)
+  - [4. Branch Naming](#4-branch-naming)
+  - [5. Development Setup](#5-development-setup)
+  - [6. Running Checks Locally](#6-running-checks-locally)
+  - [7. Commit Message Style](#7-commit-message-style)
+  - [8. Pull Request Process](#8-pull-request-process)
+  - [9. Coding Standards](#9-coding-standards)
+    - [Content Style](#content-style)
+    - [Alphabetical Ordering](#alphabetical-ordering)
+    - [Python Scripts](#python-scripts)
+    - [Section Snippet Files](#section-snippet-files)
+    - [Diagram Files](#diagram-files)
+  - [10. Deprecation warnings](#10-deprecation-warnings)
+  - [11. Dependabot update strategy](#11-dependabot-update-strategy)
 
 ---
 
@@ -236,10 +244,11 @@ Closes #42
 All top-level sections in both `index.md` and `mkdocs.yml` must be kept in **strict alphabetical order**.
 This applies to:
 
-- Cloud service providers (Azure, AWS)
-- Domain sections within each provider (Abbreviations, Compute, Database, Exam Coverage, Governance,
-  Identity & Access, Messaging & Integration, Monitoring & Observability, Networking, Security,
-  Storage, Well-Architected Framework, etc.)
+- Top level .e.g. Cloud service providers etc
+- Sub section e.g. AWS, Azure
+- Domain sections within each provider remain as is as they provide data in a meaningful order with
+  sections that should be at the top. This might change in the future. Potentially switching to start
+  with a numeric number to indicate order by importance rather then by alphabetical order.
 
 Alphabetical ordering ensures consistency, improves navigation, and simplifies maintenance. When
 adding new sections or reorganizing content, verify ordering in both `index.md` and `mkdocs.yml`.
