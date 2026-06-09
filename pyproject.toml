@@ -10,11 +10,11 @@ packages = []
 
 [project.optional-dependencies]
 dev = [
-    "mkdocs-material>=9.5,<10",
-    "pip-audit>=2.7,<3",
+    "mkdocs-material>=9.7.6,<10",
+    "pip-audit>=2.10.0,<3",
     "pytest>=9.0.3,<10",
     "pytest-cov>=7.1.0,<8",
-    "ruff>=0.15.15,<1",
+    "ruff>=0.15.16,<1",
 ]
 
 [tool.ruff]
