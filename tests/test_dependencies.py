@@ -11,6 +11,9 @@ Verifies that:
 import re
 from pathlib import Path
 
+from packaging.requirements import Requirement
+from packaging.version import Version
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PYPROJECT = REPO_ROOT / "pyproject.toml"
 LINT_YML = REPO_ROOT / ".github" / "workflows" / "lint.yml"
@@ -20,19 +23,46 @@ CONTRIBUTING = REPO_ROOT / "CONTRIBUTING.md"
 class TestPyprojectUpperBounds:
     """pyproject.toml dev deps must carry upper-bound caps."""
 
-    def test_pytest_has_upper_bound(self):
+    def _dev_requirements(self) -> list[Requirement]:
         content = PYPROJECT.read_text()
-        assert "pytest>=9.0.3,<10" in content, "pytest constraint must include upper bound <10"
+        m = re.search(r"\[project\.optional-dependencies\].*?dev\s*=\s*\[(.*?)\]", content, re.S)
+        assert m, "Could not locate dev extras in pyproject.toml"
+        entries = re.findall(r'"([^"]+)"', m.group(1))
+        return [Requirement(entry) for entry in entries]
 
-    def test_pytest_cov_has_upper_bound(self):
-        content = PYPROJECT.read_text()
-        assert "pytest-cov>=7.1.0,<8" in content, (
-            "pytest-cov constraint must include upper bound <8"
+    def _requirement(self, name: str) -> Requirement:
+        for req in self._dev_requirements():
+            if req.name == name:
+                return req
+        raise AssertionError(f"{name} must be listed under [project.optional-dependencies] dev")
+
+    @staticmethod
+    def _lower_bound(req: Requirement) -> Version:
+        bounds = [Version(spec.version) for spec in req.specifier if spec.operator in {">", ">="}]
+        assert bounds, f"{req.name} must define a lower bound"
+        return max(bounds)
+
+    @staticmethod
+    def _has_upper_bound(req: Requirement, upper: str) -> bool:
+        return any(
+            spec.operator == "<" and Version(spec.version) == Version(upper)
+            for spec in req.specifier
         )
 
+    def test_pytest_has_upper_bound(self):
+        req = self._requirement("pytest")
+        assert self._lower_bound(req) >= Version("9.0.3"), "pytest lower bound must be >=9.0.3"
+        assert self._has_upper_bound(req, "10"), "pytest constraint must include upper bound <10"
+
+    def test_pytest_cov_has_upper_bound(self):
+        req = self._requirement("pytest-cov")
+        assert self._lower_bound(req) >= Version("7.1.0"), "pytest-cov lower bound must be >=7.1.0"
+        assert self._has_upper_bound(req, "8"), "pytest-cov constraint must include upper bound <8"
+
     def test_ruff_has_upper_bound(self):
-        content = PYPROJECT.read_text()
-        assert "ruff>=0.15.15,<1" in content, "ruff constraint must include upper bound <1"
+        req = self._requirement("ruff")
+        assert self._lower_bound(req) >= Version("0.15.15"), "ruff lower bound must be >=0.15.15"
+        assert self._has_upper_bound(req, "1"), "ruff constraint must include upper bound <1"
 
     def test_no_open_ended_pytest(self):
         content = PYPROJECT.read_text()
