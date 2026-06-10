@@ -10,6 +10,9 @@ Covers:
 import re
 from pathlib import Path
 
+from packaging.requirements import Requirement
+from packaging.version import Version
+
 REPO_ROOT = Path(__file__).parent.parent
 PYPROJECT = REPO_ROOT / "pyproject.toml"
 LINT_WORKFLOW = REPO_ROOT / ".github" / "workflows" / "lint.yml"
@@ -31,18 +34,32 @@ class TestPyprojectPipAudit:
         assert m, "Could not locate dev extras in pyproject.toml"
         return m.group(1)
 
+    def _dev_requirements(self) -> list[Requirement]:
+        entries = re.findall(r'"([^"]+)"', self._dev_section())
+        return [Requirement(entry) for entry in entries]
+
+    def _requirement(self, name: str) -> Requirement:
+        for req in self._dev_requirements():
+            if req.name == name:
+                return req
+        raise AssertionError(f"{name} must be listed under [project.optional-dependencies] dev")
+
     def test_pip_audit_present_in_dev_extras(self):
-        assert "pip-audit" in self._dev_section(), (
-            "pip-audit must be listed under [project.optional-dependencies] dev"
-        )
+        self._requirement("pip-audit")
 
     def test_pip_audit_has_lower_bound(self):
-        section = self._dev_section()
-        assert "pip-audit>=2.7" in section, "pip-audit lower bound must be >=2.7"
+        req = self._requirement("pip-audit")
+        lower_bounds = [
+            Version(spec.version) for spec in req.specifier if spec.operator in {">", ">="}
+        ]
+        assert lower_bounds, "pip-audit must define a lower bound"
+        assert max(lower_bounds) >= Version("2.7"), "pip-audit lower bound must be >=2.7"
 
     def test_pip_audit_has_upper_bound(self):
-        section = self._dev_section()
-        assert "pip-audit>=2.7,<3" in section, "pip-audit upper bound must be <3"
+        req = self._requirement("pip-audit")
+        assert any(
+            spec.operator == "<" and Version(spec.version) == Version("3") for spec in req.specifier
+        ), "pip-audit upper bound must be <3"
 
 
 # ---------------------------------------------------------------------------
