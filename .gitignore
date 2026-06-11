@@ -69,3 +69,5 @@ openspec/
 # END workspace-orchestrator
 
 .tools
+.vercel
+.env*

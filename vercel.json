@@ -2,6 +2,5 @@
   "framework": null,
   "buildCommand": "uv pip install --system -r requirements-docs.txt && mkdocs build",
   "outputDirectory": "site",
-  "cleanUrls": true,
-  "ignoreCommand": "[ \"$VERCEL_GIT_COMMIT_REF\" != \"main\" ] && exit 0 || exit 1"
+  "cleanUrls": true
 }
