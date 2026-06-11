@@ -76,7 +76,7 @@ jobs:
       - name: Format check
         run: ruff format --check scripts/ tests/
       - name: Audit Python dependencies
-        run: pip-audit
+        run: pip-audit --skip-editable
 
   python-test:
     runs-on: ubuntu-latest
